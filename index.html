@@ -1,801 +1,1311 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BUSPROS Week 5 Exam – Production Planning & Execution</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BUSPROS Week 3 Mock Exam – SAP Sales &amp; Distribution</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy: #0a1628;
-  --navy-light: #1a3366;
-  --gold: #c9a227;
-  --gold-light: #e8c355;
-  --gold-dim: #a07c18;
-  --gray-100: #eef1f7;
-  --gray-200: #d8dde8;
-  --gray-600: #4a5568;
-  --correct: #16a34a;
-  --correct-bg: #dcfce7;
-  --wrong: #dc2626;
-  --wrong-bg: #fee2e2;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --blue: #2563eb;
-  --blue-bg: #eff6ff;
-  --orange: #ea580c;
-  --orange-bg: #fff7ed;
-  --bg: #f0f4fc;
-  --surface: #ffffff;
-  --surface2: #f4f6fb;
-  --text: #0a1628;
-  --text-sub: #4a5568;
-  --border: #d8dde8;
-  --timer-bg: #0a1628;
-  --timer-text: #ffffff;
-  --shadow-sm: 0 1px 3px rgba(10,22,40,0.08), 0 1px 2px rgba(10,22,40,0.06);
-  --shadow-md: 0 4px 12px rgba(10,22,40,0.1), 0 2px 6px rgba(10,22,40,0.08);
-  --shadow-lg: 0 10px 30px rgba(10,22,40,0.14), 0 4px 12px rgba(10,22,40,0.1);
+  --bg: #F0F2F8;
+  --surface: #FFFFFF;
+  --surface2: #F7F8FC;
+  --border: #E2E6F0;
+  --primary: #0A1628;
+  --accent: #E09B00;
+  --accent-light: #FFF4CC;
+  --accent2: #1E3A6E;
+  --text: #0D1B2A;
+  --text-muted: #5A6478;
+  --text-light: #8A93A6;
+  --correct: #0F7B4B;
+  --correct-bg: #E8F8F0;
+  --correct-border: #34C77A;
+  --wrong: #C0392B;
+  --wrong-bg: #FEECEB;
+  --wrong-border: #E74C3C;
+  --warn: #D97706;
+  --warn-bg: #FFFBEB;
+  --danger: #B91C1C;
+  --answered: #1E3A6E;
+  --flagged-col: #D97706;
+  --shadow: 0 2px 12px rgba(10,22,40,0.08);
+  --shadow-lg: 0 8px 32px rgba(10,22,40,0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font-body: 'Outfit', sans-serif;
+  --font-head: 'Syne', sans-serif;
 }
 [data-theme="dark"] {
-  --bg: #07101f;
-  --surface: #0f1e35;
-  --surface2: #162540;
-  --text: #e8edf5;
-  --text-sub: #8a99b8;
-  --border: #1f3358;
-  --timer-bg: #091525;
-  --timer-text: #e8edf5;
-  --gray-100: #162540;
-  --gray-200: #1f3358;
-  --blue-bg: #0a1e3a;
-  --correct-bg: #052e16;
-  --wrong-bg: #1e0404;
-  --orange-bg: #1e0d00;
+  --bg: #07101D;
+  --surface: #0F1E30;
+  --surface2: #162539;
+  --border: #1E3350;
+  --primary: #E8B800;
+  --accent: #E8B800;
+  --accent-light: #2A2000;
+  --accent2: #4A7DC8;
+  --text: #E2E8F4;
+  --text-muted: #8A9AB8;
+  --text-light: #5A6D88;
+  --correct: #34C77A;
+  --correct-bg: #082D1A;
+  --correct-border: #1A7A45;
+  --wrong: #E74C3C;
+  --wrong-bg: #2A0A08;
+  --wrong-border: #7A1C14;
+  --warn: #F59E0B;
+  --warn-bg: #1A1000;
+  --danger: #FC5C5C;
+  --answered: #4A7DC8;
+  --flagged-col: #F59E0B;
+  --shadow: 0 2px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
   background: var(--bg);
   color: var(--text);
-  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
   transition: background 0.3s, color 0.3s;
 }
-h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
-
+/* ---- CREDIT BAR ---- */
 .credit-bar {
-  background: var(--navy);
-  color: rgba(255,255,255,0.85);
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--font-head);
   font-size: 11.5px;
-  padding: 6px 20px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  align-items: center;
-  justify-content: center;
-  letter-spacing: 0.02em;
-}
-.credit-bar a { color: var(--gold-light); text-decoration: none; }
-.credit-bar a:hover { text-decoration: underline; }
-.credit-sep { color: rgba(255,255,255,0.3); }
-
-#timer-bar {
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  background: var(--timer-bg);
-  color: var(--timer-text);
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-}
-#timer-bar .timer-display {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 700;
-  min-width: 70px;
+  font-weight: 600;
   letter-spacing: 0.04em;
-}
-#timer-bar .timer-display.warning { color: var(--warning); }
-#timer-bar .timer-display.danger { color: var(--danger); animation: pulse-text 0.8s infinite alternate; }
-@keyframes pulse-text { from { opacity: 1; } to { opacity: 0.5; } }
-
-#progress-bar-wrap {
-  flex: 1;
-  min-width: 120px;
-  height: 6px;
-  background: rgba(255,255,255,0.12);
-  border-radius: 3px;
-  overflow: hidden;
-}
-#progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  border-radius: 3px;
-  transition: width 0.4s ease;
-  width: 0%;
-}
-.timer-badge {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 20px;
-  padding: 3px 10px;
-  font-size: 12px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-.timer-badge span { color: var(--gold-light); font-weight: 700; }
-.timer-btn {
-  background: var(--gold);
-  color: var(--navy);
-  border: none;
-  border-radius: 8px;
-  padding: 6px 14px;
-  font-weight: 600;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
-}
-.timer-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
-.dark-toggle {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: var(--timer-text);
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 12px;
-  cursor: pointer;
-}
-.dark-toggle:hover { background: rgba(255,255,255,0.2); }
-
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 24px 16px 60px;
-}
-.exam-header {
-  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-  color: white;
-  border-radius: 16px;
-  padding: 32px 36px;
-  margin-bottom: 28px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-}
-.exam-header::before {
-  content: '';
-  position: absolute;
-  top: -30px; right: -30px;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(201,162,39,0.18) 0%, transparent 70%);
-  border-radius: 50%;
-}
-.exam-header::after {
-  content: '';
-  position: absolute;
-  bottom: -50px; left: -20px;
-  width: 180px; height: 180px;
-  background: radial-gradient(circle, rgba(201,162,39,0.1) 0%, transparent 70%);
-  border-radius: 50%;
-}
-.exam-header h1 {
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 800;
-  color: var(--gold-light);
-  margin-bottom: 6px;
-  position: relative;
-}
-.exam-header .subtitle {
-  color: rgba(255,255,255,0.75);
-  font-size: 14px;
-  margin-bottom: 18px;
-  position: relative;
-}
-.exam-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  position: relative;
-}
-.meta-pill {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(201,162,39,0.3);
-  border-radius: 20px;
-  padding: 5px 14px;
-  font-size: 12px;
-  color: rgba(255,255,255,0.9);
   display: flex;
   align-items: center;
-  gap: 5px;
-}
-.meta-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
-
-.section-label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 32px 0 16px;
-}
-.section-label .label-badge {
-  background: var(--navy);
-  color: var(--gold-light);
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 11px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-[data-theme="dark"] .section-label .label-badge { background: var(--navy-light); }
-.section-label .label-line {
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-.section-label .label-count {
-  color: var(--text-sub);
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.q-card {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 22px 24px;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
-  position: relative;
-}
-.q-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
-.q-card.flagged {
-  border-color: var(--orange);
-  box-shadow: 0 0 0 3px rgba(234,88,12,0.15), var(--shadow-sm);
-}
-.q-card.correct-card { border-color: var(--correct); }
-.q-card.wrong-card { border-color: var(--wrong); }
-
-.q-header {
-  display: flex;
-  align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 14px;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 7px 20px;
 }
-.q-num {
-  font-family: 'Syne', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-sub);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  white-space: nowrap;
-}
-.q-diff {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.diff-Easy { background: #dcfce7; color: #15803d; }
-.diff-Medium { background: #fef9c3; color: #92400e; }
-.diff-Hard { background: #fee2e2; color: #b91c1c; }
-[data-theme="dark"] .diff-Easy { background: #052e16; color: #4ade80; }
-[data-theme="dark"] .diff-Medium { background: #1c1400; color: #fbbf24; }
-[data-theme="dark"] .diff-Hard { background: #1e0404; color: #f87171; }
-
-.flag-btn {
-  background: none;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  padding: 5px 10px;
-  font-size: 13px;
-  cursor: pointer;
-  color: var(--text-sub);
-  transition: all 0.2s;
-}
-.flag-btn:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-bg); }
-.flag-btn.active { border-color: var(--orange); background: var(--orange-bg); color: var(--orange); }
-
-.q-text {
-  font-size: 15px;
-  line-height: 1.65;
-  color: var(--text);
-  font-weight: 500;
-  margin-bottom: 16px;
-}
-
-.choices { display: flex; flex-direction: column; gap: 9px; }
-.choice-btn {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 12px 16px;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  background: var(--surface);
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: left;
-  font-size: 14px;
-  color: var(--text);
-  width: 100%;
-}
-.choice-btn:hover:not(:disabled) {
-  border-color: var(--blue);
-  background: var(--blue-bg);
-}
-.choice-btn.selected {
-  border-color: var(--blue);
-  background: var(--blue-bg);
-}
-.choice-btn.correct-choice {
-  border-color: var(--correct);
-  background: var(--correct-bg);
-}
-.choice-btn.wrong-choice {
-  border-color: var(--wrong);
-  background: var(--wrong-bg);
-}
-.choice-btn.missed-choice {
-  border-color: var(--correct);
-  background: rgba(134,239,172,0.15);
-}
-.choice-btn:disabled { cursor: default; }
-
-.radio-circle {
-  width: 20px; height: 20px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  background: var(--surface);
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.choice-btn.selected .radio-circle {
-  border-color: var(--blue);
-  background: var(--blue);
-  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
-}
-.choice-btn.selected .radio-circle::after {
-  content: '';
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: white;
-}
-.choice-btn.correct-choice .radio-circle {
-  border-color: var(--correct);
-  background: var(--correct);
-}
-.choice-btn.correct-choice .radio-circle::after {
-  content: '✓';
-  font-size: 12px;
-  color: white;
-  font-weight: 700;
-}
-.choice-btn.wrong-choice .radio-circle {
-  border-color: var(--wrong);
-  background: var(--wrong);
-}
-.choice-btn.wrong-choice .radio-circle::after {
-  content: '✗';
-  font-size: 11px;
-  color: white;
-  font-weight: 700;
-}
-.choice-btn.missed-choice .radio-circle {
-  border-color: var(--correct);
-  background: var(--correct-bg);
-}
-.choice-btn.missed-choice .radio-circle::after {
-  content: '✓';
-  font-size: 11px;
-  color: var(--correct);
-  font-weight: 700;
-}
-.choice-label { font-size: 13px; font-weight: 600; min-width: 16px; color: var(--text-sub); }
-
-.q-input {
-  width: 100%;
-  padding: 11px 16px;
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  font-size: 14px;
-  background: var(--surface2);
-  color: var(--text);
-  outline: none;
-  margin-bottom: 6px;
-}
-.q-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-.q-input.correct-input { border-color: var(--correct); background: var(--correct-bg); }
-.q-input.wrong-input { border-color: var(--wrong); background: var(--wrong-bg); }
-.enum-inputs { display: flex; flex-direction: column; gap: 8px; }
-.enum-row { display: flex; align-items: center; gap: 8px; }
-.enum-num { font-size: 13px; font-weight: 600; color: var(--text-sub); min-width: 20px; }
-
-.explanation-box {
-  margin-top: 14px;
-  padding: 14px 16px;
-  background: var(--surface2);
-  border-left: 3px solid var(--gold);
-  border-radius: 0 10px 10px 0;
-  font-size: 13.5px;
-  line-height: 1.65;
-  color: var(--text-sub);
-  display: none;
-}
-.explanation-box.show { display: block; }
-.explanation-box .why-item { margin-bottom: 5px; }
-.explanation-box .why-label { font-weight: 600; color: var(--text); }
-.explanation-box .correct-label { color: var(--correct); font-weight: 700; }
-
-.result-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 8px;
-  margin-top: 8px;
-}
-.status-correct { background: var(--correct-bg); color: var(--correct); }
-.status-wrong { background: var(--wrong-bg); color: var(--wrong); }
-.status-skipped { background: var(--gray-100); color: var(--gray-600); }
-
-.submit-area { text-align: center; margin: 36px 0; }
-.submit-btn {
-  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-  color: var(--navy);
-  border: none;
-  padding: 15px 48px;
-  font-family: 'Syne', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  border-radius: 12px;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(201,162,39,0.35);
-}
-.submit-btn:hover { transform: translateY(-2px); }
-
-#modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.6);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s;
-}
-#modal-overlay.open { opacity: 1; pointer-events: all; }
-.modal-box {
-  background: var(--surface);
-  border-radius: 16px;
-  padding: 32px;
-  max-width: 400px;
-  width: 100%;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-  transform: scale(0.9);
-  transition: transform 0.25s;
-}
-#modal-overlay.open .modal-box { transform: scale(1); }
-.modal-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
-.modal-body { font-size: 14px; color: var(--text-sub); line-height: 1.6; margin-bottom: 24px; }
-.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
-.modal-cancel, .modal-confirm {
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.modal-cancel { background: var(--gray-100); color: var(--text); }
-.modal-confirm { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-family: 'Syne', sans-serif; font-weight: 700; }
-
-#results-section { display: none; }
-#results-section.show { display: block; }
-
-.score-banner {
-  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-  color: white;
-  border-radius: 16px;
-  padding: 32px;
-  margin-bottom: 24px;
-  text-align: center;
-  box-shadow: var(--shadow-lg);
+[data-theme="dark"] .credit-bar { background: #070F1A; border-bottom: 1px solid var(--border); }
+.credit-bar a { color: var(--accent); text-decoration: none; }
+.credit-bar a:hover { text-decoration: underline; }
+.credit-items { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+.credit-dot { color: var(--accent); }
+/* ---- HEADER ---- */
+.exam-header {
+  background: linear-gradient(135deg, #0A1628 0%, #1E3A6E 100%);
+  color: #fff;
+  padding: 28px 24px 20px;
   position: relative;
   overflow: hidden;
 }
-.score-banner::before {
+[data-theme="dark"] .exam-header { background: linear-gradient(135deg, #05101A 0%, #0F2040 100%); }
+.exam-header::before {
   content: '';
   position: absolute;
   top: -40px; right: -40px;
   width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(201,162,39,0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(224,155,0,0.18) 0%, transparent 70%);
   border-radius: 50%;
 }
-.score-big {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(3rem, 8vw, 5rem);
-  font-weight: 800;
-  color: var(--gold-light);
-  line-height: 1;
-}
-.score-label { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px; margin-bottom: 20px; }
-.score-meta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px; }
-.score-meta-item {
+.header-inner { max-width: 900px; margin: 0 auto; }
+.header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.exam-title { font-family: var(--font-head); font-size: 22px; font-weight: 800; line-height: 1.2; }
+.exam-subtitle { font-size: 13px; color: #A8B8D0; margin-top: 4px; }
+.header-controls { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+.theme-btn {
   background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(201,162,39,0.3);
-  border-radius: 10px;
-  padding: 10px 18px;
-  text-align: center;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 7px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.2s;
+  display: flex; align-items: center; gap: 6px;
 }
-.score-meta-item .val { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--gold-light); display: block; }
-.score-meta-item .lbl { font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.06em; }
-.pass-badge {
-  display: inline-block;
-  padding: 8px 22px;
-  border-radius: 30px;
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 15px;
-  margin-top: 14px;
+.theme-btn:hover { background: rgba(255,255,255,0.2); }
+/* ---- TIMER ---- */
+.timer-section { margin-top: 16px; }
+.timer-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+#timer-container {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 8px 16px;
+  transition: background 0.3s, border-color 0.3s;
 }
-.pass-badge.pass { background: var(--correct); color: white; }
-.pass-badge.fail { background: var(--wrong); color: white; }
-
-.breakdown-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
-.pill {
+#timer-container.timer-warning { background: rgba(217,119,6,0.3); border-color: #F59E0B; }
+#timer-container.timer-danger { background: rgba(185,28,28,0.4); border-color: #FC5C5C; animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+.timer-icon { font-size: 16px; }
+#timer-display { font-family: var(--font-head); font-size: 22px; font-weight: 800; letter-spacing: 0.08em; }
+.timer-bar-track {
+  flex: 1; min-width: 120px; height: 5px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 3px; overflow: hidden;
+}
+#timer-bar {
+  height: 100%; width: 100%;
+  background: linear-gradient(90deg, #E09B00, #F0C040);
+  border-radius: 3px;
+  transition: width 1s linear;
+}
+#timer-container.timer-warning #timer-bar { background: linear-gradient(90deg, #D97706, #F59E0B); }
+#timer-container.timer-danger #timer-bar { background: linear-gradient(90deg, #B91C1C, #E74C3C); }
+.streak-display {
+  background: rgba(224,155,0,0.2);
+  border: 1px solid rgba(224,155,0,0.4);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #F5C842;
+  font-family: var(--font-head);
+}
+/* ---- LAYOUT ---- */
+.main-layout {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 20px;
+  align-items: start;
+}
+@media(max-width:680px){
+  .main-layout { grid-template-columns: 1fr; }
+  .navigator-panel { order: -1; }
+}
+/* ---- NAVIGATOR ---- */
+.navigator-panel {
+  position: sticky;
+  top: 20px;
   background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 12px;
-  padding: 12px 18px;
-  flex: 1; min-width: 130px;
-  box-shadow: var(--shadow-sm);
-  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
 }
-.pill .pill-name { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-sub); font-weight: 600; margin-bottom: 4px; }
-.pill .pill-score { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--text); }
-.pill .pill-pct { font-size: 12px; color: var(--text-sub); }
-
-.analytics-section {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 14px;
-  padding: 24px;
-  margin-bottom: 28px;
-  box-shadow: var(--shadow-sm);
-}
-.analytics-section h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 20px; }
-.bar-chart { display: flex; flex-direction: column; gap: 14px; }
-.bar-row { display: flex; align-items: center; gap: 12px; }
-.bar-row-label { font-size: 12px; font-weight: 600; color: var(--text-sub); min-width: 80px; text-align: right; }
-.bar-wrap { flex: 1; height: 28px; background: var(--gray-100); border-radius: 6px; overflow: hidden; }
-.bar-fill {
-  height: 100%;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
+.nav-title {
+  font-family: var(--font-head);
   font-size: 12px;
   font-weight: 700;
-  color: white;
-  width: 0%;
-  transition: width 0.9s ease;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
 }
-.bar-fill.bar-mc { background: linear-gradient(90deg, #2563eb, #60a5fa); }
-.bar-fill.bar-tf { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
-.bar-fill.bar-enum { background: linear-gradient(90deg, #0891b2, #38bdf8); }
-.bar-fill.bar-ident { background: linear-gradient(90deg, #c9a227, #e8c355); color: var(--navy); }
-.bar-fill.bar-acro { background: linear-gradient(90deg, #16a34a, #4ade80); }
-
-.retake-wrap { text-align: center; margin: 16px 0 36px; }
-.retake-btn {
-  background: transparent;
-  border: 2px solid var(--gold);
-  color: var(--gold-dim);
+#navigator-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin-bottom: 14px;
+}
+.nav-btn {
+  aspect-ratio: 1;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font-body);
+}
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.nav-btn.answered { background: var(--answered); border-color: var(--answered); color: #fff; }
+.nav-btn.nav-flagged { border-color: var(--flagged-col) !important; }
+.nav-btn.answered.nav-flagged { background: var(--flagged-col); border-color: var(--flagged-col); }
+.nav-legend { display: flex; flex-direction: column; gap: 5px; font-size: 11px; color: var(--text-muted); }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.legend-dot.ld-answered { background: var(--answered); }
+.legend-dot.ld-flagged { background: var(--flagged-col); }
+.legend-dot.ld-unanswered { background: var(--surface2); border: 1px solid var(--border); }
+.nav-progress { margin-top: 12px; }
+.progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 5px; font-weight: 500; }
+.progress-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent)); border-radius: 3px; transition: width 0.4s; }
+/* ---- SECTIONS HEADER ---- */
+.section-group-header {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 8px 0 4px;
+  border-bottom: 2px solid var(--accent-light);
+  margin: 24px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+[data-theme="dark"] .section-group-header { border-bottom-color: rgba(224,155,0,0.2); }
+.section-badge {
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+/* ---- QUESTION CARD ---- */
+.question-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+  scroll-margin-top: 20px;
+  transition: border-color 0.2s;
+}
+.question-card:hover { border-color: rgba(30,58,110,0.3); }
+[data-theme="dark"] .question-card:hover { border-color: rgba(74,125,200,0.3); }
+.question-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.q-number {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 800;
+  background: var(--primary);
+  color: #fff;
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: 0.06em;
+}
+[data-theme="dark"] .q-number { background: var(--accent); color: #000; }
+.q-section {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 2px 9px;
+  border-radius: 20px;
+}
+.diff-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.diff-easy { background: #DCFCE7; color: #166534; }
+.diff-medium { background: #FEF9C3; color: #713F12; }
+.diff-hard { background: #FEE2E2; color: #7F1D1D; }
+[data-theme="dark"] .diff-easy { background: #052E16; color: #4ADE80; }
+[data-theme="dark"] .diff-medium { background: #1C1400; color: #FCD34D; }
+[data-theme="dark"] .diff-hard { background: #280A0A; color: #FCA5A5; }
+.flag-btn {
+  margin-left: auto;
+  background: none;
+  border: 1.5px solid var(--border);
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  transition: all 0.15s;
+}
+.flag-btn:hover { border-color: var(--flagged-col); color: var(--flagged-col); }
+.flag-btn.flagged { background: rgba(217,119,6,0.1); border-color: var(--flagged-col); color: var(--flagged-col); }
+.question-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+/* ---- CHOICES ---- */
+.question-input { display: flex; flex-direction: column; gap: 8px; }
+.choice-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--surface2);
+}
+.choice-label:hover { border-color: var(--accent); background: var(--accent-light); }
+.choice-label input[type=radio] { display: none; }
+.choice-label:has(input:checked) { border-color: var(--accent2); background: rgba(30,58,110,0.08); }
+[data-theme="dark"] .choice-label:has(input:checked) { background: rgba(74,125,200,0.15); border-color: var(--accent2); }
+.choice-letter {
+  width: 26px; height: 26px;
+  background: var(--border);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-head);
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.choice-label:has(input:checked) .choice-letter { background: var(--accent2); color: #fff; }
+.choice-text { font-size: 14px; font-weight: 400; }
+/* ---- TEXT INPUT ---- */
+.text-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.text-input:focus { border-color: var(--accent2); background: var(--surface); }
+.enum-input { margin-bottom: 4px; }
+.enum-hint { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; font-style: italic; }
+/* ---- SUBMIT AREA ---- */
+.submit-area {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.submit-info { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; }
+#submit-btn {
+  background: linear-gradient(135deg, #0A1628, #1E3A6E);
+  color: #fff;
+  border: none;
   padding: 13px 40px;
-  border-radius: 12px;
-  font-family: 'Syne', sans-serif;
+  border-radius: 8px;
+  font-family: var(--font-head);
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
 }
-.retake-btn:hover { background: var(--gold); color: var(--navy); }
-
-#nav-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 500;
+#submit-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(10,22,40,0.3); }
+#submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+[data-theme="dark"] #submit-btn { background: linear-gradient(135deg, var(--accent), #C8A000); color: #000; }
+/* ---- MODAL ---- */
+.modal-overlay {
   display: none;
-}
-#nav-overlay.open { display: block; }
-#nav-panel {
   position: fixed;
-  left: -320px;
-  top: 0; bottom: 0;
-  width: 300px;
-  background: var(--surface);
-  z-index: 501;
-  transition: left 0.3s ease;
-  padding: 20px;
-  overflow-y: auto;
-  box-shadow: var(--shadow-lg);
-}
-#nav-panel.open { left: 0; }
-#nav-panel h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 16px; color: var(--text); }
-.nav-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-.nav-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-sub); }
-.nav-dot { width: 12px; height: 12px; border-radius: 3px; }
-.nav-dot.gray { background: var(--gray-200); }
-.nav-dot.blue { background: var(--blue); }
-.nav-dot.orange { background: var(--orange); }
-.nav-dot.green { background: var(--correct); }
-.nav-dot.red { background: var(--wrong); }
-.nav-dot.faded-red { background: #fca5a5; }
-
-.nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-.nav-item {
-  aspect-ratio: 1;
-  border-radius: 7px;
-  background: var(--gray-200);
-  display: flex;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--text-sub);
-  border: none;
+  backdrop-filter: blur(4px);
 }
-.nav-item.answered { background: var(--blue); color: white; }
-.nav-item.flagged-nav { background: var(--orange); color: white; }
-.nav-item.correct-nav { background: var(--correct); color: white; }
-.nav-item.wrong-nav { background: var(--wrong); color: white; }
-.nav-item.skipped-nav { background: #fca5a5; color: white; }
-.nav-close {
-  width: 100%;
-  margin-top: 20px;
-  padding: 10px;
+.modal-overlay.active { display: flex; }
+.modal-box {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 30px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
   border: 1.5px solid var(--border);
-  border-radius: 10px;
-  background: none;
-  color: var(--text);
+}
+.modal-title { font-family: var(--font-head); font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+.modal-msg { font-size: 14px; color: var(--text-muted); margin-bottom: 22px; line-height: 1.6; }
+.modal-btns { display: flex; gap: 12px; justify-content: center; }
+.btn-confirm {
+  background: linear-gradient(135deg, #0A1628, #1E3A6E);
+  color: #fff;
+  border: none;
+  padding: 11px 28px;
+  border-radius: 8px;
+  font-family: var(--font-head);
+  font-weight: 700;
   font-size: 14px;
   cursor: pointer;
+  transition: all 0.2s;
 }
-
-footer {
-  background: var(--navy);
-  color: rgba(255,255,255,0.65);
+.btn-confirm:hover { transform: translateY(-1px); }
+[data-theme="dark"] .btn-confirm { background: var(--accent); color: #000; }
+.btn-cancel {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  padding: 11px 28px;
+  border-radius: 8px;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-cancel:hover { border-color: var(--accent); }
+/* ---- RESULTS ---- */
+#results-section { display: none; }
+.results-header {
+  background: linear-gradient(135deg, #0A1628 0%, #1E3A6E 100%);
+  color: #fff;
+  padding: 28px 24px;
   text-align: center;
-  padding: 16px;
+}
+[data-theme="dark"] .results-header { background: linear-gradient(135deg, #05101A 0%, #0F2040 100%); }
+.results-title { font-family: var(--font-head); font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.results-sub { font-size: 13px; color: #A8B8D0; }
+.results-body {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+#score-display { margin-bottom: 24px; }
+.score-circle {
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  font-family: var(--font-head);
+  border: 4px solid;
+  box-shadow: 0 0 30px rgba(0,0,0,0.1);
+}
+.score-circle.passed { border-color: var(--correct-border); background: var(--correct-bg); color: var(--correct); }
+.score-circle.failed { border-color: var(--wrong-border); background: var(--wrong-bg); color: var(--wrong); }
+.score-pct { font-size: 30px; font-weight: 800; line-height: 1; }
+.score-label { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; margin-top: 4px; }
+.score-details { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+.score-stat {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+  text-align: center;
+  min-width: 90px;
+  box-shadow: var(--shadow);
+}
+.score-stat span { display: block; font-family: var(--font-head); font-size: 22px; font-weight: 800; color: var(--accent2); }
+[data-theme="dark"] .score-stat span { color: var(--accent); }
+.score-stat label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.section-breakdown-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+.section-breakdown-title { font-family: var(--font-head); font-size: 14px; font-weight: 700; margin-bottom: 16px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.section-bar-item { margin-bottom: 12px; }
+.section-bar-label { font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+.section-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.section-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+.section-bar-fill.good { background: linear-gradient(90deg, #0F7B4B, #34C77A); }
+.section-bar-fill.poor { background: linear-gradient(90deg, #C0392B, #E74C3C); }
+.retake-area { text-align: center; margin-bottom: 28px; }
+#retake-btn {
+  background: linear-gradient(135deg, #0A1628, #1E3A6E);
+  color: #fff;
+  border: none;
+  padding: 13px 36px;
+  border-radius: 8px;
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+#retake-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(10,22,40,0.3); }
+[data-theme="dark"] #retake-btn { background: linear-gradient(135deg, var(--accent), #C8A000); color: #000; }
+/* ---- REVIEW ---- */
+.review-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  padding: 20px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+.review-card.correct { border-left: 4px solid var(--correct-border); }
+.review-card.incorrect { border-left: 4px solid var(--wrong-border); }
+.review-header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.rv-num { font-family: var(--font-head); font-size: 11px; font-weight: 800; background: var(--primary); color: #fff; padding: 3px 9px; border-radius: 20px; }
+[data-theme="dark"] .rv-num { background: var(--accent); color: #000; }
+.rv-section { font-size: 11px; color: var(--text-muted); font-weight: 600; background: var(--surface2); border: 1px solid var(--border); padding: 2px 9px; border-radius: 20px; }
+.rv-result { margin-left: auto; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.rv-correct { background: var(--correct-bg); color: var(--correct); }
+.rv-incorrect { background: var(--wrong-bg); color: var(--wrong); }
+.rv-question { font-size: 14px; font-weight: 500; margin-bottom: 14px; line-height: 1.6; }
+.rv-choices { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.rv-choice {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+}
+.rv-choice.rv-choice-correct { background: var(--correct-bg); border-color: var(--correct-border); }
+.rv-choice.rv-choice-user-wrong { background: var(--wrong-bg); border-color: var(--wrong-border); }
+.rv-choice.rv-choice-user-correct { background: var(--correct-bg); border-color: var(--correct-border); }
+.rv-letter { font-family: var(--font-head); font-size: 11px; font-weight: 800; width: 22px; height: 22px; background: var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.rv-choice.rv-choice-correct .rv-letter { background: var(--correct-border); color: #fff; }
+.rv-choice.rv-choice-user-wrong .rv-letter { background: var(--wrong-border); color: #fff; }
+.rv-marker { margin-left: auto; font-weight: 700; font-size: 13px; }
+.rv-text-answer { font-size: 13px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
+.rv-user-ans { padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); }
+.rv-correct-text { background: var(--correct-bg); border-color: var(--correct-border); color: var(--correct); }
+.rv-wrong-text { background: var(--wrong-bg); border-color: var(--wrong-border); color: var(--wrong); }
+.rv-correct-ans { padding: 8px 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--correct-border); background: var(--correct-bg); color: var(--correct); font-weight: 600; }
+.rv-skipped { font-size: 12px; color: var(--warn); font-style: italic; padding: 6px 0; }
+.rv-enum { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 10px; }
+.rv-enum-user, .rv-enum-correct { flex: 1; min-width: 140px; font-size: 13px; }
+.rv-enum-item { margin-top: 4px; padding: 5px 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; }
+.explanation-box {
+  margin-top: 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.explanation-box summary {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--surface2);
+  color: var(--text-muted);
+  user-select: none;
+  list-style: none;
+  display: flex; align-items: center; gap: 6px;
+}
+.explanation-box summary:hover { color: var(--text); }
+.explanation-box[open] summary { border-bottom: 1px solid var(--border); }
+.exp-note { font-size: 12px; color: var(--warn); background: var(--warn-bg); padding: 8px 14px; border-bottom: 1px solid var(--border); font-style: italic; }
+.exp-list { padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+.exp-item { display: flex; gap: 8px; font-size: 13px; padding: 7px 10px; border-radius: 6px; background: var(--surface2); border: 1px solid var(--border); }
+.exp-item.exp-correct { background: var(--correct-bg); border-color: var(--correct-border); }
+.exp-letter { font-family: var(--font-head); font-size: 11px; font-weight: 800; width: 20px; height: 20px; background: var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.exp-item.exp-correct .exp-letter { background: var(--correct-border); color: #fff; }
+.exp-text { line-height: 1.5; color: var(--text); }
+.explanation-box .exp-text-single { padding: 12px 14px; font-size: 13px; line-height: 1.6; color: var(--text); }
+/* ---- FOOTER ---- */
+footer {
+  background: var(--primary);
+  color: rgba(255,255,255,0.8);
+  padding: 20px 24px;
   font-size: 12px;
+  font-family: var(--font-head);
 }
-footer a { color: var(--gold-light); text-decoration: none; }
-
-button:focus-visible, input:focus-visible {
-  outline: 3px solid var(--gold);
-  outline-offset: 2px;
+[data-theme="dark"] footer { background: #050E1A; border-top: 1px solid var(--border); }
+.footer-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.footer-items { display: flex; gap: 14px; flex-wrap: wrap; }
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+.footer-copy { font-size: 11px; color: rgba(255,255,255,0.4); }
+/* ---- MISC ---- */
+.review-section-header {
+  font-family: var(--font-head);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  padding: 16px 0 8px;
+  border-bottom: 2px solid var(--border);
+  margin: 24px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-
-@media (max-width: 600px) {
-  .exam-header { padding: 22px 20px; }
-  .q-card { padding: 16px; }
-  #timer-bar { padding: 8px 12px; gap: 8px; }
-  .timer-badge { display: none; }
+.submitted-banner {
+  background: linear-gradient(135deg, var(--correct-bg), var(--correct-bg));
+  border: 1.5px solid var(--correct-border);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  display: none;
+  margin-top: 14px;
+  font-weight: 600;
+  color: var(--correct);
+  font-size: 14px;
+  text-align: center;
 }
+.submitted-banner.visible { display: block; }
 </style>
 </head>
 <body>
 
+<!-- TOP CREDIT BAR -->
 <div class="credit-bar">
-  <span>Kim Cedrick C. Villar</span>
-  <span class="credit-sep">|</span>
-  <span>BSIT / BUSPROS</span>
-  <span class="credit-sep">|</span>
-  <span>National University – Fairview</span>
-  <span class="credit-sep">|</span>
-  <span>Section IT-252</span>
-  <span class="credit-sep">|</span>
-  <span id="top-date"></span>
-  <span class="credit-sep">|</span>
-  <a href="https://github.com/Ceddrickx" target="_blank" rel="noopener">GitHub</a>
-</div>
-
-<div id="timer-bar">
-  <div id="timer-display" class="timer-display">20:00</div>
-  <div id="progress-bar-wrap"><div id="progress-bar-fill"></div></div>
-  <div class="timer-badge">Answered: <span id="answered-count">0</span>/<span id="total-count">48</span></div>
-  <div class="timer-badge">🔥 Streak: <span id="streak-count">0</span></div>
-  <button class="timer-btn" onclick="openNav()" aria-label="Open question navigator">☰ Navigator</button>
-  <button class="dark-toggle" id="dark-btn" onclick="toggleDark()" aria-label="Toggle dark mode">🌙 Dark</button>
-</div>
-
-<div id="nav-overlay" onclick="closeNav()"></div>
-<div id="nav-panel" role="dialog" aria-label="Question Navigator">
-  <h3>📋 Question Navigator</h3>
-  <div class="nav-legend">
-    <div class="nav-legend-item"><div class="nav-dot gray"></div>Unanswered</div>
-    <div class="nav-legend-item"><div class="nav-dot blue"></div>Answered</div>
-    <div class="nav-legend-item"><div class="nav-dot orange"></div>Flagged</div>
-    <div class="nav-legend-item"><div class="nav-dot green"></div>Correct</div>
-    <div class="nav-legend-item"><div class="nav-dot red"></div>Wrong</div>
-    <div class="nav-legend-item"><div class="nav-dot faded-red"></div>Skipped</div>
+  <div class="credit-items">
+    <span>Kim Cedrick C. Villar</span>
+    <span class="credit-dot">·</span>
+    <span>BSIT / BUSPROS</span>
+    <span class="credit-dot">·</span>
+    <span>National University – Fairview</span>
+    <span class="credit-dot">·</span>
+    <span>Section: IT-252</span>
+    <span class="credit-dot">·</span>
+    <span id="credit-date"></span>
   </div>
-  <div class="nav-grid" id="nav-grid"></div>
-  <button class="nav-close" onclick="closeNav()">✕ Close</button>
+  <div>
+    <a href="https://github.com/Ceddrickx" target="_blank" rel="noopener">⌥ github.com/Ceddrickx</a>
+  </div>
 </div>
 
-<div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+<!-- EXAM HEADER -->
+<div class="exam-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div>
+        <div class="exam-title">BUSPROS — Week 3 Mock Exam</div>
+        <div class="exam-subtitle">SAP S/4HANA · Sales and Distribution (SD) · Global Bike Case</div>
+      </div>
+      <div class="header-controls">
+        <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle dark mode">
+          <span id="theme-icon">🌙</span>
+          <span id="theme-label">Dark</span>
+        </button>
+      </div>
+    </div>
+    <div class="timer-section" id="exam-section">
+      <div class="timer-row">
+        <div id="timer-container">
+          <span class="timer-icon">⏱</span>
+          <span id="timer-display">20:00</span>
+        </div>
+        <div class="timer-bar-track">
+          <div id="timer-bar"></div>
+        </div>
+        <div class="streak-display" id="streak-display">🔥 Streak: <span id="streak-count">0</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="submit-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="modal-box">
-    <div class="modal-title" id="modal-title">Submit Exam</div>
-    <div class="modal-body" id="modal-body">Are you sure you want to submit your exam?</div>
-    <div class="modal-actions">
-      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
-      <button class="modal-confirm" onclick="confirmSubmit()">✓ Yes, Submit</button>
+    <div class="modal-title" id="modal-title">⚠ Submit Exam?</div>
+    <div class="modal-msg" id="modal-msg">Are you sure you want to submit? Unanswered questions will be marked incorrect.</div>
+    <div class="modal-btns">
+      <button class="btn-confirm" onclick="confirmSubmit()" aria-label="Confirm submission">Submit</button>
+      <button class="btn-cancel" onclick="closeModal()" aria-label="Cancel submission">Cancel</button>
     </div>
   </div>
 </div>
 
-<div class="container">
-  <div class="exam-header">
-    <h1>Production Planning &amp; Execution</h1>
-    <div class="subtitle">BUSPROS Week 5 – SAP S/4HANA PP Module</div>
-    <div class="exam-meta">
-      <div class="meta-pill"><div class="dot"></div>20 Multiple Choice</div>
-      <div class="meta-pill"><div class="dot"></div>10 True or False</div>
-      <div class="meta-pill"><div class="dot"></div>3 Enumeration</div>
-      <div class="meta-pill"><div class="dot"></div>10 Identification</div>
-      <div class="meta-pill"><div class="dot"></div>5 Acronym</div>
-      <div class="meta-pill"><div class="dot"></div>⏱ 20 Minutes</div>
-    </div>
-  </div>
-
-  <div id="exam-form">
+<!-- MAIN LAYOUT -->
+<div class="main-layout" id="main-layout">
+  <!-- QUESTIONS AREA -->
+  <div id="exam-area">
     <div id="questions-container"></div>
-    <div class="submit-area">
-      <button class="submit-btn" onclick="openModal()" aria-label="Submit exam">Submit Exam</button>
+    <div id="submitted-banner" class="submitted-banner">✓ Exam submitted! Scroll down to view your results.</div>
+    <div class="submit-area" id="submit-area">
+      <div class="submit-info" id="submit-info">Answer all 48 questions before submitting. Timer auto-submits at 00:00.</div>
+      <button id="submit-btn" onclick="openModal()" aria-label="Submit exam">Submit Exam</button>
     </div>
   </div>
 
-  <div id="results-section">
-    <div class="score-banner">
-      <div class="score-big" id="score-big">--</div>
-      <div class="score-label">out of <span id="score-total">--</span> points</div>
-      <div id="pass-badge" class="pass-badge pass">PASSED ✓</div>
-      <div class="score-meta" id="score-meta"></div>
+  <!-- NAVIGATOR -->
+  <div class="navigator-panel" id="nav-panel">
+    <div class="nav-title">📋 Navigator</div>
+    <div id="navigator-grid"></div>
+    <div class="nav-progress">
+      <div class="progress-label">
+        <span>Progress</span>
+        <span id="progress-text">0 / 48</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
-    <div class="breakdown-pills" id="breakdown-pills"></div>
-    <div class="analytics-section">
-      <h3>📊 Performance Analytics</h3>
-      <div class="bar-chart" id="bar-chart"></div>
+    <div class="nav-legend">
+      <div class="legend-item"><div class="legend-dot ld-answered"></div>Answered</div>
+      <div class="legend-item"><div class="legend-dot ld-flagged"></div>Flagged</div>
+      <div class="legend-item"><div class="legend-dot ld-unanswered"></div>Unanswered</div>
     </div>
-    <div class="retake-wrap">
-      <button class="retake-btn" onclick="retakeExam()">↺ Retake Exam</button>
-    </div>
-    <div id="review-section"></div>
   </div>
 </div>
 
+<!-- RESULTS SECTION -->
+<div id="results-section">
+  <div class="results-header">
+    <div class="results-title">Exam Results</div>
+    <div class="results-sub">SAP SD – Week 3 · BUSPROS</div>
+  </div>
+  <div class="results-body">
+    <div id="score-display"></div>
+    <div class="section-breakdown-card">
+      <div class="section-breakdown-title">📊 Performance by Section</div>
+      <div id="section-breakdown"></div>
+    </div>
+    <div class="retake-area">
+      <button id="retake-btn" onclick="retakeExam()" aria-label="Retake exam">🔄 Retake Exam</button>
+    </div>
+    <div class="review-section-header">📝 Question Review</div>
+    <div id="review-container"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
-  <p>Kim Cedrick C. Villar &nbsp;|&nbsp; BSIT / BUSPROS &nbsp;|&nbsp; National University – Fairview &nbsp;|&nbsp; Section IT-252 &nbsp;|&nbsp; <a href="https://github.com/Ceddrickx" target="_blank" rel="noopener">github.com/Ceddrickx</a></p>
-  <p id="footer-date" style="margin-top:4px;"></p>
+  <div class="footer-inner">
+    <div class="footer-items">
+      <span>Kim Cedrick C. Villar</span>
+      <span>BSIT / BUSPROS</span>
+      <span>National University – Fairview</span>
+      <span>Section: IT-252</span>
+      <span id="footer-date"></span>
+    </div>
+    <div><a href="https://github.com/Ceddrickx" target="_blank" rel="noopener">github.com/Ceddrickx</a></div>
+  </div>
 </footer>
 
 <script>
+// ========================================================
+// QUESTION BANK (READ-ONLY — never mutated)
+// ========================================================
+const questionBank = [
+  // ---- MULTIPLE CHOICE (20) ----
+  {
+    id:1, type:'mc', question:'What is the combination of Sales Organization, Distribution Channel, and Division called in SAP SD?',
+    slideRef:'Slide 8', difficulty:'easy',
+    origChoices:['Sales Office','Sales Area','Credit Control Area','Company Code'],
+    correctAnswer:'Sales Area',
+    origWhy:[
+      'Sales Office is a sub-unit that reports to the Sales Organization — it is not a combination of three organizational units.',
+      'CORRECT. Sales Area = Sales Organization + Distribution Channel + Division. It determines pricing conditions for sales activities.',
+      'Credit Control Area grants and monitors credit limits for customers and can span multiple company codes.',
+      'Company Code is the smallest organizational unit for maintaining a legal set of books — unrelated to the sales combination.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:2, type:'mc', question:'Which SD organizational unit is responsible for the sale of certain products or services and may carry legal liability for products and customer claims?',
+    slideRef:'Slide 7', difficulty:'easy',
+    origChoices:['Distribution Channel','Division','Sales Organization','Delivering Plant'],
+    correctAnswer:'Sales Organization',
+    origWhy:[
+      'Distribution Channel describes how products reach customers (wholesale, retail, direct sales) — not who is legally responsible.',
+      'Division is a way of grouping materials, products, or services — not responsible for sales.',
+      'CORRECT. The Sales Organization is responsible for sales of products/services and may include legal liability for products and customer claims.',
+      'In SD, the Delivering Plant is the plant from which goods are shipped — it does not carry sales legal liability.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:3, type:'mc', question:'Which of the following is NOT listed as a functionality of the SAP SD module?',
+    slideRef:'Slide 5', difficulty:'easy',
+    origChoices:['Sales Support','Billing','Procurement','Foreign Trade'],
+    correctAnswer:'Procurement',
+    origWhy:[
+      'Sales Support is one of the six SD functionalities.',
+      'Billing is one of the six SD functionalities.',
+      'CORRECT. Procurement belongs to the MM (Materials Management) module, not SD. The six SD functionalities are: Sales Support, Sales, Shipping and Transportation, Billing, Credit Management, and Foreign Trade.',
+      'Foreign Trade is one of the six SD functionalities.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:4, type:'mc', question:'The Customer Master information is divided into how many areas?',
+    slideRef:'Slide 13', difficulty:'easy',
+    origChoices:['Two (2)','Three (3)','Four (4)','Five (5)'],
+    correctAnswer:'Three (3)',
+    origWhy:[
+      'Two areas is insufficient. Customer Master is divided into three distinct data areas.',
+      'CORRECT. Customer Master is divided into: (1) General Data, (2) Company Code Data, and (3) Sales Area Data.',
+      'Four is incorrect — the Customer Master has exactly three areas.',
+      'Five is incorrect — the Customer Master has exactly three areas.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:5, type:'mc', question:'The Availability Check in SAP SD proposes three delivery methods. Which option is NOT one of these three?',
+    slideRef:'Slide 32', difficulty:'medium',
+    origChoices:['One-time Delivery','Partial Delivery','Complete Delivery','Delayed Proposal'],
+    correctAnswer:'Partial Delivery',
+    origWhy:[
+      'One-time Delivery IS one of the three delivery methods proposed by the Availability Check.',
+      'CORRECT. Partial Delivery is NOT one of the three methods. The three are: One-time Delivery, Complete Delivery, and Delayed Proposal.',
+      'Complete Delivery IS one of the three delivery methods proposed by the Availability Check.',
+      'Delayed Proposal IS one of the three delivery methods proposed by the Availability Check.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:6, type:'mc', question:'What is the Credit Control Area code for Global Bike\'s enterprise structure in SAP ERP (Sales)?',
+    slideRef:'Slide 10', difficulty:'medium',
+    origChoices:['US00','GL00','DE00','GB00'],
+    correctAnswer:'GL00',
+    origWhy:[
+      'US00 is the Company Code for the United States, not the Credit Control Area.',
+      'CORRECT. The global Credit Control Area for Global Bike is GL00, which spans all company codes globally.',
+      'DE00 is the Company Code for Germany, not the Credit Control Area.',
+      'GB00 is the Company Code for Great Britain, not the Credit Control Area.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:7, type:'mc', question:'Which process is NOT directly controlled or initiated by the Delivery Document in SAP SD?',
+    slideRef:'Slide 38', difficulty:'medium',
+    origChoices:['Picking','Loading','Billing','Post Goods Issue'],
+    correctAnswer:'Billing',
+    origWhy:[
+      'Picking IS directly controlled by the Delivery Document.',
+      'Loading IS directly controlled by the Delivery Document.',
+      'CORRECT. Billing is a separate subsequent process — it copies data from the sales order and/or delivery document but is NOT controlled by the delivery document itself. The Delivery Document controls: Picking, Packing, Loading, and Post Goods Issue.',
+      'Post Goods Issue IS directly controlled and concluded by the Delivery Document.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:8, type:'mc', question:'Which event in the SD process signals that goods have left the seller\'s premises and may indicate a legal change in ownership?',
+    slideRef:'Slide 41', difficulty:'medium',
+    origChoices:['Sales Order Entry','Invoice Creation','Post Goods Issue','Delivery Document Creation'],
+    correctAnswer:'Post Goods Issue',
+    origWhy:[
+      'Sales Order Entry is the initial order step — it does not involve physical transfer of goods.',
+      'Invoice Creation (Billing) updates financial accounts but does not signal physical departure of goods.',
+      'CORRECT. Post Goods Issue signals that goods have left the seller\'s premises. The legal change of ownership depends on the Incoterm. It reduces inventory, enters Cost of Goods Sold, and updates G/L accounts.',
+      'Delivery Document Creation begins the shipping process but does not itself move goods out.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:9, type:'mc', question:'What does ATP stand for in SAP SD Delivery Scheduling?',
+    slideRef:'Slide 28', difficulty:'easy',
+    origChoices:['Automatic Transfer Process','Availability to Promise','Assigned Transportation Plan','Automated Tax Pricing'],
+    correctAnswer:'Availability to Promise',
+    origWhy:[
+      '"Automatic Transfer Process" is not an SAP SD term.',
+      'CORRECT. ATP stands for Availability to Promise — the date determined by the system using scheduling rules that tells us when material will be available for delivery.',
+      '"Assigned Transportation Plan" is not an SAP SD term.',
+      '"Automated Tax Pricing" is not an SAP SD term.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:10, type:'mc', question:'In Backward Scheduling, from which point does the system begin calculating the delivery timeline?',
+    slideRef:'Slide 29', difficulty:'medium',
+    origChoices:['Order Date','Material Availability Date','Requested Delivery Date','Goods Issue Date'],
+    correctAnswer:'Requested Delivery Date',
+    origWhy:[
+      'The Order Date is the END RESULT of backward scheduling — it tells you when the order must be placed, not the starting point.',
+      'The Material Availability Date is calculated during the backward scheduling process, not the starting point.',
+      'CORRECT. Backward Scheduling starts from the Requested Delivery Date and works backwards through transit time, loading time, transportation scheduling, and pick & pack time to determine the material availability and order dates.',
+      'The Goods Issue Date is an intermediate step in the timeline, not the starting point.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:11, type:'mc', question:'Which financial posting does the Billing Document automatically create in SAP SD?',
+    slideRef:'Slide 42', difficulty:'medium',
+    origChoices:[
+      'Credit to customer sub-ledger, Debit to revenue account',
+      'Debit to customer sub-ledger (A/R), Credit to revenue account',
+      'Debit to bank account, Credit to customer account',
+      'Credit to bank account, Debit to revenue account'
+    ],
+    correctAnswer:'Debit to customer sub-ledger (A/R), Credit to revenue account',
+    origWhy:[
+      'This is the reverse of the correct posting — credits and debits are swapped.',
+      'CORRECT. The billing document automatically creates a DEBIT posting to the customer\'s sub-ledger (A/R) account and CREDITS the revenue account, recording what the customer owes.',
+      'This describes a payment/clearing posting, not the billing document posting.',
+      'This is financially incorrect for billing — it describes a cash receipt entry.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:12, type:'mc', question:'Which of the following is NOT a type of condition master data in SAP SD pricing?',
+    slideRef:'Slide 18', difficulty:'easy',
+    origChoices:['Surcharges','Purchase Requisitions','Discounts','Freights'],
+    correctAnswer:'Purchase Requisitions',
+    origWhy:[
+      'Surcharges are a valid type of condition master data in SD pricing.',
+      'CORRECT. Purchase Requisitions belong to the MM module and are not part of SD condition master data. SD condition types are: Prices, Surcharges, Discounts, Freights, and Taxes.',
+      'Discounts are a valid type of condition master data in SD pricing.',
+      'Freights are a valid type of condition master data in SD pricing.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:13, type:'mc', question:'What is the key difference between an Inquiry and a Quotation in SAP SD presales?',
+    slideRef:'Slides 23-24', difficulty:'medium',
+    origChoices:[
+      'An inquiry is legally binding; a quotation is not',
+      'An inquiry has no purchase obligation; a quotation is legally binding on the vendor',
+      'An inquiry creates a delivery; a quotation creates an invoice',
+      'They are the same document with different names'
+    ],
+    correctAnswer:'An inquiry has no purchase obligation; a quotation is legally binding on the vendor',
+    origWhy:[
+      'This is reversed — the QUOTATION is legally binding, not the inquiry.',
+      'CORRECT. An inquiry is the customer\'s request for information with NO obligation to purchase. A quotation is a legally binding offer from the VENDOR to deliver specific products at a predefined price within a timeframe.',
+      'Neither document creates deliveries or invoices directly.',
+      'They are distinct presales documents with very different purposes and legal standing.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:14, type:'mc', question:'In SAP, material master data is organized and stored in functional segments called:',
+    slideRef:'Slide 15', difficulty:'easy',
+    origChoices:['Tables','Modules','Views','Sections'],
+    correctAnswer:'Views',
+    origWhy:[
+      'Tables are the underlying database structures — not the term used for material master data segments accessible to users.',
+      'Modules are large functional areas of SAP (e.g., SD, MM, FI) — not segments of the material master.',
+      'CORRECT. Material master data is stored in functional segments called Views (e.g., Basic Data, Sales Data, Purchasing Data, Accounting Data, Storage Data, etc.).',
+      '"Sections" is not the SAP terminology used for material master data organization.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:15, type:'mc', question:'Which presales document is considered legally binding on the vendor in SAP SD?',
+    slideRef:'Slide 24', difficulty:'easy',
+    origChoices:['Inquiry','Delivery Note','Quotation','Purchase Order'],
+    correctAnswer:'Quotation',
+    origWhy:[
+      'An inquiry is NOT legally binding — it is merely a customer request for information without obligation.',
+      'A Delivery Note is part of the shipping process, not a presales document.',
+      'CORRECT. A Quotation is legally binding on the VENDOR, committing them to deliver specific products at a predefined price within a specified timeframe.',
+      'A Purchase Order is an MM document for procurement — it is not a presales SD document.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:16, type:'mc', question:'The Sales Document (Sales Order) in SAP SD is made up of how many primary structural areas?',
+    slideRef:'Slide 26', difficulty:'easy',
+    origChoices:['Two (2)','Three (3)','Four (4)','Five (5)'],
+    correctAnswer:'Three (3)',
+    origWhy:[
+      'Two areas is incorrect — a Sales Order has three distinct structural levels.',
+      'CORRECT. The three primary areas are: (1) Header — data for the entire order; (2) Line Item(s) — specific product information; (3) Schedule Line(s) — delivery quantities and dates.',
+      'Four is incorrect — the Sales Order has exactly three structural areas.',
+      'Five is incorrect — the Sales Order has exactly three structural areas.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:17, type:'mc', question:'Which SAP SD component assists sales and marketing activities — including tracking customer contacts and mailing campaigns — and is referred to as "CRM Light"?',
+    slideRef:'Slide 22', difficulty:'medium',
+    origChoices:['Billing','Credit Management','Sales Support','Foreign Trade'],
+    correctAnswer:'Sales Support',
+    origWhy:[
+      'Billing generates customer invoices and creates financial postings — it is not a CRM function.',
+      'Credit Management monitors credit exposure and customer credit limits, not customer relationship activities.',
+      'CORRECT. Sales Support is referred to as "CRM Light." It handles creating and tracking customer contacts, implementing mailing/internet/trade fair campaigns, and pre-sales documents (Inquiries and Quotations).',
+      'Foreign Trade handles import/export documentation and compliance, not CRM activities.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:18, type:'mc', question:'Which of the following correctly describes the Distribution Channel in SAP SD?',
+    slideRef:'Slide 7', difficulty:'easy',
+    origChoices:[
+      'A way of grouping materials, products, or services',
+      'The way in which products or services reach the customer',
+      'The smallest organizational unit for maintaining a legal set of books',
+      'An organizational entity that grants and monitors credit limits'
+    ],
+    correctAnswer:'The way in which products or services reach the customer',
+    origWhy:[
+      'This describes Division, not Distribution Channel.',
+      'CORRECT. The Distribution Channel defines how products or services reach the customer — typical examples are wholesale, retail, or direct sales.',
+      'This describes Company Code.',
+      'This describes Credit Control Area.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:19, type:'mc', question:'Which SAP transaction code is used to display the "List of Sales Orders" — a key tool for sales order process debugging?',
+    slideRef:'Slide 46', difficulty:'medium',
+    origChoices:['VA01','ME21N','VK11','VA05'],
+    correctAnswer:'VA05',
+    origWhy:[
+      'VA01 is used to CREATE a new sales order in SAP.',
+      'ME21N is a Materials Management transaction for creating purchase orders — unrelated to sales orders.',
+      'VK11 is used to maintain pricing condition records (condition master data).',
+      'CORRECT. VA05 is the "List of Sales Orders" transaction, used as a tool to find and review existing orders when debugging the sales order process.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:20, type:'mc', question:'The billing process in SAP SD can generate invoices in which of the following ways?',
+    slideRef:'Slide 42', difficulty:'medium',
+    origChoices:[
+      'Only order-based billing',
+      'Only delivery-based billing',
+      'Both order-based and delivery-based billing',
+      'Only automatic billing without any manual option'
+    ],
+    correctAnswer:'Both order-based and delivery-based billing',
+    origWhy:[
+      'Order-based billing is supported but it is not the only method available.',
+      'Delivery-based billing is supported but it is not the only method available.',
+      'CORRECT. The billing document can be created from either the sales order (order-based billing) OR the delivery document (delivery-based billing). Collective invoicing and split invoicing are also supported methods.',
+      'SAP supports both automatic and manual billing processing options.'
+    ],
+    altAnswers:[]
+  },
+  // ---- TRUE OR FALSE (10) ----
+  {
+    id:21, type:'tf', question:'Every customer in SAP SD must have a master record.',
+    slideRef:'Slide 13', difficulty:'easy',
+    origChoices:['True','False'],
+    correctAnswer:'True',
+    origWhy:[
+      'CORRECT — True. The Customer Master contains all information needed for processing orders, deliveries, invoices, and customer payments. Every customer MUST have a master record, although one-time customers (CPD accounts) are also possible.',
+      'Incorrect. The statement is TRUE — every customer requires a master record to be processed in SAP SD.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:22, type:'tf', question:'The Client is the smallest organizational unit in SAP for which you can maintain a legal set of books.',
+    slideRef:'Slide 7', difficulty:'easy',
+    origChoices:['True','False'],
+    correctAnswer:'False',
+    origWhy:[
+      'Incorrect. The Client is NOT the smallest unit for legal books — it is actually the largest/highest-level organizational unit, representing an independent system environment.',
+      'CORRECT — False. The COMPANY CODE is the smallest organizational unit for maintaining a legal set of books. The Client is the highest-level unit representing an independent SAP environment.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:23, type:'tf', question:'A Credit Control Area in SAP SD can include one or more company codes.',
+    slideRef:'Slide 7', difficulty:'easy',
+    origChoices:['True','False'],
+    correctAnswer:'True',
+    origWhy:[
+      'CORRECT — True. The Credit Control Area grants and monitors credit limits for customers, and it can encompass one or more company codes within its scope (as shown by GL00 covering all of Global Bike).',
+      'Incorrect. The statement is TRUE — a Credit Control Area can span multiple company codes.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:24, type:'tf', question:'A quotation in SAP SD is legally binding on the customer.',
+    slideRef:'Slide 24', difficulty:'medium',
+    origChoices:['True','False'],
+    correctAnswer:'False',
+    origWhy:[
+      'Incorrect. The statement is FALSE — a quotation is legally binding on the VENDOR, not the customer.',
+      'CORRECT — False. A quotation is legally binding on the VENDOR (seller), committing them to deliver products at a predefined price within a specified timeframe. The customer has no obligation to purchase.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:25, type:'tf', question:'Post Goods Issue in SAP SD reduces inventory and records Cost of Goods Sold.',
+    slideRef:'Slide 41', difficulty:'easy',
+    origChoices:['True','False'],
+    correctAnswer:'True',
+    origWhy:[
+      'CORRECT — True. Post Goods Issue signals goods left the seller\'s premises. It reduces inventory, enters Cost of Goods Sold, automatically updates the General Ledger (G/L) accounts, and ends the shipping process.',
+      'Incorrect. The statement is TRUE — Goods Issue does reduce inventory and record Cost of Goods Sold.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:26, type:'tf', question:'The Material Master in SAP is used exclusively by the Sales and Distribution (SD) module.',
+    slideRef:'Slide 15', difficulty:'easy',
+    origChoices:['True','False'],
+    correctAnswer:'False',
+    origWhy:[
+      'Incorrect. The statement is FALSE — the Material Master is used across many SAP modules, not just SD.',
+      'CORRECT — False. The Material Master is used by most components within the SAP system: Sales and Distribution (SD), Materials Management (MM), Production, Plant Maintenance, Accounting/Controlling, and Quality Management.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:27, type:'tf', question:'In Forward Scheduling, the system starts from the Order Date to calculate a new (later) delivery date when the requested date cannot be met.',
+    slideRef:'Slide 30', difficulty:'medium',
+    origChoices:['True','False'],
+    correctAnswer:'True',
+    origWhy:[
+      'CORRECT — True. Forward Scheduling begins from the Order Date and calculates forward through pick/pack time, transportation scheduling time, loading time, and transit time to arrive at a new Delivery Date.',
+      'Incorrect. The statement is TRUE — Forward Scheduling does start from the Order Date and moves forward in time.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:28, type:'tf', question:'The billing document in SAP SD passes the sales process to the Human Resources (HR) department for final payment.',
+    slideRef:'Slide 42', difficulty:'easy',
+    origChoices:['True','False'],
+    correctAnswer:'False',
+    origWhy:[
+      'Incorrect. The statement is FALSE — the billing document passes the process to Financial Accounting (FI), not HR.',
+      'CORRECT — False. The billing document passes the sales process to FINANCIAL ACCOUNTING (FI) to await customer payment. HR manages employee-related processes and has no role here.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:29, type:'tf', question:'Changes to a delivery document — such as modifications to products and quantities — are allowable in SAP SD.',
+    slideRef:'Slide 38', difficulty:'easy',
+    origChoices:['True','False'],
+    correctAnswer:'True',
+    origWhy:[
+      'CORRECT — True. The slide explicitly states: "Changes to delivery are allowable - products, quantities." The Delivery Document is flexible and allows product and quantity modifications.',
+      'Incorrect. The statement is TRUE — the Delivery Document does allow changes to products and quantities.'
+    ],
+    altAnswers:[]
+  },
+  {
+    id:30, type:'tf', question:'Output in SAP SD can only be transmitted via Electronic Data Interchange (EDI).',
+    slideRef:'Slide 19', difficulty:'easy',
+    origChoices:['True','False'],
+    correctAnswer:'False',
+    origWhy:[
+      'Incorrect. The statement is FALSE — EDI is only one of several transmission methods.',
+      'CORRECT — False. Output can be transmitted using various media: Electronic Data Interchange (EDI), Email, Mail, Fax, and XML. EDI is just one of five listed options.'
+    ],
+    altAnswers:[]
+  },
+  // ---- ENUMERATION (3) ----
+  {
+    id:31, type:'enum', question:'List the THREE areas into which Customer Master information is divided in SAP SD. (Order does not matter; partial credit applies.)',
+    slideRef:'Slide 13', difficulty:'easy',
+    origChoices:[],
+    correctAnswer:['General Data','Company Code Data','Sales Area Data'],
+    origWhy:['The Customer Master is divided into three areas: (1) General Data — information relevant for the entire organization such as name, address, and communication details; (2) Company Code Data — company-specific information including account management, payment terms, and banking details; (3) Sales Area Data — sales-specific information such as sales office, currency, and pricing.'],
+    altAnswers:[]
+  },
+  {
+    id:32, type:'enum', question:'List the THREE primary areas (structural levels) of a Sales Document (Sales Order) in SAP SD. (Order does not matter; partial credit applies.)',
+    slideRef:'Slide 26', difficulty:'easy',
+    origChoices:[],
+    correctAnswer:['Header','Line Item','Schedule Line'],
+    origWhy:['The three primary areas of a Sales Order are: (1) Header — data relevant for the entire sales order (e.g., customer data, total cost); (2) Line Item(s) — information about the specific product (e.g., material, quantity, individual line cost); (3) Schedule Line(s) — uniquely belongs to a Line Item and contains delivery quantities and dates for partial deliveries.'],
+    altAnswers:[]
+  },
+  {
+    id:33, type:'enum', question:'List ALL SIX functionalities of the SAP SD module. (Order does not matter; partial credit applies.)',
+    slideRef:'Slide 5', difficulty:'medium',
+    origChoices:[],
+    correctAnswer:['Sales Support','Sales','Shipping and Transportation','Billing','Credit Management','Foreign Trade'],
+    origWhy:['The six SD module functionalities are: (1) Sales Support, (2) Sales, (3) Shipping and Transportation, (4) Billing, (5) Credit Management, and (6) Foreign Trade. These cover the entire sales lifecycle from pre-sales activities through financial settlement.'],
+    altAnswers:[]
+  },
+  // ---- IDENTIFICATION (10) ----
+  {
+    id:34, type:'id', question:'This SAP SD organizational entity grants and monitors a credit limit for customers and can include one or more company codes.',
+    slideRef:'Slide 7', difficulty:'easy',
+    origChoices:[], correctAnswer:'Credit Control Area',
+    origWhy:['Answer: Credit Control Area. It is an organizational entity in SAP that manages credit risk by granting and monitoring credit limits for customers. It can span one or more company codes. In Global Bike, the Credit Control Area GL00 covers all company codes globally.'],
+    altAnswers:[]
+  },
+  {
+    id:35, type:'id', question:'Identify the plant from which goods should be delivered to the customer in the SAP SD organizational structure.',
+    slideRef:'Slide 8', difficulty:'easy',
+    origChoices:[], correctAnswer:'Delivering Plant',
+    origWhy:['Answer: Delivering Plant (also referred to as "Plant" in context). In SD, the Delivering Plant is the specific plant from which goods are dispatched to the customer. It is assigned per line item in the sales order.'],
+    altAnswers:['Plant']
+  },
+  {
+    id:36, type:'id', question:'This pre-sales document is a customer\'s request to a company for information or quotation in respect to their products or services — with NO obligation to purchase.',
+    slideRef:'Slide 23', difficulty:'easy',
+    origChoices:[], correctAnswer:'Inquiry',
+    origWhy:['Answer: Inquiry. An inquiry is a customer request for information (pricing, material availability, quantities, dates) without any obligation to purchase. It is maintained in the system and a quotation is then created to address the customer\'s questions.'],
+    altAnswers:[]
+  },
+  {
+    id:37, type:'id', question:'This scheduling method in SAP SD works backwards from the Requested Delivery Date to determine the material availability date and order date.',
+    slideRef:'Slide 29', difficulty:'medium',
+    origChoices:[], correctAnswer:'Backward Scheduling',
+    origWhy:['Answer: Backward Scheduling. Starting from the Requested Delivery Date, the system subtracts transit time, loading time, transportation scheduling time, and pick & pack time to calculate the Material Availability Date and the Order Date.'],
+    altAnswers:[]
+  },
+  {
+    id:38, type:'id', question:'This master data record in SAP SD contains all the information necessary for processing orders, deliveries, invoices, and customer payment.',
+    slideRef:'Slide 13', difficulty:'easy',
+    origChoices:[], correctAnswer:'Customer Master',
+    origWhy:['Answer: Customer Master. It stores all customer-relevant data including name, address, payment terms, and sales area-specific data. Every customer must have a Customer Master record to participate in SD transactions.'],
+    altAnswers:['Customer Master Data']
+  },
+  {
+    id:39, type:'id', question:'This SD structural level of a Sales Order belongs uniquely to a Line Item and contains delivery quantities and dates for partial deliveries.',
+    slideRef:'Slide 26', difficulty:'medium',
+    origChoices:[], correctAnswer:'Schedule Line',
+    origWhy:['Answer: Schedule Line. Schedule Lines are the lowest level of a sales document. They belong uniquely to a Line Item and carry specific confirmed delivery quantities and dates, enabling partial deliveries to be tracked and managed.'],
+    altAnswers:['Schedule Lines']
+  },
+  {
+    id:40, type:'id', question:'This billing method in SAP SD combines deliveries from multiple sales orders into a single invoice.',
+    slideRef:'Slide 43', difficulty:'medium',
+    origChoices:[], correctAnswer:'Collective Invoicing',
+    origWhy:['Answer: Collective Invoicing. This billing method consolidates multiple deliveries from different orders into one invoice, reducing administrative overhead for the customer and the billing department.'],
+    altAnswers:['Collective Invoice']
+  },
+  {
+    id:41, type:'id', question:'This is the final step in the SAP SD Order-to-Cash process, managed by Financial Accounting, which clears the A/R liability and increases the bank account.',
+    slideRef:'Slide 44', difficulty:'easy',
+    origChoices:[], correctAnswer:'Payment',
+    origWhy:['Answer: Payment. Payment is the final step in the sales order process. It involves posting payments against invoices, reconciling differences, and creating journal entries that clear the A/R (Accounts Receivable) account and increase the bank balance.'],
+    altAnswers:['Receipt of Customer Payment','Customer Payment']
+  },
+  {
+    id:42, type:'id', question:'This SAP SD feature shows the status of an order at any point in time and is updated every time a change is made to any document in the Order-to-Cash cycle.',
+    slideRef:'Slide 45', difficulty:'medium',
+    origChoices:[], correctAnswer:'Document Flow',
+    origWhy:['Answer: Document Flow. The Document Flow feature allows users to view the complete chain of documents related to a sales transaction (Inquiry → Quotation → Sales Order → Delivery → Goods Issue → Invoice → Payment) and see the status of each document at any point in time.'],
+    altAnswers:[]
+  },
+  {
+    id:43, type:'id', question:'This SAP SD process, which occurs during sales order creation, determines the warehouse location and the route material will take from the warehouse to the customer\'s location.',
+    slideRef:'Slide 31', difficulty:'medium',
+    origChoices:[], correctAnswer:'Shipping and Route Determination',
+    origWhy:['Answer: Shipping and Route Determination. During sales order creation, the system automatically determines: (1) the Shipping Point from which material will be shipped (per line item), and (2) the Route the material will travel from the warehouse to the customer — which is then used to define transit time in delivery scheduling.'],
+    altAnswers:['Route Determination','Shipping Point Determination']
+  },
+  // ---- ACRONYM MEANING (5) ----
+  {
+    id:44, type:'acronym', question:'What does the acronym SD stand for in the context of SAP enterprise systems?',
+    slideRef:'Slide 1', difficulty:'easy',
+    origChoices:[], correctAnswer:'Sales and Distribution',
+    origWhy:['SD stands for Sales and Distribution — the SAP module that manages the entire sales order process from pre-sales activities through billing and payment.'],
+    altAnswers:[]
+  },
+  {
+    id:45, type:'acronym', question:'What does the acronym ATP stand for in SAP SD delivery scheduling?',
+    slideRef:'Slide 28', difficulty:'easy',
+    origChoices:[], correctAnswer:'Availability to Promise',
+    origWhy:['ATP stands for Availability to Promise — the confirmed date when stock will be available for delivery, determined by the system using forward and backward scheduling rules.'],
+    altAnswers:[]
+  },
+  {
+    id:46, type:'acronym', question:'What does the acronym EDI stand for in the context of SAP SD output transmission?',
+    slideRef:'Slide 19', difficulty:'easy',
+    origChoices:[], correctAnswer:'Electronic Data Interchange',
+    origWhy:['EDI stands for Electronic Data Interchange — a standardized electronic communication method used in SAP SD to transmit business documents (such as order confirmations, invoices) between trading partners in a structured format.'],
+    altAnswers:[]
+  },
+  {
+    id:47, type:'acronym', question:'What does the acronym ERP stand for, referring to the type of system that SAP S/4HANA represents?',
+    slideRef:'Slide 10', difficulty:'easy',
+    origChoices:[], correctAnswer:'Enterprise Resource Planning',
+    origWhy:['ERP stands for Enterprise Resource Planning — a category of software that integrates core business processes (finance, manufacturing, supply chain, sales, HR, etc.) into a single unified system. SAP S/4HANA is an ERP system.'],
+    altAnswers:[]
+  },
+  {
+    id:48, type:'acronym', question:'What does the acronym CRM stand for, as referenced in the context of Sales Support being described as "CRM Light"?',
+    slideRef:'Slide 22', difficulty:'easy',
+    origChoices:[], correctAnswer:'Customer Relationship Management',
+    origWhy:['CRM stands for Customer Relationship Management — a strategy and set of tools for managing interactions with customers. SAP SD\'s Sales Support module handles basic CRM functions (contact tracking, campaigns, presales) and is informally called "CRM Light."'],
+    altAnswers:[]
+  }
+];
+
+// ========================================================
+// EXAM STATE
+// ========================================================
 const examState = {
   answers: {},
   flagged: {},
@@ -803,334 +1313,16 @@ const examState = {
   longestStreak: 0,
   submitted: false,
   startTime: null,
-  remainingTime: 20 * 60,
-  timerInterval: null,
+  remainingTime: null,
   questions: []
 };
 
-const questionBank = [
-  {
-    id: 1, type: 'mc', difficulty: 'Easy',
-    question: 'What SAP S/4HANA module manages the manufacturing cycle — from planning materials to executing production?',
-    slideRef: 'Section 1',
-    choices: [], correctAnswer: 'PP (Production Planning)', why: [],
-    origChoices: ['MM (Materials Management)', 'SD (Sales & Distribution)', 'PP (Production Planning)', 'FI (Financial Accounting)'],
-    origWhy: [
-      'MM handles procurement and inventory management, not manufacturing execution.',
-      'SD manages sales orders and customer delivery, not production.',
-      'Correct. PP is the module that manages the manufacturing cycle — planning through execution — in SAP S/4HANA.',
-      'FI handles financial accounting and is a downstream module of PP, not the production manager.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 2, type: 'mc', difficulty: 'Easy',
-    question: 'What is the highest independent environment in the SAP system, under which all organizational units belong?',
-    slideRef: 'Section 2',
-    choices: [], correctAnswer: 'Client', why: [],
-    origChoices: ['Plant', 'Company Code', 'Storage Location', 'Client'],
-    origWhy: [
-      'A Plant is an operating area within a Company Code, not the top level.',
-      'Company Code is the smallest org unit for complete legal books, but not the highest.',
-      'Storage Location is below the Plant level.',
-      'Correct. The Client is the highest independent environment in SAP — all org units belong to one client.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 3, type: 'mc', difficulty: 'Easy',
-    question: 'What analogy best describes the relationship between a BOM and a Routing in SAP PP?',
-    slideRef: 'Section 3',
-    choices: [], correctAnswer: 'BOM = ingredients; Routing = steps (like a cooking recipe)', why: [],
-    origChoices: ['Blueprint and Tools', 'BOM = ingredients; Routing = steps (like a cooking recipe)', 'Map and Compass', 'Script and Actors'],
-    origWhy: [
-      'Blueprint and Tools is not the analogy used in SAP PP documentation.',
-      'Correct. The reviewer explicitly states: BOM = ingredients; Routing = steps — together they function like a cooking recipe.',
-      'Map and Compass is not the analogy referenced in the material.',
-      'Script and Actors is not used in the PP context.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 4, type: 'mc', difficulty: 'Medium',
-    question: 'Which BOM item category symbol represents a Stock item?',
-    slideRef: 'Section 3.2',
-    choices: [], correctAnswer: 'L', why: [],
-    origChoices: ['N', 'D', 'L', 'T'],
-    origWhy: [
-      'N is not the stock item category in SAP BOM.',
-      'D is not the stock item category in SAP BOM.',
-      'Correct. Item category L = Stock item in SAP BOM. It controls screen sequence, field selection, and inventory management.',
-      'T is used for Text items in SAP BOM, not Stock items.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 5, type: 'mc', difficulty: 'Medium',
-    question: 'What does a low-level code of 000 signify for a material in SAP?',
-    slideRef: 'Section 3.1',
-    choices: [], correctAnswer: 'It is at the top of the BOM structure (finished product)', why: [],
-    origChoices: ['It is at the bottom of the BOM structure', 'It is a raw material with no BOM', 'It is at the top of the BOM structure (finished product)', 'It has not been assigned to any BOM'],
-    origWhy: [
-      'Low-level code 000 means top, not bottom.',
-      'Raw materials typically have higher numeric low-level codes.',
-      'Correct. Material Type FERT with low-level code 000 is at the TOP of the BOM structure, indicating a finished product.',
-      'Unassigned materials are a different scenario entirely.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 6, type: 'mc', difficulty: 'Medium',
-    question: 'Which forecasting model accounts for BOTH trend AND seasonal patterns simultaneously?',
-    slideRef: 'Section 4.1',
-    choices: [], correctAnswer: 'Trend and Seasonal', why: [],
-    origChoices: ['Constant', 'Trend', 'Seasonal', 'Trend and Seasonal'],
-    origWhy: [
-      'Constant model assumes no trend or seasonality — values remain stable.',
-      'Trend model accounts for upward/downward movement but not seasonality.',
-      'Seasonal model accounts for recurring patterns but not directional trend.',
-      'Correct. The Trend and Seasonal model captures both the directional trend and recurring seasonal fluctuations simultaneously.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 7, type: 'mc', difficulty: 'Easy',
-    question: 'Which planning strategy code represents "Net Requirements Planning" in Make-to-Stock?',
-    slideRef: 'Section 4.4',
-    choices: [], correctAnswer: '10', why: [],
-    origChoices: ['20', '10', '40', '30'],
-    origWhy: [
-      'Strategy 20 is Make-to-Order.',
-      'Correct. Strategy 10 = Net Requirements Planning (MTS). Only net shortage triggers production.',
-      'Strategy 40 = Planning with Final Assembly (MTS).',
-      'Strategy 30 = Production by Lot Size (MTS).'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 8, type: 'mc', difficulty: 'Medium',
-    question: 'In MRP, what event triggers a Procurement Proposal?',
-    slideRef: 'Section 4.6',
-    choices: [], correctAnswer: 'A shortage (net requirement) after deducting stock and safety stock from demand', why: [],
-    origChoices: ['A surplus of stock above safety stock', 'A shortage (net requirement) after deducting stock and safety stock from demand', 'Manual entry by the MRP controller', 'A vendor delivery confirmation'],
-    origWhy: [
-      'Surplus means no procurement is needed.',
-      'Correct. Net Requirements Formula: Demand − Stock − Safety Stock = Shortage → triggers a Procurement Proposal.',
-      'While controllers can trigger manually, the automatic logic is based on shortage.',
-      'Vendor confirmation is downstream of procurement, not a trigger for proposals.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 9, type: 'mc', difficulty: 'Medium',
-    question: 'In consumption-based planning, which parameter defines the stock level that automatically triggers replenishment?',
-    slideRef: 'Section 4.6',
-    choices: [], correctAnswer: 'Reorder Point', why: [],
-    origChoices: ['Safety Stock', 'Reorder Point', 'Lot Size', 'Replenishment Lead Time'],
-    origWhy: [
-      'Safety Stock is a buffer below the reorder point to prevent stockouts, but it does not trigger replenishment.',
-      'Correct. The Reorder Point is the stock level that triggers replenishment in consumption-based planning.',
-      'Lot Size defines how much to order per replenishment event, not when to order.',
-      'Replenishment Lead Time is the time to receive stock, not the trigger level.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 10, type: 'mc', difficulty: 'Easy',
-    question: 'Which document type is automatically created during an MRP run and must later be converted to a production or purchase order?',
-    slideRef: 'Section 6 / 4.6',
-    choices: [], correctAnswer: 'Planned Order', why: [],
-    origChoices: ['Production Order', 'Purchase Order', 'Planned Order', 'Process Order'],
-    origWhy: [
-      'Production Orders are created by converting Planned Orders — they are not auto-created by MRP directly.',
-      'Purchase Orders are created via Purchase Requisitions after MRP, not directly by the run.',
-      'Correct. A Planned Order is auto-created during an MRP run under the Planning category and converts to a Production or Purchase Order.',
-      'Process Orders are used in process industries, not standard MRP output for all materials.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 11, type: 'mc', difficulty: 'Hard',
-    question: 'What is the primary purpose of Order Settlement in the manufacturing execution cycle?',
-    slideRef: 'Section 5.9',
-    choices: [], correctAnswer: 'To settle actual production costs to one or more receiver cost objects', why: [],
-    origChoices: ['To release the production order for execution', 'To withdraw components from stock using BOM reservations', 'To settle actual production costs to one or more receiver cost objects', 'To confirm completion quantities and activity data'],
-    origWhy: [
-      'Releasing the order is the Release step (Step 3), not Order Settlement.',
-      'Withdrawing components is the Goods Issue step (Step 5).',
-      'Correct. Order Settlement (Step 8) settles actual costs incurred in the production order to receiver cost objects (material, cost center, internal order, etc.).',
-      'Confirming quantities is the Completion Confirmation step (Step 6).'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 12, type: 'mc', difficulty: 'Medium',
-    question: 'Which MRP Type code on the MRP1 screen of the Material Master represents standard MRP in SAP?',
-    slideRef: 'Section 4.6',
-    choices: [], correctAnswer: 'PD', why: [],
-    origChoices: ['VB', 'VV', 'PD', 'RP'],
-    origWhy: [
-      'VB = Reorder Point planning (consumption-based), not standard MRP.',
-      'VV = Forecast-Based planning (consumption-based).',
-      'Correct. PD = standard MRP (requirements-based planning).',
-      'RP = Replenishment planning (consumption-based).'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 13, type: 'mc', difficulty: 'Medium',
-    question: 'In Production Order scheduling, which Scheduling Type code means "schedule from the end date (backward)"?',
-    slideRef: 'Section 5.1',
-    choices: [], correctAnswer: '2 – Backwards Scheduling', why: [],
-    origChoices: ['1 – Forward Scheduling', '2 – Backwards Scheduling', '3 – Current Date', '4 – Only Capacity Planning'],
-    origWhy: [
-      'Forward Scheduling (type 1) calculates from the start date forward.',
-      'Correct. Scheduling Type 2 = Backwards — it schedules from the required end date backward through all operations.',
-      'Type 3 uses the current date as a reference.',
-      'Type 4 is used only for capacity requirements planning, not normal scheduling.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 14, type: 'mc', difficulty: 'Easy',
-    question: 'Which PP master data object is defined as the location within a plant where value-added work (operations/activities) is performed?',
-    slideRef: 'Section 3.4',
-    choices: [], correctAnswer: 'Work Center', why: [],
-    origChoices: ['Storage Location', 'Plant', 'Work Center', 'Company Code'],
-    origWhy: [
-      'Storage Location differentiates material stocks within a plant but is not where production work is done.',
-      'Plant is the broader operating area/branch, not the specific production location.',
-      'Correct. A Work Center is defined as a location within a plant where value-added work (operations/activities) is performed.',
-      'Company Code is a financial/legal organizational unit, not a production location.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 15, type: 'mc', difficulty: 'Medium',
-    question: 'How many documents are created when a Goods Receipt from production is posted?',
-    slideRef: 'Section 5.8',
-    choices: [], correctAnswer: 'Three (Material, Accounting, Controlling)', why: [],
-    origChoices: ['One (Material Document only)', 'Two (Material + Accounting)', 'Three (Material, Accounting, Controlling)', 'Four (Material, Accounting, Controlling, Production Order Update)'],
-    origWhy: [
-      'Only one document would miss the financial and controlling postings.',
-      'Two documents omits the Controlling (CO) posting.',
-      'Correct. Three documents are created: Material Document (physical movement), Accounting Document (FI journal entry), and Controlling Document (CO posting).',
-      'Four is incorrect; the production order update is an effect, not a separate document type.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 16, type: 'mc', difficulty: 'Easy',
-    question: 'Which of the three SOP planning layers represents the demand side of the plan?',
-    slideRef: 'Section 4.2',
-    choices: [], correctAnswer: 'Sales Plan', why: [],
-    origChoices: ['Production Plan', 'Rough Cut Capacity Plan', 'Sales Plan', 'Demand Program'],
-    origWhy: [
-      'The Production Plan represents the supply side (how much to produce).',
-      'Rough Cut Capacity Plan is a high-level resource check layer.',
-      'Correct. The Sales Plan is the demand-side layer of SOP, capturing expected customer demand.',
-      'Demand Program is an output of Demand Management, not a direct SOP layer.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 17, type: 'mc', difficulty: 'Medium',
-    question: 'What type of demand is generated for component parts (e.g., wheels, tires) derived from a higher-level finished product?',
-    slideRef: 'Section 4.6',
-    choices: [], correctAnswer: 'Dependent Demand', why: [],
-    origChoices: ['Independent Demand', 'Dependent Demand', 'Planned Independent Requirement', 'Customer Independent Requirement'],
-    origWhy: [
-      'Independent Demand is the original demand for a finished product (e.g., a bicycle) — it exists on its own.',
-      'Correct. Dependent Demand is demand for component parts/sub-assemblies that is derived from the higher-level finished product demand.',
-      'PIR is a planning document in Demand Management, not a demand type classification.',
-      'CIR is a document generated by actual sales orders, not a demand type classification.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 18, type: 'mc', difficulty: 'Hard',
-    question: 'Which of the following is NOT one of the four forecasting parameters in SAP PP?',
-    slideRef: 'Section 4.1',
-    choices: [], correctAnswer: 'Delta factor', why: [],
-    origChoices: ['Alpha factor (smoothing)', 'Beta factor (trend)', 'Delta factor', 'Gamma factor (seasonality)'],
-    origWhy: [
-      'Alpha factor is a real parameter controlling smoothing of the base level.',
-      'Beta factor is a real parameter controlling trend smoothing.',
-      'Correct. There is no Delta factor in SAP PP forecasting. The four parameters are Alpha, Beta, Gamma, and Periods per Season.',
-      'Gamma factor is a real parameter controlling seasonality smoothing.'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 19, type: 'mc', difficulty: 'Medium',
-    question: 'What is the PRIMARY purpose of the Availability Check when a Production Order is released?',
-    slideRef: 'Section 5.4',
-    choices: [], correctAnswer: 'To verify that components, PRTs, and capacities are available on the required date', why: [],
-    origChoices: ['To confirm production quantities and record scrap', 'To verify that components, PRTs, and capacities are available on the required date', 'To print shop floor documents for line workers', 'To settle production costs to the material cost object'],
-    origWhy: [
-      'Confirming production quantities is the Completion Confirmation step, not the Availability Check.',
-      'Correct. The Availability Check automatically verifies whether components, Production Resource Tools (PRTs), and capacities are available on the required date.',
-      'Printing documents is the Shop Floor Documents step, triggered on release but separate from availability.',
-      'Cost settlement is Order Settlement (last step in the cycle).'
-    ],
-    altAnswers: []
-  },
-  {
-    id: 20, type: 'mc', difficulty: 'Hard',
-    question: 'Which of the following roles is involved in STRATEGIC PLANNING (SOP level) according to the PP process chain?',
-    slideRef: 'Section 4',
-    choices: [], correctAnswer: 'CEO, COO, CFO, and Marketing Director', why: [],
-    origChoices: ['Line Workers', 'MRP Controllers', 'CEO, COO, CFO, and Marketing Director', 'Shop Floor Supervisors'],
-    origWhy: [
-      'Line Workers are involved in Manufacturing Execution, not strategic planning.',
-      'MRP Controllers are involved in Detailed Planning (MPS/MRP), not strategic SOP.',
-      'Correct. Strategic Planning (Forecasting → SOP) involves executive roles: CEO, COO, CIO, CFO, Controllers, and Marketing Director.',
-      'Shop Floor Supervisors are part of Manufacturing Execution, not SOP.'
-    ],
-    altAnswers: []
-  },
+let timerInterval = null;
+const TOTAL_TIME = 1200; // 20 minutes
 
-  { id: 21, type: 'tf', difficulty: 'Easy', question: 'Forecasts in SAP PP are always accurate, and the goal of the forecasting module is to achieve a perfect forecast.', slideRef: 'Section 4.1', choices: [], correctAnswer: 'False', why: [], origChoices: ['True', 'False'], origWhy: ['This is incorrect. The reviewer explicitly states: "Forecasts are ALWAYS WRONG."', 'Correct. The key principle of forecasting in SAP PP is that forecasts are ALWAYS WRONG — the goal is to MINIMIZE deviation, not achieve perfection.'], altAnswers: [] },
-  { id: 22, type: 'tf', difficulty: 'Easy', question: 'In SAP PP, the BOM represents the steps/operations required to produce a material, while the Routing lists the ingredients/components.', slideRef: 'Section 3', choices: [], correctAnswer: 'False', why: [], origChoices: ['True', 'False'], origWhy: ['This is incorrect. The analogy is reversed.', 'Correct. This is FALSE. BOM = ingredients (components list); Routing = steps (operations sequence). The statement has them backwards.'], altAnswers: [] },
-  { id: 23, type: 'tf', difficulty: 'Easy', question: 'The lowest level of a Product Group structure must always consist of materials.', slideRef: 'Section 3.5', choices: [], correctAnswer: 'True', why: [], origChoices: ['True', 'False'], origWhy: ['Correct. TRUE. Product Groups can be multi-level or single-level, but the lowest level must always consist of materials.', 'This is incorrect. The reviewer states the lowest level MUST always be materials.'], altAnswers: [] },
-  { id: 24, type: 'tf', difficulty: 'Easy', question: 'Work Centers in SAP PP can represent individual people, machines, machine groups, or assembly lines.', slideRef: 'Section 3.4', choices: [], correctAnswer: 'True', why: [], origChoices: ['True', 'False'], origWhy: ['Correct. TRUE. Work Centers can represent individual people or groups, machines or machine groups, and assembly lines.', 'This is incorrect. The reviewer confirms all these representations are valid.'], altAnswers: [] },
-  { id: 25, type: 'tf', difficulty: 'Medium', question: 'Planned Independent Requirements (PIR) are used in Make-to-Order (MTO) environments.', slideRef: 'Section 4.3', choices: [], correctAnswer: 'False', why: [], origChoices: ['True', 'False'], origWhy: ['This is incorrect. PIR is associated with Make-to-Stock, not Make-to-Order.', 'Correct. FALSE. PIR (Planned Independent Requirements) comes from forecast/SOP and is used in MAKE-TO-STOCK environments. CIR (Customer Independent Requirements) is used in Make-to-Order.'], altAnswers: [] },
-  { id: 26, type: 'tf', difficulty: 'Medium', question: 'In the PP planning sequence, Master Production Scheduling (MPS) materials are planned BEFORE the full MRP explosion.', slideRef: 'Section 4.5', choices: [], correctAnswer: 'True', why: [], origChoices: ['True', 'False'], origWhy: ['Correct. TRUE. MPS distinguishes materials with strong profit influence or critical resources, and they are planned FIRST before the full MRP explosion.', 'This is incorrect. MPS runs before full MRP, not after.'], altAnswers: [] },
-  { id: 27, type: 'tf', difficulty: 'Medium', question: 'The Goods Issue step in manufacturing execution withdraws components from inventory and assigns actual costs to the production order.', slideRef: 'Section 5.6', choices: [], correctAnswer: 'True', why: [], origChoices: ['True', 'False'], origWhy: ['Correct. TRUE. Goods Issue withdraws components from inventory (reducing inventory quantity) and assigns actual costs to the production order.', 'This is incorrect. Both actions (withdrawal + cost assignment) occur during Goods Issue.'], altAnswers: [] },
-  { id: 28, type: 'tf', difficulty: 'Hard', question: 'The Availability Check in SAP PP can ONLY be triggered automatically when a Production Order is released.', slideRef: 'Section 5.4', choices: [], correctAnswer: 'False', why: [], origChoices: ['True', 'False'], origWhy: ['This is incorrect. The availability check is not limited to automatic triggering.', 'Correct. FALSE. The Availability Check can be triggered automatically (e.g., on release) OR manually executed at any time by the planner.'], altAnswers: [] },
-  { id: 29, type: 'tf', difficulty: 'Easy', question: "Global Bike's SAP structure includes plants in Dallas (US) and Heidelberg (DE).", slideRef: 'Section 2.1', choices: [], correctAnswer: 'True', why: [], origChoices: ['True', 'False'], origWhy: ['Correct. TRUE. Dallas (DL00) is the US plant and Heidelberg (HD00) is the German plant in the Global Bike structure.', 'This is incorrect. Both plants are explicitly listed in the reviewer.'], altAnswers: [] },
-  { id: 30, type: 'tf', difficulty: 'Hard', question: 'When a Production Order is released at the OPERATION level, the order status immediately becomes REL (Released).', slideRef: 'Section 5.3', choices: [], correctAnswer: 'False', why: [], origChoices: ['True', 'False'], origWhy: ['This is incorrect. Operation-level release sets PREL, not REL.', 'Correct. FALSE. Operation Level Release sets the order to PREL (Partially Released). The status becomes REL only when the LAST operation is released.'], altAnswers: [] },
-
-  { id: 31, type: 'enum', difficulty: 'Medium', question: 'Enumerate the FIVE (5) core PP master data objects in SAP S/4HANA.', slideRef: 'Section 3', choices: [], correctAnswer: ['Material', 'Bill of Materials', 'Routing', 'Work Center', 'Product Group'], why: [], origChoices: [], origWhy: ['The five core PP master data objects are: Material, Bill of Materials (BOM), Routing, Work Center, and Product Group.'], altAnswers: ['material master', 'bom', 'bill of material', 'workcenter'] },
-  { id: 32, type: 'enum', difficulty: 'Hard', question: 'Enumerate the FIVE (5) logical steps of Material Requirements Planning (MRP) in SAP.', slideRef: 'Section 4.6', choices: [], correctAnswer: ['Net Requirements Calculation', 'Lot Size Calculation', 'Procurement Type Determination', 'Scheduling', 'BOM Explosion'], why: [], origChoices: [], origWhy: ['The 5 logical steps of MRP are Net Requirements Calculation, Lot Size Calculation, Procurement Type Determination, Scheduling, and BOM Explosion.'], altAnswers: ['net requirements', 'lot sizing', 'lot size', 'procurement type', 'bill of materials explosion'] },
-  { id: 33, type: 'enum', difficulty: 'Medium', question: 'Enumerate the THREE (3) planning layers of Sales and Operations Planning (SOP).', slideRef: 'Section 4.2', choices: [], correctAnswer: ['Sales Plan', 'Production Plan', 'Rough Cut Capacity Plan'], why: [], origChoices: [], origWhy: ['SOP has three planning layers: Sales Plan, Production Plan, and Rough Cut Capacity Plan.'], altAnswers: ['rough-cut capacity plan', 'rccp'] },
-
-  { id: 34, type: 'ident', difficulty: 'Easy', question: 'This organizational unit within a plant differentiates between various material stocks (e.g., Raw Materials, Finished Goods).', slideRef: 'Section 2', choices: [], correctAnswer: 'Storage Location', why: [], origChoices: ['Storage Location', 'Work Center', 'Plant', 'Company Code'], origWhy: ['Correct. Storage Location is the organizational unit within a plant that differentiates between various material stocks.', 'Work Center is where operations are performed, not where stocks are differentiated.', 'Plant is the broader operating area — Storage Locations exist within a Plant.', 'Company Code is a financial/legal entity, not a stock differentiation unit.'], altAnswers: ['storage loc', 'sloc'] },
-  { id: 35, type: 'ident', difficulty: 'Medium', question: 'This PP process bridges SOP and detailed planning (MPS/MRP) by translating aggregate plans into specific material requirements.', slideRef: 'Section 4.3', choices: [], correctAnswer: 'Demand Management', why: [], origChoices: ['Demand Management', 'Forecasting', 'Order Settlement', 'Capacity Planning'], origWhy: ['Correct. Demand Management bridges SOP and detailed MPS/MRP planning, converting aggregate plans into PIR or CIR documents.', 'Forecasting feeds into SOP, which precedes Demand Management.', 'Order Settlement is the last step in manufacturing execution, not a planning bridge.', 'Capacity Planning checks resource availability, not plan translation.'], altAnswers: ['demand mgmt'] },
-  { id: 36, type: 'ident', difficulty: 'Medium', question: 'This document type is used in batch-oriented manufacturing such as chemical, pharmaceutical, and food & beverage industries.', slideRef: 'Section 6', choices: [], correctAnswer: 'Process Order', why: [], origChoices: ['Process Order', 'Production Order', 'Planned Order', 'Purchase Order'], origWhy: ['Correct. Process Orders are used in Production – Process Industries for batch-oriented manufacturing.', 'Production Orders are used for discrete/repetitive manufacturing, not batch-process industries.', 'Planned Orders are planning documents that convert to production/purchase orders.', 'Purchase Orders are for external procurement, not internal production.'], altAnswers: ['process orders'] },
-  { id: 37, type: 'ident', difficulty: 'Easy', question: 'This forecasting parameter in SAP PP controls the smoothing of the base level of a time series.', slideRef: 'Section 4.1', choices: [], correctAnswer: 'Alpha factor', why: [], origChoices: ['Alpha factor', 'Beta factor', 'Gamma factor', 'Delta factor'], origWhy: ['Correct. The Alpha factor controls smoothing of the base level in SAP PP forecasting.', 'Beta factor controls trend smoothing, not base level smoothing.', 'Gamma factor controls seasonality smoothing.', 'Delta factor does not exist in SAP PP forecasting parameters.'], altAnswers: ['alpha', 'smoothing factor'] },
-  { id: 38, type: 'ident', difficulty: 'Medium', question: 'This is the production order status set when ALL operations are released via HEADER-level release.', slideRef: 'Section 5.3', choices: [], correctAnswer: 'REL', why: [], origChoices: ['REL', 'PREL', 'CRTD', 'TECO'], origWhy: ['Correct. REL (Released) is the status when the entire order and all operations are released at once via header-level release.', 'PREL (Partially Released) is the status for operation-level release when not all operations are released.', 'CRTD is the initial Created status before any release.', 'TECO means Technically Completed — set after production is finished.'], altAnswers: ['released', 'rel status'] },
-  { id: 39, type: 'ident', difficulty: 'Easy', question: 'This is the Work Center used for all operations in the Finished Bike routing at plant DL00 (Dallas).', slideRef: 'Section 3.3', choices: [], correctAnswer: 'ASSY1000', why: [], origChoices: ['ASSY1000', 'PACK1000', 'INSP1000', 'DL00_WC'], origWhy: ['Correct. ASSY1000 is the Work Center used for all operations in the Finished Bike routing at plant DL00.', 'PACK1000 is not used in the Finished Bike routing example.', 'INSP1000 is not referenced in the routing example.', 'DL00_WC is not a real Work Center code from the material.'], altAnswers: ['assy 1000', 'assembly 1000'] },
-  { id: 40, type: 'ident', difficulty: 'Hard', question: 'In MRP lot sizing, this type groups requirements ACROSS multiple periods to calculate a consolidated order quantity.', slideRef: 'Section 4.6', choices: [], correctAnswer: 'Periodic lot sizing', why: [], origChoices: ['Periodic lot sizing', 'Static lot sizing', 'Optimized lot sizing', 'Fixed lot sizing'], origWhy: ['Correct. Periodic lot sizing groups requirements across periods.', 'Static lot sizing uses fixed values from the Material Master.', 'Optimized lot sizing calculates the optimal lot size considering costs.', 'Fixed lot sizing is a type of static lot sizing, not the periodic group type.'], altAnswers: ['periodic', 'periodic lot size'] },
-  { id: 41, type: 'ident', difficulty: 'Medium', question: 'This shop floor document type, printed on production order release, lists the components to be withdrawn from stock.', slideRef: 'Section 5.5', choices: [], correctAnswer: 'Material Withdrawal Slip', why: [], origChoices: ['Material Withdrawal Slip', 'Time Ticket', 'Operation Control Ticket', 'PRT List'], origWhy: ['Correct. The Material Withdrawal Slip is a component-based shop floor document listing materials to be withdrawn from inventory.', 'Time Tickets are operation-based documents for recording time, not component withdrawal.', 'Operation Control Ticket is a multi-purpose document, not specifically for component withdrawal.', 'PRT Lists show Production Resource Tools per operation, not material components.'], altAnswers: ['withdrawal slip', 'material withdrawal', 'pull list'] },
-  { id: 42, type: 'ident', difficulty: 'Hard', question: 'In Order Settlement accounting logic, the difference between the debit and credit posting goes to this account.', slideRef: 'Section 5.9', choices: [], correctAnswer: 'Price Difference account', why: [], origChoices: ['Price Difference account', 'Cost of Goods Sold account', 'WIP account', 'Overhead account'], origWhy: ['Correct. The difference goes to a Price Difference account in Order Settlement.', 'Cost of Goods Sold account is a different accounting concept from production variance.', 'WIP account tracks Work In Progress, not price differences.', 'Overhead account is for overhead allocations, not price differences.'], altAnswers: ['price difference', 'price diff account'] },
-  { id: 43, type: 'ident', difficulty: 'Medium', question: 'This step in manufacturing execution formally records the confirmed output quantity from the production order into stock.', slideRef: 'Section 5.8', choices: [], correctAnswer: 'Goods Receipt', why: [], origChoices: ['Goods Receipt', 'Goods Issue', 'Completion Confirmation', 'Order Settlement'], origWhy: ['Correct. Goods Receipt formally records acceptance of confirmed output quantity from the production order into stock.', 'Goods Issue withdraws components FROM stock, not finished goods INTO stock.', 'Completion Confirmation tracks progress and quantities but does not post to stock.', 'Order Settlement settles costs, not physical stock movements.'], altAnswers: ['goods receipt from production', 'gr'] },
-
-  { id: 44, type: 'acronym', difficulty: 'Easy', question: 'What does the acronym PP stand for in SAP S/4HANA?', slideRef: 'Section 1', choices: [], correctAnswer: 'Production Planning', why: [], origChoices: [], origWhy: ['PP stands for Production Planning.'], altAnswers: ['production planning & execution', 'production planning and execution'] },
-  { id: 45, type: 'acronym', difficulty: 'Easy', question: 'What does the acronym BOM stand for in the context of SAP PP?', slideRef: 'Section 3.2', choices: [], correctAnswer: 'Bill of Materials', why: [], origChoices: [], origWhy: ['BOM stands for Bill of Materials.'], altAnswers: ['bill of material'] },
-  { id: 46, type: 'acronym', difficulty: 'Easy', question: 'What does the acronym MRP stand for in SAP production planning?', slideRef: 'Section 4.6', choices: [], correctAnswer: 'Material Requirements Planning', why: [], origChoices: [], origWhy: ['MRP stands for Material Requirements Planning.'], altAnswers: ['materials requirements planning'] },
-  { id: 47, type: 'acronym', difficulty: 'Easy', question: 'What does the acronym SOP stand for in SAP PP strategic planning?', slideRef: 'Section 4.2', choices: [], correctAnswer: 'Sales and Operations Planning', why: [], origChoices: [], origWhy: ['SOP stands for Sales and Operations Planning.'], altAnswers: ['sales & operations planning'] },
-  { id: 48, type: 'acronym', difficulty: 'Medium', question: 'What does the acronym PIR stand for in the context of SAP Demand Management?', slideRef: 'Section 4.3', choices: [], correctAnswer: 'Planned Independent Requirements', why: [], origChoices: [], origWhy: ['PIR stands for Planned Independent Requirements.'], altAnswers: ['planned independent requirement'] }
-];
-
-const sections = [
-  { type: 'mc', label: 'Multiple Choice', count: 20 },
-  { type: 'tf', label: 'True or False', count: 10 },
-  { type: 'enum', label: 'Enumeration', count: 3 },
-  { type: 'ident', label: 'Identification', count: 10 },
-  { type: 'acronym', label: 'Acronym Meaning', count: 5 }
-];
-
+// ========================================================
+// UTILITY FUNCTIONS
+// ========================================================
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -1140,563 +1332,628 @@ function shuffle(arr) {
   return a;
 }
 
-function cloneQuestion(q) {
-  return {
-    ...q,
-    choices: [],
-    why: Array.isArray(q.why) ? [...q.why] : [],
-    origChoices: Array.isArray(q.origChoices) ? [...q.origChoices] : [],
-    origWhy: Array.isArray(q.origWhy) ? [...q.origWhy] : [],
-    altAnswers: Array.isArray(q.altAnswers) ? [...q.altAnswers] : [],
-    correctAnswer: Array.isArray(q.correctAnswer) ? [...q.correctAnswer] : q.correctAnswer,
-    shuffledChoices: [],
-    correctShuffledIndex: -1
-  };
+function normalizeStr(s) {
+  if (!s && s !== 0) return '';
+  return String(s).toLowerCase().trim().replace(/\s+/g, ' ').replace(/[.,!?;:'"()\-\/]/g, '');
 }
 
-function initExam() {
-  if (examState.timerInterval) clearInterval(examState.timerInterval);
+function matchEnum(userNorm, correctNorm) {
+  if (userNorm === correctNorm) return true;
+  if (userNorm === correctNorm + 's') return true;
+  if (userNorm + 's' === correctNorm) return true;
+  // handle "shipping and transportation" vs "shipping & transportation"
+  if (userNorm.replace(/\band\b/g,'&') === correctNorm.replace(/\band\b/g,'&')) return true;
+  if (userNorm.replace(/&/g,'and') === correctNorm.replace(/&/g,'and')) return true;
+  return false;
+}
 
+function getSectionLabel(type) {
+  const map = { mc: 'Multiple Choice', tf: 'True or False', enum: 'Enumeration', id: 'Identification', acronym: 'Acronym' };
+  return map[type] || type;
+}
+
+function escapeAttr(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ========================================================
+// INIT EXAM (all shuffling happens here only)
+// ========================================================
+function initExam() {
+  // Clear timer
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+
+  // Reset state
   examState.answers = {};
   examState.flagged = {};
   examState.currentStreak = 0;
   examState.longestStreak = 0;
   examState.submitted = false;
-  examState.remainingTime = 20 * 60;
   examState.startTime = Date.now();
-  examState.questions = [];
+  examState.remainingTime = TOTAL_TIME;
 
-  sections.forEach(sec => {
-    const pool = shuffle(questionBank.filter(q => q.type === sec.type).map(cloneQuestion));
-    pool.forEach(q => {
-      if (q.origChoices.length) {
-        q.shuffledChoices = shuffle(q.origChoices);
-        q.choices = [...q.shuffledChoices];
-        q.correctShuffledIndex = q.shuffledChoices.findIndex(choice => choice === q.correctAnswer);
-      }
-      examState.questions.push(q);
-    });
+  // Shuffle question order (clone — do NOT mutate questionBank)
+  const shuffledOrder = shuffle(questionBank.map((_, i) => i));
+
+  examState.questions = shuffledOrder.map(origIdx => {
+    const q = questionBank[origIdx];
+    // Deep clone relevant fields
+    const clone = {
+      id: q.id,
+      type: q.type,
+      question: q.question,
+      slideRef: q.slideRef,
+      difficulty: q.difficulty,
+      origChoices: [...q.origChoices],
+      origWhy: [...q.origWhy],
+      correctAnswer: q.correctAnswer,
+      altAnswers: [...q.altAnswers],
+      shuffledChoices: [],
+      correctShuffledIndex: -1
+    };
+    // For enum, clone array
+    if (Array.isArray(q.correctAnswer)) {
+      clone.correctAnswer = [...q.correctAnswer];
+    }
+    // Shuffle choices for MC and TF
+    if (clone.origChoices.length > 0) {
+      clone.shuffledChoices = shuffle([...clone.origChoices]);
+      clone.correctShuffledIndex = clone.shuffledChoices.indexOf(clone.correctAnswer);
+    }
+    return clone;
   });
 
+  // Show exam, hide results
+  document.getElementById('results-section').style.display = 'none';
+  document.getElementById('submit-area').style.display = 'block';
+  document.getElementById('submitted-banner').classList.remove('visible');
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('submit-btn').textContent = 'Submit Exam';
+  document.getElementById('main-layout').style.display = 'grid';
+
+  // Re-enable all inputs (in case of retake after submit)
+  document.querySelectorAll('.choice-label input, .text-input').forEach(el => { el.disabled = false; });
+
+  // Render
   renderQuestions();
-  startTimer();
-  updateNav();
-  updateProgress();
+
+  // Start timer
+  updateTimerDisplay(examState.remainingTime);
+  timerInterval = setInterval(() => {
+    if (examState.submitted) { clearInterval(timerInterval); timerInterval = null; return; }
+    examState.remainingTime--;
+    updateTimerDisplay(examState.remainingTime);
+    if (examState.remainingTime <= 0) {
+      clearInterval(timerInterval); timerInterval = null;
+      submitExam(true);
+    }
+  }, 1000);
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// ========================================================
+// RENDER QUESTIONS (never shuffles — uses examState.questions only)
+// ========================================================
 function renderQuestions() {
   const container = document.getElementById('questions-container');
   container.innerHTML = '';
-  let globalIdx = 0;
 
-  sections.forEach(sec => {
-    const qs = examState.questions.filter(q => q.type === sec.type);
-    const secDiv = document.createElement('div');
+  const sectionOrder = ['mc','tf','enum','id','acronym'];
+  const sectionTitles = { mc:'Part I — Multiple Choice', tf:'Part II — True or False', enum:'Part III — Enumeration', id:'Part IV — Identification', acronym:'Part V — Acronym Meaning' };
+  const sectionPoints = { mc:'(1 pt each)', tf:'(1 pt each)', enum:'(partial credit)', id:'(1 pt each)', acronym:'(1 pt each)' };
+  const sectionEmoji = { mc:'🔘', tf:'✅', enum:'📋', id:'🔍', acronym:'🔤' };
 
-    const lbl = document.createElement('div');
-    lbl.className = 'section-label';
-    lbl.innerHTML = `<div class="label-badge">${sec.label}</div><div class="label-line"></div><div class="label-count">${sec.count} items</div>`;
-    secDiv.appendChild(lbl);
-
-    qs.forEach(q => {
-      globalIdx++;
-      secDiv.appendChild(buildQuestionCard(q, globalIdx));
-    });
-
-    container.appendChild(secDiv);
-  });
-
-  document.getElementById('total-count').textContent = examState.questions.length;
-}
-
-function buildQuestionCard(q, num) {
-  const card = document.createElement('div');
-  card.className = 'q-card';
-  card.id = `q-card-${q.id}`;
-
-  const header = document.createElement('div');
-  header.className = 'q-header';
-  header.innerHTML = `
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-      <div class="q-num">Question ${num}</div>
-      <span class="q-diff diff-${q.difficulty}">${q.difficulty}</span>
-      <span style="font-size:10px;color:var(--text-sub);opacity:0.6">${q.slideRef}</span>
-    </div>
-    <button class="flag-btn" id="flag-btn-${q.id}" onclick="toggleFlag(${q.id})" aria-label="Flag question ${num}">⚑ Flag</button>
-  `;
-  card.appendChild(header);
-
-  const qtext = document.createElement('div');
-  qtext.className = 'q-text';
-  qtext.textContent = q.question;
-  card.appendChild(qtext);
-
-  if (q.type === 'mc' || q.type === 'tf' || q.type === 'ident') {
-    const choicesDiv = document.createElement('div');
-    choicesDiv.className = 'choices';
-    const labels = ['A', 'B', 'C', 'D'];
-
-    q.choices.forEach((choice, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'choice-btn';
-      btn.id = `choice-${q.id}-${i}`;
-      btn.setAttribute('aria-label', `Choice ${labels[i]}: ${choice}`);
-      btn.innerHTML = `
-        <div class="radio-circle"></div>
-        <span class="choice-label">${labels[i]}</span>
-        <span>${choice}</span>
-      `;
-      btn.onclick = () => handleAnswer(q.id, choice, i);
-      choicesDiv.appendChild(btn);
-    });
-
-    card.appendChild(choicesDiv);
-  } else if (q.type === 'enum') {
-    const enumDiv = document.createElement('div');
-    enumDiv.className = 'enum-inputs';
-    for (let i = 0; i < q.correctAnswer.length; i++) {
-      const row = document.createElement('div');
-      row.className = 'enum-row';
-      row.innerHTML = `<span class="enum-num">${i + 1}.</span>`;
-      const inp = document.createElement('input');
-      inp.type = 'text';
-      inp.className = 'q-input';
-      inp.id = `enum-${q.id}-${i}`;
-      inp.placeholder = `Item ${i + 1}`;
-      inp.setAttribute('aria-label', `Enumeration item ${i + 1}`);
-      inp.oninput = () => handleEnumChange(q.id);
-      row.appendChild(inp);
-      enumDiv.appendChild(row);
-    }
-    card.appendChild(enumDiv);
-  } else if (q.type === 'acronym') {
-    const inp = document.createElement('input');
-    inp.type = 'text';
-    inp.className = 'q-input';
-    inp.id = `acronym-${q.id}`;
-    inp.placeholder = 'Type the full meaning…';
-    inp.setAttribute('aria-label', 'Acronym answer');
-    inp.oninput = () => handleInputChange(q.id, 'acronym');
-    card.appendChild(inp);
-  }
-
-  const expl = document.createElement('div');
-  expl.className = 'explanation-box';
-  expl.id = `expl-${q.id}`;
-  card.appendChild(expl);
-
-  return card;
-}
-
-function handleAnswer(qId, choice, idx) {
-  if (examState.submitted) return;
-  examState.answers[qId] = choice;
-  const q = examState.questions.find(item => item.id === qId);
-  q.choices.forEach((_, i) => {
-    const btn = document.getElementById(`choice-${qId}-${i}`);
-    if (btn) btn.classList.toggle('selected', i === idx);
-  });
-  updateProgress();
-  updateNav();
-}
-
-function handleEnumChange(qId) {
-  if (examState.submitted) return;
-  const q = examState.questions.find(x => x.id === qId);
-  const vals = [];
-  for (let i = 0; i < q.correctAnswer.length; i++) {
-    const inp = document.getElementById(`enum-${qId}-${i}`);
-    vals.push(inp ? inp.value.trim() : '');
-  }
-  examState.answers[qId] = vals;
-  updateProgress();
-  updateNav();
-}
-
-function handleInputChange(qId, type) {
-  if (examState.submitted) return;
-  const inp = document.getElementById(`${type}-${qId}`);
-  if (inp) examState.answers[qId] = inp.value.trim();
-  updateProgress();
-  updateNav();
-}
-
-function toggleFlag(qId) {
-  examState.flagged[qId] = !examState.flagged[qId];
-  const card = document.getElementById(`q-card-${qId}`);
-  const btn = document.getElementById(`flag-btn-${qId}`);
-  if (card) card.classList.toggle('flagged', !!examState.flagged[qId]);
-  if (btn) btn.classList.toggle('active', !!examState.flagged[qId]);
-  updateNav();
-}
-
-function startTimer() {
-  if (examState.timerInterval) clearInterval(examState.timerInterval);
-  updateTimerDisplay();
-  examState.timerInterval = setInterval(() => {
-    examState.remainingTime--;
-    updateTimerDisplay();
-    if (examState.remainingTime <= 0) {
-      clearInterval(examState.timerInterval);
-      submitExam();
-    }
-  }, 1000);
-}
-
-function updateTimerDisplay() {
-  const t = Math.max(examState.remainingTime, 0);
-  const m = Math.floor(t / 60);
-  const s = t % 60;
-  const el = document.getElementById('timer-display');
-  el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-  el.classList.remove('warning', 'danger');
-  if (t <= 300) el.classList.add('danger');
-  else if (t <= (20 * 60 * 0.25)) el.classList.add('warning');
-}
-
-function getAnsweredCount() {
-  return examState.questions.filter(q => {
-    const ans = examState.answers[q.id];
-    if (!ans) return false;
-    if (Array.isArray(ans)) return ans.some(a => String(a).trim().length > 0);
-    return String(ans).trim().length > 0;
-  }).length;
-}
-
-function updateProgress() {
-  const answered = getAnsweredCount();
-  const total = examState.questions.length;
-  document.getElementById('answered-count').textContent = answered;
-  document.getElementById('total-count').textContent = total;
-  document.getElementById('progress-bar-fill').style.width = `${(answered / total) * 100}%`;
-}
-
-function openNav() {
-  document.getElementById('nav-overlay').classList.add('open');
-  document.getElementById('nav-panel').classList.add('open');
-}
-function closeNav() {
-  document.getElementById('nav-overlay').classList.remove('open');
-  document.getElementById('nav-panel').classList.remove('open');
-}
-
-function updateNav() {
-  const grid = document.getElementById('nav-grid');
-  grid.innerHTML = '';
-
-  examState.questions.forEach((q, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'nav-item';
-    btn.textContent = i + 1;
-    btn.setAttribute('aria-label', `Jump to question ${i + 1}`);
-
-    const ans = examState.answers[q.id];
-    const answered = Array.isArray(ans) ? ans.some(a => String(a).trim()) : !!(ans && String(ans).trim());
-
-    if (examState.submitted) {
-      const correct = isCorrect(q);
-      if (correct === null) btn.classList.add('skipped-nav');
-      else if (correct === true) btn.classList.add('correct-nav');
-      else btn.classList.add('wrong-nav');
-    } else {
-      if (examState.flagged[q.id]) btn.classList.add('flagged-nav');
-      else if (answered) btn.classList.add('answered');
-    }
-
-    btn.onclick = () => {
-      const card = document.getElementById(`q-card-${q.id}`) || document.getElementById(`review-q-${q.id}`);
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      closeNav();
-    };
-    grid.appendChild(btn);
-  });
-}
-
-function openModal() {
-  const unanswered = examState.questions.length - getAnsweredCount();
-  const titleEl = document.getElementById('modal-title');
-  const bodyEl = document.getElementById('modal-body');
-  if (unanswered > 0) {
-    titleEl.textContent = '⚠ Unanswered Questions';
-    bodyEl.innerHTML = `You have <strong>${unanswered} unanswered question${unanswered > 1 ? 's' : ''}</strong>. Unanswered items will be marked as skipped. Do you still want to submit?`;
-  } else {
-    titleEl.textContent = '✓ Submit Exam';
-    bodyEl.textContent = 'You have answered all questions. Are you ready to submit your exam?';
-  }
-  document.getElementById('modal-overlay').classList.add('open');
-}
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-}
-function confirmSubmit() {
-  closeModal();
-  submitExam();
-}
-
-function normalizeStr(s) {
-  return String(s).toLowerCase().trim().replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
-}
-
-function isCorrect(q) {
-  const ans = examState.answers[q.id];
-  if (!ans || (Array.isArray(ans) && !ans.some(a => String(a).trim().length > 0)) || ans === '') return null;
-
-  if (q.type === 'mc' || q.type === 'tf' || q.type === 'ident' || q.type === 'acronym') {
-    const a = normalizeStr(ans);
-    const c = normalizeStr(q.correctAnswer);
-    if (a === c) return true;
-    if (q.altAnswers) {
-      for (const alt of q.altAnswers) {
-        if (normalizeStr(alt) === a) return true;
-      }
-    }
-    return false;
-  }
-
-  if (q.type === 'enum') {
-    const answers = (ans || []).map(a => normalizeStr(a)).filter(Boolean);
-    const valid = [...q.correctAnswer.map(c => normalizeStr(c)), ...q.altAnswers.map(a => normalizeStr(a))];
-    const used = new Set();
-    let matched = 0;
-
-    answers.forEach(a => {
-      const idx = valid.findIndex((v, i) => !used.has(i) && (v === a || v.includes(a) || a.includes(v)));
-      if (idx !== -1) {
-        used.add(idx);
-        matched++;
-      }
-    });
-
-    return matched >= q.correctAnswer.length ? true : (matched > 0 ? 'partial' : false);
-  }
-
-  return false;
-}
-
-function getEnumScore(q) {
-  const ans = (examState.answers[q.id] || []).map(a => normalizeStr(a)).filter(Boolean);
-  const valid = [...q.correctAnswer.map(c => normalizeStr(c)), ...q.altAnswers.map(a => normalizeStr(a))];
-  const used = new Set();
-  let matched = 0;
-
-  ans.forEach(a => {
-    const idx = valid.findIndex((v, i) => !used.has(i) && (v === a || v.includes(a) || a.includes(v)));
-    if (idx !== -1) {
-      used.add(idx);
-      matched++;
-    }
-  });
-
-  return Math.min(matched, q.correctAnswer.length);
-}
-
-function submitExam() {
-  if (examState.submitted) return;
-  examState.submitted = true;
-  if (examState.timerInterval) clearInterval(examState.timerInterval);
-
-  let totalScore = 0;
-  let totalPoints = 0;
-  const sectionScores = { mc:{s:0,t:0}, tf:{s:0,t:0}, enum:{s:0,t:0}, ident:{s:0,t:0}, acronym:{s:0,t:0} };
-
-  examState.questions.forEach(q => {
-    const pts = q.type === 'enum' ? q.correctAnswer.length : 1;
-    totalPoints += pts;
-    sectionScores[q.type].t += pts;
-
-    const result = isCorrect(q);
-    if (result === true) {
-      totalScore += pts;
-      sectionScores[q.type].s += pts;
-      examState.currentStreak++;
-      examState.longestStreak = Math.max(examState.longestStreak, examState.currentStreak);
-    } else if (result === 'partial') {
-      const ps = getEnumScore(q);
-      totalScore += ps;
-      sectionScores[q.type].s += ps;
-      examState.currentStreak = 0;
-    } else {
-      examState.currentStreak = 0;
-    }
-  });
-
-  document.getElementById('streak-count').textContent = examState.longestStreak;
-  document.getElementById('exam-form').style.display = 'none';
-  renderResults(totalScore, totalPoints, sectionScores);
-  updateNav();
-}
-
-function renderResults(totalScore, totalPoints, sectionScores) {
-  const pct = Math.round((totalScore / totalPoints) * 100);
-  const passed = pct >= 75;
-
-  document.getElementById('score-big').textContent = totalScore;
-  document.getElementById('score-total').textContent = totalPoints;
-  const pb = document.getElementById('pass-badge');
-  pb.textContent = passed ? 'PASSED ✓' : 'FAILED ✗';
-  pb.className = `pass-badge ${passed ? 'pass' : 'fail'}`;
-
-  const skipped = examState.questions.length - getAnsweredCount();
-  document.getElementById('score-meta').innerHTML = `
-    <div class="score-meta-item"><span class="val">${pct}%</span><span class="lbl">Score</span></div>
-    <div class="score-meta-item"><span class="val">${examState.longestStreak}</span><span class="lbl">Longest Streak</span></div>
-    <div class="score-meta-item"><span class="val">${getAnsweredCount()}</span><span class="lbl">Answered</span></div>
-    <div class="score-meta-item"><span class="val">${skipped}</span><span class="lbl">Skipped</span></div>
-  `;
-
-  const sectionNames = { mc:'Multiple Choice', tf:'True/False', enum:'Enumeration', ident:'Identification', acronym:'Acronym' };
-  let pillsHTML = '';
-  Object.entries(sectionScores).forEach(([key, val]) => {
-    const p = val.t ? Math.round((val.s / val.t) * 100) : 0;
-    pillsHTML += `<div class="pill"><div class="pill-name">${sectionNames[key]}</div><div class="pill-score">${val.s}/${val.t}</div><div class="pill-pct">${p}%</div></div>`;
-  });
-  document.getElementById('breakdown-pills').innerHTML = pillsHTML;
-
-  const barColors = { mc:'bar-mc', tf:'bar-tf', enum:'bar-enum', ident:'bar-ident', acronym:'bar-acro' };
-  const barLabels = { mc:'MC', tf:'T/F', enum:'Enum', ident:'Ident', acronym:'Acronym' };
-  let chartHTML = '';
-  Object.entries(sectionScores).forEach(([key, val]) => {
-    const p = val.t ? Math.round((val.s / val.t) * 100) : 0;
-    chartHTML += `<div class="bar-row"><div class="bar-row-label">${barLabels[key]}</div><div class="bar-wrap"><div class="bar-fill ${barColors[key]}" id="bar-${key}" style="width:0%">${p}%</div></div><div style="font-size:12px;font-weight:600;color:var(--text-sub);min-width:40px">${val.s}/${val.t}</div></div>`;
-  });
-  document.getElementById('bar-chart').innerHTML = chartHTML;
-
-  setTimeout(() => {
-    Object.entries(sectionScores).forEach(([key, val]) => {
-      const p = val.t ? Math.round((val.s / val.t) * 100) : 0;
-      const bar = document.getElementById(`bar-${key}`);
-      if (bar) bar.style.width = `${p}%`;
-    });
-  }, 200);
-
-  const rs = document.getElementById('results-section');
-  rs.style.display = 'block';
-  setTimeout(() => rs.classList.add('show'), 10);
-  rs.scrollIntoView({ behavior: 'smooth' });
-
-  renderReview();
-}
-
-function renderReview() {
-  const container = document.getElementById('review-section');
-  container.innerHTML = '<div class="section-label"><div class="label-badge">Review Answers</div><div class="label-line"></div></div>';
+  let renderedSections = new Set();
 
   examState.questions.forEach((q, idx) => {
+    // Insert section header if new section
+    if (!renderedSections.has(q.type)) {
+      renderedSections.add(q.type);
+      const header = document.createElement('div');
+      header.className = 'section-group-header';
+      const count = examState.questions.filter(x => x.type === q.type).length;
+      header.innerHTML = `${sectionEmoji[q.type]} ${sectionTitles[q.type]} <span class="section-badge">${count} items ${sectionPoints[q.type]}</span>`;
+      container.appendChild(header);
+    }
+
     const card = document.createElement('div');
-    const result = isCorrect(q);
-    card.className = `q-card ${result === true ? 'correct-card' : (result === null ? '' : 'wrong-card')}`;
-    card.id = `review-q-${q.id}`;
+    card.className = 'question-card';
+    card.id = `question-${idx}`;
 
-    const ans = examState.answers[q.id];
-    const hasAnswer = ans && (Array.isArray(ans) ? ans.some(a => String(a).trim().length > 0) : String(ans).trim().length > 0);
-
-    let statusHTML = '';
-    if (result === true) statusHTML = '<div class="result-status status-correct">✓ Correct</div>';
-    else if (result === 'partial') statusHTML = '<div class="result-status" style="background:#fef9c3;color:#92400e;">~ Partial Credit</div>';
-    else if (!hasAnswer) statusHTML = '<div class="result-status status-skipped">— Skipped</div>';
-    else statusHTML = '<div class="result-status status-wrong">✗ Incorrect</div>';
-
-    let answerArea = '';
-    if (q.type === 'mc' || q.type === 'tf' || q.type === 'ident') {
-      const labels = ['A','B','C','D'];
-      answerArea = '<div class="choices">';
-      q.choices.forEach((choice, i) => {
-        let cls = 'choice-btn';
-        const isSelected = ans === choice;
-        const isCorrectChoice = i === q.correctShuffledIndex;
-        if (isSelected && isCorrectChoice) cls += ' correct-choice';
-        else if (isSelected && !isCorrectChoice) cls += ' wrong-choice';
-        else if (!isSelected && isCorrectChoice) cls += ' missed-choice';
-        answerArea += `<button class="${cls}" disabled aria-label="${labels[i]}: ${choice}">
-          <div class="radio-circle"></div>
-          <span class="choice-label">${labels[i]}</span>
-          <span>${choice}</span>
-        </button>`;
-      });
-      answerArea += '</div>';
-      answerArea += `<div style="font-size:12px;color:var(--text-sub);margin-top:8px;">Correct answer in your attempt order: <strong>${['A','B','C','D'][q.correctShuffledIndex]}</strong></div>`;
-    } else if (q.type === 'enum') {
-      const answers = ans || [];
-      answerArea = '<div class="enum-inputs">';
-      q.correctAnswer.forEach((ca, i) => {
-        const userAns = answers[i] || '';
-        const norm = normalizeStr(userAns);
-        const valid = [...q.correctAnswer.map(v => normalizeStr(v)), ...q.altAnswers.map(v => normalizeStr(v))];
-        const isOk = norm && valid.some(v => v === norm || v.includes(norm) || norm.includes(v));
-        answerArea += `<div class="enum-row">
-          <span class="enum-num">${i + 1}.</span>
-          <input class="q-input ${userAns ? (isOk ? 'correct-input' : 'wrong-input') : ''}" value="${userAns || ''}" disabled placeholder="(Skipped)" style="flex:1"/>
-          <span style="font-size:12px;color:var(--text-sub);margin-left:6px">${isOk ? '✓' : `→ ${ca}`}</span>
-        </div>`;
-      });
-      answerArea += '</div>';
-    } else if (q.type === 'acronym') {
-      const isOk = result === true;
-      answerArea = `<input class="q-input ${ans ? (isOk ? 'correct-input' : 'wrong-input') : ''}" value="${ans || ''}" disabled placeholder="(No answer)" style="width:100%"/>`;
-      if (!isOk) answerArea += `<div style="font-size:13px;color:var(--correct);margin-top:6px">✓ Correct answer: <strong>${q.correctAnswer}</strong></div>`;
-    }
-
-    let explHTML = '';
-    if (q.origChoices.length) {
-      const labels = ['A','B','C','D'];
-      explHTML += '<div style="margin-bottom:8px;font-size:12px;color:var(--text-sub);font-style:italic">Original explanation order (A/B/C/D below refers to the original source order, not the shuffled review buttons above).</div>';
-      q.origChoices.forEach((choice, i) => {
-        const isCorrectOrig = choice === q.correctAnswer;
-        explHTML += `<div class="why-item"><span class="why-label ${isCorrectOrig ? 'correct-label' : ''}">${labels[i]}. ${choice}:</span><span> ${q.origWhy[i] || ''}</span></div>`;
-      });
-    } else {
-      explHTML += `<div style="color:var(--text)">${q.origWhy[0] || ''}</div>`;
-      explHTML += `<div style="margin-top:8px;color:var(--correct);font-weight:600">✓ Correct answer: ${Array.isArray(q.correctAnswer) ? q.correctAnswer.join(' / ') : q.correctAnswer}</div>`;
-    }
+    const flagged = examState.flagged[q.id];
+    const diffClass = `diff-${q.difficulty}`;
 
     card.innerHTML = `
-      <div class="q-header">
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-          <div class="q-num">Question ${idx + 1}</div>
-          <span class="q-diff diff-${q.difficulty}">${q.difficulty}</span>
-        </div>
+      <div class="question-header">
+        <span class="q-number">Q${idx+1}</span>
+        <span class="q-section">${getSectionLabel(q.type)}</span>
+        <span class="diff-badge ${diffClass}">${q.difficulty}</span>
+        <button class="flag-btn${flagged ? ' flagged' : ''}" data-qid="${q.id}" data-qidx="${idx}" onclick="toggleFlag(${q.id}, ${idx})" aria-label="${flagged ? 'Unflag' : 'Flag'} question ${idx+1}">${flagged ? '🚩 Flagged' : '⚑ Flag'}</button>
       </div>
-      <div class="q-text">${q.question}</div>
-      ${answerArea}
-      ${statusHTML}
-      <div class="explanation-box show" style="display:block">${explHTML}</div>
+      <div class="question-text">${q.question}</div>
+      <div class="question-input" id="input-${idx}">
+        ${renderInputHTML(q, idx)}
+      </div>
     `;
     container.appendChild(card);
   });
+
+  renderNavigator();
 }
 
+function renderInputHTML(q, idx) {
+  if (q.type === 'mc' || q.type === 'tf') {
+    return q.shuffledChoices.map((choice, ci) => {
+      const letter = String.fromCharCode(65 + ci);
+      const isChecked = examState.answers[q.id] === choice;
+      return `<label class="choice-label" aria-label="Option ${letter}">
+        <input type="radio" name="q_${q.id}" value="${ci}" ${isChecked ? 'checked' : ''}
+          data-qid="${q.id}" data-qidx="${idx}" data-ci="${ci}"
+          onchange="handleChoiceAnswer(this)">
+        <span class="choice-letter">${letter}</span>
+        <span class="choice-text">${escapeAttr(choice)}</span>
+      </label>`;
+    }).join('');
+  } else if (q.type === 'id' || q.type === 'acronym') {
+    const val = examState.answers[q.id] || '';
+    return `<input type="text" class="text-input"
+      placeholder="Type your answer here..."
+      value="${escapeAttr(val)}"
+      data-qid="${q.id}" data-qidx="${idx}"
+      oninput="handleTextAnswer(this)"
+      aria-label="Answer for question ${idx+1}">`;
+  } else if (q.type === 'enum') {
+    const count = q.correctAnswer.length;
+    const answers = examState.answers[q.id] || new Array(count).fill('');
+    let html = `<div class="enum-hint">Enter each item in a separate box. Order does not matter. Partial credit applies.</div>`;
+    for (let i = 0; i < count; i++) {
+      html += `<input type="text" class="text-input enum-input"
+        placeholder="Item ${i+1}..."
+        value="${escapeAttr(answers[i] || '')}"
+        data-qid="${q.id}" data-qidx="${idx}" data-ei="${i}"
+        oninput="handleEnumAnswer(this)"
+        aria-label="Enumeration item ${i+1} for question ${idx+1}">`;
+    }
+    return html;
+  }
+  return '';
+}
+
+// ========================================================
+// ANSWER HANDLERS
+// ========================================================
+function handleChoiceAnswer(el) {
+  const qId = parseInt(el.dataset.qid);
+  const qIdx = parseInt(el.dataset.qidx);
+  const ci = parseInt(el.dataset.ci);
+  const q = examState.questions.find(x => x.id === qId);
+  if (!q || examState.submitted) return;
+  examState.answers[qId] = q.shuffledChoices[ci];
+  updateNavigatorBtn(qIdx, q.id);
+  updateProgress();
+}
+
+function handleTextAnswer(el) {
+  const qId = parseInt(el.dataset.qid);
+  const qIdx = parseInt(el.dataset.qidx);
+  if (examState.submitted) return;
+  examState.answers[qId] = el.value;
+  updateNavigatorBtn(qIdx, qId);
+  updateProgress();
+}
+
+function handleEnumAnswer(el) {
+  const qId = parseInt(el.dataset.qid);
+  const qIdx = parseInt(el.dataset.qidx);
+  const ei = parseInt(el.dataset.ei);
+  if (examState.submitted) return;
+  const q = examState.questions.find(x => x.id === qId);
+  if (!q) return;
+  if (!examState.answers[qId] || !Array.isArray(examState.answers[qId])) {
+    examState.answers[qId] = new Array(q.correctAnswer.length).fill('');
+  }
+  examState.answers[qId][ei] = el.value;
+  updateNavigatorBtn(qIdx, qId);
+  updateProgress();
+}
+
+function toggleFlag(qId, idx) {
+  examState.flagged[qId] = !examState.flagged[qId];
+  const btn = document.querySelector(`#question-${idx} .flag-btn`);
+  if (btn) {
+    btn.classList.toggle('flagged', examState.flagged[qId]);
+    btn.textContent = examState.flagged[qId] ? '🚩 Flagged' : '⚑ Flag';
+    btn.setAttribute('aria-label', (examState.flagged[qId] ? 'Unflag' : 'Flag') + ` question ${idx+1}`);
+  }
+  updateNavigatorBtn(idx, qId);
+}
+
+// ========================================================
+// NAVIGATOR
+// ========================================================
+function renderNavigator() {
+  const grid = document.getElementById('navigator-grid');
+  grid.innerHTML = '';
+  examState.questions.forEach((q, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn';
+    btn.id = `nav-${idx}`;
+    btn.textContent = idx + 1;
+    btn.setAttribute('aria-label', `Go to question ${idx+1}`);
+    const hasAnswer = hasAnswered(q);
+    if (hasAnswer) btn.classList.add('answered');
+    if (examState.flagged[q.id]) btn.classList.add('nav-flagged');
+    btn.onclick = () => scrollToQuestion(idx);
+    grid.appendChild(btn);
+  });
+  updateProgress();
+}
+
+function updateNavigatorBtn(idx, qId) {
+  const btn = document.getElementById(`nav-${idx}`);
+  if (!btn) return;
+  const q = examState.questions.find(x => x.id === qId);
+  if (!q) return;
+  const hasAns = hasAnswered(q);
+  btn.classList.toggle('answered', hasAns);
+  btn.classList.toggle('nav-flagged', !!examState.flagged[qId]);
+  updateProgress();
+}
+
+function hasAnswered(q) {
+  const ans = examState.answers[q.id];
+  if (ans === undefined || ans === null) return false;
+  if (typeof ans === 'string') return ans.trim() !== '';
+  if (Array.isArray(ans)) return ans.some(v => v && v.trim() !== '');
+  return false;
+}
+
+function updateProgress() {
+  const total = examState.questions.length;
+  const answered = examState.questions.filter(hasAnswered).length;
+  const fill = document.getElementById('progress-fill');
+  const text = document.getElementById('progress-text');
+  if (fill) fill.style.width = (answered / total * 100) + '%';
+  if (text) text.textContent = `${answered} / ${total}`;
+}
+
+function scrollToQuestion(idx) {
+  const el = document.getElementById(`question-${idx}`);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ========================================================
+// TIMER
+// ========================================================
+function updateTimerDisplay(seconds) {
+  const sec = Math.max(0, seconds);
+  const mins = Math.floor(sec / 60);
+  const secs = sec % 60;
+  const disp = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+  const el = document.getElementById('timer-display');
+  if (el) el.textContent = disp;
+
+  const pct = sec / TOTAL_TIME;
+  const cont = document.getElementById('timer-container');
+  const bar = document.getElementById('timer-bar');
+  if (cont) {
+    cont.classList.remove('timer-warning','timer-danger');
+    if (pct <= 0.05) cont.classList.add('timer-danger');
+    else if (pct <= 0.25) cont.classList.add('timer-warning');
+  }
+  if (bar) bar.style.width = (pct * 100) + '%';
+}
+
+// ========================================================
+// SUBMIT LOGIC
+// ========================================================
+function openModal() {
+  const answered = examState.questions.filter(hasAnswered).length;
+  const total = examState.questions.length;
+  const unanswered = total - answered;
+  document.getElementById('modal-msg').textContent =
+    unanswered > 0
+      ? `You have ${unanswered} unanswered question${unanswered>1?'s':''}. Unanswered items will receive zero points. Submit anyway?`
+      : 'All questions answered. Are you ready to submit your exam?';
+  document.getElementById('submit-modal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('submit-modal').classList.remove('active');
+}
+
+function confirmSubmit() {
+  closeModal();
+  submitExam(false);
+}
+
+function submitExam(autoSubmit) {
+  if (examState.submitted) return;
+  examState.submitted = true;
+
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+
+  // Disable ALL inputs — preserve exact state
+  document.querySelectorAll('.question-input input').forEach(el => { el.disabled = true; });
+  document.querySelectorAll('.flag-btn').forEach(btn => { btn.disabled = true; });
+  const submitBtn = document.getElementById('submit-btn');
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '✓ Submitted'; }
+
+  document.getElementById('submitted-banner').classList.add('visible');
+
+  renderResults();
+}
+
+// ========================================================
+// ANSWER CHECKING
+// ========================================================
+function checkAnswer(q, userAnswer) {
+  if (q.type === 'mc' || q.type === 'tf') {
+    return userAnswer === q.correctAnswer;
+  } else if (q.type === 'id' || q.type === 'acronym') {
+    if (!userAnswer || String(userAnswer).trim() === '') return false;
+    const norm = normalizeStr(userAnswer);
+    if (norm === normalizeStr(q.correctAnswer)) return true;
+    return q.altAnswers.some(alt => normalizeStr(alt) === norm);
+  }
+  return false;
+}
+
+function scoreEnum(q, userAnswers) {
+  const total = q.correctAnswer.length;
+  if (!userAnswers || !Array.isArray(userAnswers)) return { score: 0, total };
+  const normedCorrect = q.correctAnswer.map(normalizeStr);
+  const matched = new Set();
+  let score = 0;
+  userAnswers.forEach(ua => {
+    if (!ua || String(ua).trim() === '') return;
+    const norm = normalizeStr(ua);
+    for (let i = 0; i < normedCorrect.length; i++) {
+      if (!matched.has(i) && matchEnum(norm, normedCorrect[i])) {
+        matched.add(i);
+        score++;
+        break;
+      }
+    }
+  });
+  return { score, total };
+}
+
+// ========================================================
+// RENDER RESULTS (uses examState.questions only — never re-shuffles)
+// ========================================================
+function renderResults() {
+  let totalScore = 0, totalPossible = 0, answeredCount = 0;
+  const sectionScores = { mc:{score:0,total:0}, tf:{score:0,total:0}, enum:{score:0,total:0}, id:{score:0,total:0}, acronym:{score:0,total:0} };
+  let streak = 0, longestStreak = 0;
+
+  examState.questions.forEach(q => {
+    const ua = examState.answers[q.id];
+    const hasAns = hasAnswered(q);
+    if (hasAns) answeredCount++;
+
+    if (q.type === 'enum') {
+      const { score, total } = scoreEnum(q, ua);
+      totalScore += score; totalPossible += total;
+      sectionScores.enum.score += score; sectionScores.enum.total += total;
+      if (score === total && total > 0) { streak++; longestStreak = Math.max(longestStreak, streak); }
+      else streak = 0;
+    } else {
+      totalPossible++;
+      sectionScores[q.type].total++;
+      const correct = checkAnswer(q, ua);
+      if (correct) {
+        totalScore++; sectionScores[q.type].score++;
+        streak++; longestStreak = Math.max(longestStreak, streak);
+      } else { streak = 0; }
+    }
+  });
+
+  examState.longestStreak = longestStreak;
+  const pct = totalPossible > 0 ? Math.round(totalScore / totalPossible * 100) : 0;
+  const passed = pct >= 75;
+  const skipped = examState.questions.length - answeredCount;
+
+  // Score display
+  document.getElementById('score-display').innerHTML = `
+    <div class="score-circle ${passed ? 'passed' : 'failed'}">
+      <div class="score-pct">${pct}%</div>
+      <div class="score-label">${passed ? '✓ PASSED' : '✗ FAILED'}</div>
+    </div>
+    <div class="score-details">
+      <div class="score-stat"><span>${totalScore}/${totalPossible}</span><label>Score</label></div>
+      <div class="score-stat"><span>${answeredCount}</span><label>Answered</label></div>
+      <div class="score-stat"><span>${skipped}</span><label>Skipped</label></div>
+      <div class="score-stat"><span>${longestStreak}</span><label>Best Streak</label></div>
+    </div>
+    <p style="text-align:center;margin-top:12px;font-size:13px;color:var(--text-muted);">Passing score: 75% (${Math.ceil(totalPossible * 0.75)}/${totalPossible} points)</p>
+  `;
+
+  // Section breakdown
+  const sectionNames = { mc:'Multiple Choice', tf:'True or False', enum:'Enumeration', id:'Identification', acronym:'Acronym Meaning' };
+  let sbHTML = '';
+  Object.entries(sectionScores).forEach(([key, val]) => {
+    if (val.total === 0) return;
+    const p = Math.round(val.score / val.total * 100);
+    sbHTML += `<div class="section-bar-item">
+      <div class="section-bar-label">${sectionNames[key]}: ${val.score}/${val.total} (${p}%)</div>
+      <div class="section-bar-track"><div class="section-bar-fill ${p >= 75 ? 'good' : 'poor'}" style="width:${p}%"></div></div>
+    </div>`;
+  });
+  document.getElementById('section-breakdown').innerHTML = sbHTML;
+
+  // Review
+  const rc = document.getElementById('review-container');
+  rc.innerHTML = '';
+  let lastType = null;
+
+  examState.questions.forEach((q, idx) => {
+    // Section sub-header in review
+    if (q.type !== lastType) {
+      lastType = q.type;
+      const sh = document.createElement('div');
+      sh.className = 'review-section-header';
+      sh.textContent = `${sectionNames[q.type]}`;
+      rc.appendChild(sh);
+    }
+
+    const ua = examState.answers[q.id];
+    let isCorrect = false;
+    let scoreInfo = '';
+    if (q.type === 'enum') {
+      const { score, total } = scoreEnum(q, ua);
+      isCorrect = score === total;
+      scoreInfo = ` (${score}/${total} pts)`;
+    } else {
+      isCorrect = checkAnswer(q, ua);
+    }
+
+    const card = document.createElement('div');
+    card.className = `review-card ${isCorrect ? 'correct' : 'incorrect'}`;
+
+    const reviewChoicesHTML = buildReviewChoicesHTML(q, ua);
+    const explanationHTML = buildExplanationHTML(q);
+
+    card.innerHTML = `
+      <div class="review-header">
+        <span class="rv-num">Q${idx+1}</span>
+        <span class="rv-section">${getSectionLabel(q.type)}</span>
+        <span class="rv-result ${isCorrect ? 'rv-correct' : 'rv-incorrect'}">${isCorrect ? '✓ Correct' : '✗ Incorrect'}${scoreInfo}</span>
+      </div>
+      <div class="rv-question">${q.question}</div>
+      ${reviewChoicesHTML}
+      ${explanationHTML}
+    `;
+    rc.appendChild(card);
+  });
+
+  // Show results
+  document.getElementById('results-section').style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+  }, 300);
+
+  // Update streak display
+  document.getElementById('streak-count').textContent = longestStreak;
+}
+
+function buildReviewChoicesHTML(q, userAnswer) {
+  if (q.type === 'mc' || q.type === 'tf') {
+    // Show choices in EXACT SAME SHUFFLED ORDER as during attempt
+    let html = '<div class="rv-choices">';
+    q.shuffledChoices.forEach((choice, ci) => {
+      const letter = String.fromCharCode(65 + ci);
+      const isCorrChoice = choice === q.correctAnswer;
+      const isUserChoice = choice === userAnswer;
+      let cls = 'rv-choice';
+      if (isCorrChoice && isUserChoice) cls += ' rv-choice-user-correct';
+      else if (isCorrChoice) cls += ' rv-choice-correct';
+      else if (isUserChoice) cls += ' rv-choice-user-wrong';
+      const marker = isCorrChoice ? '✓' : (isUserChoice && !isCorrChoice ? '✗' : '');
+      html += `<div class="${cls}" ${isCorrChoice ? 'aria-label="Correct answer"' : ''}${isUserChoice ? ' aria-label="Your answer"' : ''}>
+        <span class="rv-letter">${letter}</span>
+        <span>${escapeAttr(choice)}</span>
+        ${marker ? `<span class="rv-marker">${marker}</span>` : ''}
+      </div>`;
+    });
+    html += '</div>';
+    if (!userAnswer) html += '<div class="rv-skipped">⚠ Not answered</div>';
+    return html;
+  } else if (q.type === 'id' || q.type === 'acronym') {
+    const correct = checkAnswer(q, userAnswer);
+    const altInfo = q.altAnswers.length ? ` <span style="font-size:11px;opacity:0.7">(Also accepted: ${q.altAnswers.join(', ')})</span>` : '';
+    return `<div class="rv-text-answer">
+      <div class="rv-user-ans ${correct ? 'rv-correct-text' : 'rv-wrong-text'}">
+        <strong>Your answer:</strong> ${userAnswer ? escapeAttr(userAnswer) : '<em>Not answered</em>'}
+      </div>
+      <div class="rv-correct-ans"><strong>✓ Correct answer:</strong> ${escapeAttr(q.correctAnswer)}${altInfo}</div>
+    </div>`;
+  } else if (q.type === 'enum') {
+    const answers = userAnswer || [];
+    let html = '<div class="rv-enum">';
+    html += '<div class="rv-enum-user"><strong>Your answers:</strong>';
+    if (answers.length === 0 || answers.every(a => !a || !a.trim())) {
+      html += '<div class="rv-skipped">Not answered</div>';
+    } else {
+      answers.forEach((a, i) => {
+        html += `<div class="rv-enum-item">${i+1}. ${a ? escapeAttr(a) : '<em>blank</em>'}</div>`;
+      });
+    }
+    html += '</div>';
+    html += '<div class="rv-enum-correct"><strong>✓ Expected:</strong>';
+    q.correctAnswer.forEach((ca, i) => {
+      html += `<div class="rv-enum-item">${i+1}. ${escapeAttr(ca)}</div>`;
+    });
+    html += '</div></div>';
+    return html;
+  }
+  return '';
+}
+
+function buildExplanationHTML(q) {
+  if (q.type === 'mc' || q.type === 'tf') {
+    let expItems = '';
+    q.origChoices.forEach((choice, ci) => {
+      const letter = String.fromCharCode(65 + ci);
+      const isCorrOrig = choice === q.correctAnswer;
+      expItems += `<div class="exp-item ${isCorrOrig ? 'exp-correct' : ''}">
+        <span class="exp-letter">${letter}</span>
+        <span class="exp-text">${q.origWhy[ci] || ''}</span>
+      </div>`;
+    });
+    return `<details class="explanation-box">
+      <summary>📖 Explanation</summary>
+      <div class="exp-note">⚠ Letters A–D below follow the ORIGINAL (unshuffled) choice order — not the order shown during the attempt.</div>
+      <div class="exp-list">${expItems}</div>
+    </details>`;
+  } else {
+    return `<details class="explanation-box">
+      <summary>📖 Explanation</summary>
+      <div class="exp-text-single">${q.origWhy[0] || ''}</div>
+    </details>`;
+  }
+}
+
+// ========================================================
+// RETAKE
+// ========================================================
 function retakeExam() {
-  if (examState.timerInterval) clearInterval(examState.timerInterval);
-  document.getElementById('results-section').style.display = 'none';
-  document.getElementById('results-section').classList.remove('show');
-  document.getElementById('exam-form').style.display = 'block';
-  document.getElementById('review-section').innerHTML = '';
-  document.getElementById('timer-display').classList.remove('warning', 'danger');
-  document.getElementById('streak-count').textContent = '0';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
   initExam();
 }
 
-function toggleDark() {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  document.getElementById('dark-btn').textContent = isDark ? '🌙 Dark' : '☀ Light';
+// ========================================================
+// THEME TOGGLE
+// ========================================================
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').textContent = isDark ? '🌙' : '☀️';
+  document.getElementById('theme-label').textContent = isDark ? 'Dark' : 'Light';
 }
 
-function setDates() {
+// ========================================================
+// DATE DISPLAY
+// ========================================================
+function renderDates() {
   const d = new Date();
-  const opts = { year: 'numeric', month: 'long', day: 'numeric' };
-  const dateStr = d.toLocaleDateString('en-US', opts);
-  const topDate = document.getElementById('top-date');
-  const footerDate = document.getElementById('footer-date');
-  if (topDate) topDate.textContent = dateStr;
-  if (footerDate) footerDate.textContent = `Date: ${dateStr}`;
+  const opts = { year:'numeric', month:'long', day:'numeric' };
+  const fmt = d.toLocaleDateString('en-US', opts);
+  const els = ['credit-date', 'footer-date'];
+  els.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = fmt;
+  });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  setDates();
-  initExam();
-});
+// ========================================================
+// INIT
+// ========================================================
+renderDates();
+window.addEventListener('DOMContentLoaded', () => { initExam(); });
 </script>
 </body>
 </html>
