@@ -1,7 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BUSPROS Week 5 Exam – Production Planning & Execution</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy: #0a1628;
+  --navy-light: #1a3366;
+  --gold: #c9a227;
+  --gold-light: #e8c355;
+  --gold-dim: #a07c18;
+  --gray-100: #eef1f7;
+  --gray-200: #d8dde8;
+  --gray-600: #4a5568;
+  --correct: #16a34a;
+  --correct-bg: #dcfce7;
+  --wrong: #dc2626;
+  --wrong-bg: #fee2e2;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --blue: #2563eb;
+  --blue-bg: #eff6ff;
+  --orange: #ea580c;
+  --orange-bg: #fff7ed;
+  --bg: #f0f4fc;
+  --surface: #ffffff;
+  --surface2: #f4f6fb;
+  --text: #0a1628;
+  --text-sub: #4a5568;
+  --border: #d8dde8;
+  --timer-bg: #0a1628;
+  --timer-text: #ffffff;
+  --shadow-sm: 0 1px 3px rgba(10,22,40,0.08), 0 1px 2px rgba(10,22,40,0.06);
+  --shadow-md: 0 4px 12px rgba(10,22,40,0.1), 0 2px 6px rgba(10,22,40,0.08);
+  --shadow-lg: 0 10px 30px rgba(10,22,40,0.14), 0 4px 12px rgba(10,22,40,0.1);
+}
+[data-theme="dark"] {
+  --bg: #07101f;
+  --surface: #0f1e35;
+  --surface2: #162540;
+  --text: #e8edf5;
+  --text-sub: #8a99b8;
+  --border: #1f3358;
+  --timer-bg: #091525;
+  --timer-text: #e8edf5;
+  --gray-100: #162540;
+  --gray-200: #1f3358;
+  --blue-bg: #0a1e3a;
+  --correct-bg: #052e16;
+  --wrong-bg: #1e0404;
+  --orange-bg: #1e0d00;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.3s, color 0.3s;
+}
+h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
+
+.credit-bar {
+  background: var(--navy);
+  color: rgba(255,255,255,0.85);
+  font-size: 11.5px;
+  padding: 6px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.02em;
+}
+.credit-bar a { color: var(--gold-light); text-decoration: none; }
+.credit-bar a:hover { text-decoration: underline; }
+.credit-sep { color: rgba(255,255,255,0.3); }
+
+#timer-bar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--timer-bg);
+  color: var(--timer-text);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+#timer-bar .timer-display {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  min-width: 70px;
+  letter-spacing: 0.04em;
+}
+#timer-bar .timer-display.warning { color: var(--warning); }
+#timer-bar .timer-display.danger { color: var(--danger); animation: pulse-text 0.8s infinite alternate; }
+@keyframes pulse-text { from { opacity: 1; } to { opacity: 0.5; } }
+
+#progress-bar-wrap {
+  flex: 1;
+  min-width: 120px;
+  height: 6px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 3px;
+  overflow: hidden;
+}
+#progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+.timer-badge {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.timer-badge span { color: var(--gold-light); font-weight: 700; }
+.timer-btn {
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.timer-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+.dark-toggle {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--timer-text);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.dark-toggle:hover { background: rgba(255,255,255,0.2); }
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+}
+.exam-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 32px 36px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.exam-header::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(201,162,39,0.18) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.exam-header::after {
+  content: '';
+  position: absolute;
+  bottom: -50px; left: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(201,162,39,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.exam-header h1 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  color: var(--gold-light);
+  margin-bottom: 6px;
+  position: relative;
+}
+.exam-header .subtitle {
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+  margin-bottom: 18px;
+  position: relative;
+}
+.exam-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  position: relative;
+}
+.meta-pill {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(201,162,39,0.3);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.9);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.meta-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 32px 0 16px;
+}
+.section-label .label-badge {
+  background: var(--navy);
+  color: var(--gold-light);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+[data-theme="dark"] .section-label .label-badge { background: var(--navy-light); }
+.section-label .label-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.section-label .label-count {
+  color: var(--text-sub);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.q-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+  position: relative;
+}
+.q-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.q-card.flagged {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(234,88,12,0.15), var(--shadow-sm);
+}
+.q-card.correct-card { border-color: var(--correct); }
+.q-card.wrong-card { border-color: var(--wrong); }
+
+.q-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 12px;
+}
+.q-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+}
+.q-diff {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.diff-Easy { background: #dcfce7; color: #15803d; }
+.diff-Medium { background: #fef9c3; color: #92400e; }
+.diff-Hard { background: #fee2e2; color: #b91c1c; }
+[data-theme="dark"] .diff-Easy { background: #052e16; color: #4ade80; }
+[data-theme="dark"] .diff-Medium { background: #1c1400; color: #fbbf24; }
+[data-theme="dark"] .diff-Hard { background: #1e0404; color: #f87171; }
+
+.flag-btn {
+  background: none;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-sub);
+  transition: all 0.2s;
+}
+.flag-btn:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-bg); }
+.flag-btn.active { border-color: var(--orange); background: var(--orange-bg); color: var(--orange); }
+
+.q-text {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.choices { display: flex; flex-direction: column; gap: 9px; }
+.choice-btn {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  font-size: 14px;
+  color: var(--text);
+  width: 100%;
+}
+.choice-btn:hover:not(:disabled) {
+  border-color: var(--blue);
+  background: var(--blue-bg);
+}
+.choice-btn.selected {
+  border-color: var(--blue);
+  background: var(--blue-bg);
+}
+.choice-btn.correct-choice {
+  border-color: var(--correct);
+  background: var(--correct-bg);
+}
+.choice-btn.wrong-choice {
+  border-color: var(--wrong);
+  background: var(--wrong-bg);
+}
+.choice-btn.missed-choice {
+  border-color: var(--correct);
+  background: rgba(134,239,172,0.15);
+}
+.choice-btn:disabled { cursor: default; }
+
+.radio-circle {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.choice-btn.selected .radio-circle {
+  border-color: var(--blue);
+  background: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+.choice-btn.selected .radio-circle::after {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+.choice-btn.correct-choice .radio-circle {
+  border-color: var(--correct);
+  background: var(--correct);
+}
+.choice-btn.correct-choice .radio-circle::after {
+  content: '✓';
+  font-size: 12px;
+  color: white;
+  font-weight: 700;
+}
+.choice-btn.wrong-choice .radio-circle {
+  border-color: var(--wrong);
+  background: var(--wrong);
+}
+.choice-btn.wrong-choice .radio-circle::after {
+  content: '✗';
+  font-size: 11px;
+  color: white;
+  font-weight: 700;
+}
+.choice-btn.missed-choice .radio-circle {
+  border-color: var(--correct);
+  background: var(--correct-bg);
+}
+.choice-btn.missed-choice .radio-circle::after {
+  content: '✓';
+  font-size: 11px;
+  color: var(--correct);
+  font-weight: 700;
+}
+.choice-label { font-size: 13px; font-weight: 600; min-width: 16px; color: var(--text-sub); }
+
+.q-input {
+  width: 100%;
+  padding: 11px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  background: var(--surface2);
+  color: var(--text);
+  outline: none;
+  margin-bottom: 6px;
+}
+.q-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.q-input.correct-input { border-color: var(--correct); background: var(--correct-bg); }
+.q-input.wrong-input { border-color: var(--wrong); background: var(--wrong-bg); }
+.enum-inputs { display: flex; flex-direction: column; gap: 8px; }
+.enum-row { display: flex; align-items: center; gap: 8px; }
+.enum-num { font-size: 13px; font-weight: 600; color: var(--text-sub); min-width: 20px; }
+
+.explanation-box {
+  margin-top: 14px;
+  padding: 14px 16px;
+  background: var(--surface2);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 10px 10px 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--text-sub);
+  display: none;
+}
+.explanation-box.show { display: block; }
+.explanation-box .why-item { margin-bottom: 5px; }
+.explanation-box .why-label { font-weight: 600; color: var(--text); }
+.explanation-box .correct-label { color: var(--correct); font-weight: 700; }
+
+.result-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+.status-correct { background: var(--correct-bg); color: var(--correct); }
+.status-wrong { background: var(--wrong-bg); color: var(--wrong); }
+.status-skipped { background: var(--gray-100); color: var(--gray-600); }
+
+.submit-area { text-align: center; margin: 36px 0; }
+.submit-btn {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  color: var(--navy);
+  border: none;
+  padding: 15px 48px;
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(201,162,39,0.35);
+}
+.submit-btn:hover { transform: translateY(-2px); }
+
+#modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+#modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  transform: scale(0.9);
+  transition: transform 0.25s;
+}
+#modal-overlay.open .modal-box { transform: scale(1); }
+.modal-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+.modal-body { font-size: 14px; color: var(--text-sub); line-height: 1.6; margin-bottom: 24px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.modal-cancel, .modal-confirm {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.modal-cancel { background: var(--gray-100); color: var(--text); }
+.modal-confirm { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); font-family: 'Syne', sans-serif; font-weight: 700; }
+
+#results-section { display: none; }
+#results-section.show { display: block; }
+
+.score-banner {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+.score-banner::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(201,162,39,0.2) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.score-big {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 800;
+  color: var(--gold-light);
+  line-height: 1;
+}
+.score-label { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 4px; margin-bottom: 20px; }
+.score-meta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px; }
+.score-meta-item {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(201,162,39,0.3);
+  border-radius: 10px;
+  padding: 10px 18px;
+  text-align: center;
+}
+.score-meta-item .val { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--gold-light); display: block; }
+.score-meta-item .lbl { font-size: 11px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.06em; }
+.pass-badge {
+  display: inline-block;
+  padding: 8px 22px;
+  border-radius: 30px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  margin-top: 14px;
+}
+.pass-badge.pass { background: var(--correct); color: white; }
+.pass-badge.fail { background: var(--wrong); color: white; }
+
+.breakdown-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+.pill {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 18px;
+  flex: 1; min-width: 130px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+.pill .pill-name { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-sub); font-weight: 600; margin-bottom: 4px; }
+.pill .pill-score { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--text); }
+.pill .pill-pct { font-size: 12px; color: var(--text-sub); }
+
+.analytics-section {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-sm);
+}
+.analytics-section h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 20px; }
+.bar-chart { display: flex; flex-direction: column; gap: 14px; }
+.bar-row { display: flex; align-items: center; gap: 12px; }
+.bar-row-label { font-size: 12px; font-weight: 600; color: var(--text-sub); min-width: 80px; text-align: right; }
+.bar-wrap { flex: 1; height: 28px; background: var(--gray-100); border-radius: 6px; overflow: hidden; }
+.bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  width: 0%;
+  transition: width 0.9s ease;
+}
+.bar-fill.bar-mc { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+.bar-fill.bar-tf { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+.bar-fill.bar-enum { background: linear-gradient(90deg, #0891b2, #38bdf8); }
+.bar-fill.bar-ident { background: linear-gradient(90deg, #c9a227, #e8c355); color: var(--navy); }
+.bar-fill.bar-acro { background: linear-gradient(90deg, #16a34a, #4ade80); }
+
+.retake-wrap { text-align: center; margin: 16px 0 36px; }
+.retake-btn {
+  background: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold-dim);
+  padding: 13px 40px;
+  border-radius: 12px;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.retake-btn:hover { background: var(--gold); color: var(--navy); }
+
+#nav-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 500;
+  display: none;
+}
+#nav-overlay.open { display: block; }
+#nav-panel {
+  position: fixed;
+  left: -320px;
+  top: 0; bottom: 0;
+  width: 300px;
+  background: var(--surface);
+  z-index: 501;
+  transition: left 0.3s ease;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+#nav-panel.open { left: 0; }
+#nav-panel h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+.nav-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.nav-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-sub); }
+.nav-dot { width: 12px; height: 12px; border-radius: 3px; }
+.nav-dot.gray { background: var(--gray-200); }
+.nav-dot.blue { background: var(--blue); }
+.nav-dot.orange { background: var(--orange); }
+.nav-dot.green { background: var(--correct); }
+.nav-dot.red { background: var(--wrong); }
+.nav-dot.faded-red { background: #fca5a5; }
+
+.nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.nav-item {
+  aspect-ratio: 1;
+  border-radius: 7px;
+  background: var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--text-sub);
+  border: none;
+}
+.nav-item.answered { background: var(--blue); color: white; }
+.nav-item.flagged-nav { background: var(--orange); color: white; }
+.nav-item.correct-nav { background: var(--correct); color: white; }
+.nav-item.wrong-nav { background: var(--wrong); color: white; }
+.nav-item.skipped-nav { background: #fca5a5; color: white; }
+.nav-close {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: none;
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+footer {
+  background: var(--navy);
+  color: rgba(255,255,255,0.65);
+  text-align: center;
+  padding: 16px;
+  font-size: 12px;
+}
+footer a { color: var(--gold-light); text-decoration: none; }
+
+button:focus-visible, input:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .exam-header { padding: 22px 20px; }
+  .q-card { padding: 16px; }
+  #timer-bar { padding: 8px 12px; gap: 8px; }
+  .timer-badge { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="credit-bar">
+  <span>Kim Cedrick C. Villar</span>
+  <span class="credit-sep">|</span>
+  <span>BSIT / BUSPROS</span>
+  <span class="credit-sep">|</span>
+  <span>National University – Fairview</span>
+  <span class="credit-sep">|</span>
+  <span>Section IT-252</span>
+  <span class="credit-sep">|</span>
+  <span id="top-date"></span>
+  <span class="credit-sep">|</span>
+  <a href="https://github.com/Ceddrickx" target="_blank" rel="noopener">GitHub</a>
+</div>
+
+<div id="timer-bar">
+  <div id="timer-display" class="timer-display">20:00</div>
+  <div id="progress-bar-wrap"><div id="progress-bar-fill"></div></div>
+  <div class="timer-badge">Answered: <span id="answered-count">0</span>/<span id="total-count">48</span></div>
+  <div class="timer-badge">🔥 Streak: <span id="streak-count">0</span></div>
+  <button class="timer-btn" onclick="openNav()" aria-label="Open question navigator">☰ Navigator</button>
+  <button class="dark-toggle" id="dark-btn" onclick="toggleDark()" aria-label="Toggle dark mode">🌙 Dark</button>
+</div>
+
+<div id="nav-overlay" onclick="closeNav()"></div>
+<div id="nav-panel" role="dialog" aria-label="Question Navigator">
+  <h3>📋 Question Navigator</h3>
+  <div class="nav-legend">
+    <div class="nav-legend-item"><div class="nav-dot gray"></div>Unanswered</div>
+    <div class="nav-legend-item"><div class="nav-dot blue"></div>Answered</div>
+    <div class="nav-legend-item"><div class="nav-dot orange"></div>Flagged</div>
+    <div class="nav-legend-item"><div class="nav-dot green"></div>Correct</div>
+    <div class="nav-legend-item"><div class="nav-dot red"></div>Wrong</div>
+    <div class="nav-legend-item"><div class="nav-dot faded-red"></div>Skipped</div>
+  </div>
+  <div class="nav-grid" id="nav-grid"></div>
+  <button class="nav-close" onclick="closeNav()">✕ Close</button>
+</div>
+
+<div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">Submit Exam</div>
+    <div class="modal-body" id="modal-body">Are you sure you want to submit your exam?</div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-confirm" onclick="confirmSubmit()">✓ Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="exam-header">
+    <h1>Production Planning &amp; Execution</h1>
+    <div class="subtitle">BUSPROS Week 5 – SAP S/4HANA PP Module</div>
+    <div class="exam-meta">
+      <div class="meta-pill"><div class="dot"></div>20 Multiple Choice</div>
+      <div class="meta-pill"><div class="dot"></div>10 True or False</div>
+      <div class="meta-pill"><div class="dot"></div>3 Enumeration</div>
+      <div class="meta-pill"><div class="dot"></div>10 Identification</div>
+      <div class="meta-pill"><div class="dot"></div>5 Acronym</div>
+      <div class="meta-pill"><div class="dot"></div>⏱ 20 Minutes</div>
+    </div>
+  </div>
+
+  <div id="exam-form">
+    <div id="questions-container"></div>
+    <div class="submit-area">
+      <button class="submit-btn" onclick="openModal()" aria-label="Submit exam">Submit Exam</button>
+    </div>
+  </div>
+
+  <div id="results-section">
+    <div class="score-banner">
+      <div class="score-big" id="score-big">--</div>
+      <div class="score-label">out of <span id="score-total">--</span> points</div>
+      <div id="pass-badge" class="pass-badge pass">PASSED ✓</div>
+      <div class="score-meta" id="score-meta"></div>
+    </div>
+    <div class="breakdown-pills" id="breakdown-pills"></div>
+    <div class="analytics-section">
+      <h3>📊 Performance Analytics</h3>
+      <div class="bar-chart" id="bar-chart"></div>
+    </div>
+    <div class="retake-wrap">
+      <button class="retake-btn" onclick="retakeExam()">↺ Retake Exam</button>
+    </div>
+    <div id="review-section"></div>
+  </div>
+</div>
+
+<footer>
+  <p>Kim Cedrick C. Villar &nbsp;|&nbsp; BSIT / BUSPROS &nbsp;|&nbsp; National University – Fairview &nbsp;|&nbsp; Section IT-252 &nbsp;|&nbsp; <a href="https://github.com/Ceddrickx" target="_blank" rel="noopener">github.com/Ceddrickx</a></p>
+  <p id="footer-date" style="margin-top:4px;"></p>
+</footer>
+
 <script>
-/* ===================================================
-   EXAM STATE
-=================================================== */
 const examState = {
   answers: {},
   flagged: {},
@@ -10,626 +804,333 @@ const examState = {
   submitted: false,
   startTime: null,
   remainingTime: 20 * 60,
-  timerInterval: null
+  timerInterval: null,
+  questions: []
 };
 
-/* ===================================================
-   QUESTION BANK
-=================================================== */
 const questionBank = [
-  // =================== MULTIPLE CHOICE (20) ===================
   {
     id: 1, type: 'mc', difficulty: 'Easy',
     question: 'What SAP S/4HANA module manages the manufacturing cycle — from planning materials to executing production?',
     slideRef: 'Section 1',
+    choices: [], correctAnswer: 'PP (Production Planning)', why: [],
     origChoices: ['MM (Materials Management)', 'SD (Sales & Distribution)', 'PP (Production Planning)', 'FI (Financial Accounting)'],
-    correctAnswer: 'PP (Production Planning)',
     origWhy: [
       'MM handles procurement and inventory management, not manufacturing execution.',
       'SD manages sales orders and customer delivery, not production.',
       'Correct. PP is the module that manages the manufacturing cycle — planning through execution — in SAP S/4HANA.',
       'FI handles financial accounting and is a downstream module of PP, not the production manager.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 2, type: 'mc', difficulty: 'Easy',
     question: 'What is the highest independent environment in the SAP system, under which all organizational units belong?',
     slideRef: 'Section 2',
+    choices: [], correctAnswer: 'Client', why: [],
     origChoices: ['Plant', 'Company Code', 'Storage Location', 'Client'],
-    correctAnswer: 'Client',
     origWhy: [
       'A Plant is an operating area within a Company Code, not the top level.',
       'Company Code is the smallest org unit for complete legal books, but not the highest.',
       'Storage Location is below the Plant level.',
       'Correct. The Client is the highest independent environment in SAP — all org units belong to one client.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 3, type: 'mc', difficulty: 'Easy',
     question: 'What analogy best describes the relationship between a BOM and a Routing in SAP PP?',
     slideRef: 'Section 3',
-    origChoices: [
-      'Blueprint and Tools',
-      'BOM = ingredients; Routing = steps (like a cooking recipe)',
-      'Map and Compass',
-      'Script and Actors'
-    ],
-    correctAnswer: 'BOM = ingredients; Routing = steps (like a cooking recipe)',
+    choices: [], correctAnswer: 'BOM = ingredients; Routing = steps (like a cooking recipe)', why: [],
+    origChoices: ['Blueprint and Tools', 'BOM = ingredients; Routing = steps (like a cooking recipe)', 'Map and Compass', 'Script and Actors'],
     origWhy: [
       'Blueprint and Tools is not the analogy used in SAP PP documentation.',
       'Correct. The reviewer explicitly states: BOM = ingredients; Routing = steps — together they function like a cooking recipe.',
       'Map and Compass is not the analogy referenced in the material.',
       'Script and Actors is not used in the PP context.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 4, type: 'mc', difficulty: 'Medium',
     question: 'Which BOM item category symbol represents a Stock item?',
     slideRef: 'Section 3.2',
+    choices: [], correctAnswer: 'L', why: [],
     origChoices: ['N', 'D', 'L', 'T'],
-    correctAnswer: 'L',
     origWhy: [
       'N is not the stock item category in SAP BOM.',
       'D is not the stock item category in SAP BOM.',
       'Correct. Item category L = Stock item in SAP BOM. It controls screen sequence, field selection, and inventory management.',
       'T is used for Text items in SAP BOM, not Stock items.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 5, type: 'mc', difficulty: 'Medium',
     question: 'What does a low-level code of 000 signify for a material in SAP?',
     slideRef: 'Section 3.1',
-    origChoices: [
-      'It is at the bottom of the BOM structure',
-      'It is a raw material with no BOM',
-      'It is at the top of the BOM structure (finished product)',
-      'It has not been assigned to any BOM'
-    ],
-    correctAnswer: 'It is at the top of the BOM structure (finished product)',
+    choices: [], correctAnswer: 'It is at the top of the BOM structure (finished product)', why: [],
+    origChoices: ['It is at the bottom of the BOM structure', 'It is a raw material with no BOM', 'It is at the top of the BOM structure (finished product)', 'It has not been assigned to any BOM'],
     origWhy: [
       'Low-level code 000 means top, not bottom.',
       'Raw materials typically have higher numeric low-level codes.',
       'Correct. Material Type FERT with low-level code 000 is at the TOP of the BOM structure, indicating a finished product.',
       'Unassigned materials are a different scenario entirely.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 6, type: 'mc', difficulty: 'Medium',
     question: 'Which forecasting model accounts for BOTH trend AND seasonal patterns simultaneously?',
     slideRef: 'Section 4.1',
+    choices: [], correctAnswer: 'Trend and Seasonal', why: [],
     origChoices: ['Constant', 'Trend', 'Seasonal', 'Trend and Seasonal'],
-    correctAnswer: 'Trend and Seasonal',
     origWhy: [
       'Constant model assumes no trend or seasonality — values remain stable.',
       'Trend model accounts for upward/downward movement but not seasonality.',
       'Seasonal model accounts for recurring patterns but not directional trend.',
       'Correct. The Trend and Seasonal model captures both the directional trend and recurring seasonal fluctuations simultaneously.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 7, type: 'mc', difficulty: 'Easy',
     question: 'Which planning strategy code represents "Net Requirements Planning" in Make-to-Stock?',
     slideRef: 'Section 4.4',
+    choices: [], correctAnswer: '10', why: [],
     origChoices: ['20', '10', '40', '30'],
-    correctAnswer: '10',
     origWhy: [
       'Strategy 20 is Make-to-Order.',
       'Correct. Strategy 10 = Net Requirements Planning (MTS). Only net shortage triggers production.',
       'Strategy 40 = Planning with Final Assembly (MTS).',
       'Strategy 30 = Production by Lot Size (MTS).'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 8, type: 'mc', difficulty: 'Medium',
     question: 'In MRP, what event triggers a Procurement Proposal?',
     slideRef: 'Section 4.6',
-    origChoices: [
-      'A surplus of stock above safety stock',
-      'A shortage (net requirement) after deducting stock and safety stock from demand',
-      'Manual entry by the MRP controller',
-      'A vendor delivery confirmation'
-    ],
-    correctAnswer: 'A shortage (net requirement) after deducting stock and safety stock from demand',
+    choices: [], correctAnswer: 'A shortage (net requirement) after deducting stock and safety stock from demand', why: [],
+    origChoices: ['A surplus of stock above safety stock', 'A shortage (net requirement) after deducting stock and safety stock from demand', 'Manual entry by the MRP controller', 'A vendor delivery confirmation'],
     origWhy: [
       'Surplus means no procurement is needed.',
       'Correct. Net Requirements Formula: Demand − Stock − Safety Stock = Shortage → triggers a Procurement Proposal.',
       'While controllers can trigger manually, the automatic logic is based on shortage.',
       'Vendor confirmation is downstream of procurement, not a trigger for proposals.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 9, type: 'mc', difficulty: 'Medium',
     question: 'In consumption-based planning, which parameter defines the stock level that automatically triggers replenishment?',
     slideRef: 'Section 4.6',
+    choices: [], correctAnswer: 'Reorder Point', why: [],
     origChoices: ['Safety Stock', 'Reorder Point', 'Lot Size', 'Replenishment Lead Time'],
-    correctAnswer: 'Reorder Point',
     origWhy: [
       'Safety Stock is a buffer below the reorder point to prevent stockouts, but it does not trigger replenishment.',
       'Correct. The Reorder Point is the stock level that triggers replenishment in consumption-based planning.',
       'Lot Size defines how much to order per replenishment event, not when to order.',
       'Replenishment Lead Time is the time to receive stock, not the trigger level.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 10, type: 'mc', difficulty: 'Easy',
     question: 'Which document type is automatically created during an MRP run and must later be converted to a production or purchase order?',
     slideRef: 'Section 6 / 4.6',
+    choices: [], correctAnswer: 'Planned Order', why: [],
     origChoices: ['Production Order', 'Purchase Order', 'Planned Order', 'Process Order'],
-    correctAnswer: 'Planned Order',
     origWhy: [
       'Production Orders are created by converting Planned Orders — they are not auto-created by MRP directly.',
       'Purchase Orders are created via Purchase Requisitions after MRP, not directly by the run.',
       'Correct. A Planned Order is auto-created during an MRP run under the Planning category and converts to a Production or Purchase Order.',
       'Process Orders are used in process industries, not standard MRP output for all materials.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 11, type: 'mc', difficulty: 'Hard',
     question: 'What is the primary purpose of Order Settlement in the manufacturing execution cycle?',
     slideRef: 'Section 5.9',
-    origChoices: [
-      'To release the production order for execution',
-      'To withdraw components from stock using BOM reservations',
-      'To settle actual production costs to one or more receiver cost objects',
-      'To confirm completion quantities and activity data'
-    ],
-    correctAnswer: 'To settle actual production costs to one or more receiver cost objects',
+    choices: [], correctAnswer: 'To settle actual production costs to one or more receiver cost objects', why: [],
+    origChoices: ['To release the production order for execution', 'To withdraw components from stock using BOM reservations', 'To settle actual production costs to one or more receiver cost objects', 'To confirm completion quantities and activity data'],
     origWhy: [
       'Releasing the order is the Release step (Step 3), not Order Settlement.',
       'Withdrawing components is the Goods Issue step (Step 5).',
       'Correct. Order Settlement (Step 8) settles actual costs incurred in the production order to receiver cost objects (material, cost center, internal order, etc.).',
       'Confirming quantities is the Completion Confirmation step (Step 6).'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 12, type: 'mc', difficulty: 'Medium',
     question: 'Which MRP Type code on the MRP1 screen of the Material Master represents standard MRP in SAP?',
     slideRef: 'Section 4.6',
+    choices: [], correctAnswer: 'PD', why: [],
     origChoices: ['VB', 'VV', 'PD', 'RP'],
-    correctAnswer: 'PD',
     origWhy: [
       'VB = Reorder Point planning (consumption-based), not standard MRP.',
       'VV = Forecast-Based planning (consumption-based).',
       'Correct. PD = standard MRP (requirements-based planning).',
       'RP = Replenishment planning (consumption-based).'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 13, type: 'mc', difficulty: 'Medium',
     question: 'In Production Order scheduling, which Scheduling Type code means "schedule from the end date (backward)"?',
     slideRef: 'Section 5.1',
+    choices: [], correctAnswer: '2 – Backwards Scheduling', why: [],
     origChoices: ['1 – Forward Scheduling', '2 – Backwards Scheduling', '3 – Current Date', '4 – Only Capacity Planning'],
-    correctAnswer: '2 – Backwards Scheduling',
     origWhy: [
       'Forward Scheduling (type 1) calculates from the start date forward.',
       'Correct. Scheduling Type 2 = Backwards — it schedules from the required end date backward through all operations.',
       'Type 3 uses the current date as a reference.',
       'Type 4 is used only for capacity requirements planning, not normal scheduling.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 14, type: 'mc', difficulty: 'Easy',
     question: 'Which PP master data object is defined as the location within a plant where value-added work (operations/activities) is performed?',
     slideRef: 'Section 3.4',
+    choices: [], correctAnswer: 'Work Center', why: [],
     origChoices: ['Storage Location', 'Plant', 'Work Center', 'Company Code'],
-    correctAnswer: 'Work Center',
     origWhy: [
       'Storage Location differentiates material stocks within a plant but is not where production work is done.',
       'Plant is the broader operating area/branch, not the specific production location.',
       'Correct. A Work Center is defined as a location within a plant where value-added work (operations/activities) is performed.',
       'Company Code is a financial/legal organizational unit, not a production location.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 15, type: 'mc', difficulty: 'Medium',
     question: 'How many documents are created when a Goods Receipt from production is posted?',
     slideRef: 'Section 5.8',
+    choices: [], correctAnswer: 'Three (Material, Accounting, Controlling)', why: [],
     origChoices: ['One (Material Document only)', 'Two (Material + Accounting)', 'Three (Material, Accounting, Controlling)', 'Four (Material, Accounting, Controlling, Production Order Update)'],
-    correctAnswer: 'Three (Material, Accounting, Controlling)',
     origWhy: [
       'Only one document would miss the financial and controlling postings.',
       'Two documents omits the Controlling (CO) posting.',
       'Correct. Three documents are created: Material Document (physical movement), Accounting Document (FI journal entry), and Controlling Document (CO posting).',
       'Four is incorrect; the production order update is an effect, not a separate document type.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 16, type: 'mc', difficulty: 'Easy',
     question: 'Which of the three SOP planning layers represents the demand side of the plan?',
     slideRef: 'Section 4.2',
+    choices: [], correctAnswer: 'Sales Plan', why: [],
     origChoices: ['Production Plan', 'Rough Cut Capacity Plan', 'Sales Plan', 'Demand Program'],
-    correctAnswer: 'Sales Plan',
     origWhy: [
       'The Production Plan represents the supply side (how much to produce).',
       'Rough Cut Capacity Plan is a high-level resource check layer.',
       'Correct. The Sales Plan is the demand-side layer of SOP, capturing expected customer demand.',
       'Demand Program is an output of Demand Management, not a direct SOP layer.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 17, type: 'mc', difficulty: 'Medium',
     question: 'What type of demand is generated for component parts (e.g., wheels, tires) derived from a higher-level finished product?',
     slideRef: 'Section 4.6',
+    choices: [], correctAnswer: 'Dependent Demand', why: [],
     origChoices: ['Independent Demand', 'Dependent Demand', 'Planned Independent Requirement', 'Customer Independent Requirement'],
-    correctAnswer: 'Dependent Demand',
     origWhy: [
       'Independent Demand is the original demand for a finished product (e.g., a bicycle) — it exists on its own.',
       'Correct. Dependent Demand is demand for component parts/sub-assemblies that is derived from the higher-level finished product demand.',
       'PIR is a planning document in Demand Management, not a demand type classification.',
       'CIR is a document generated by actual sales orders, not a demand type classification.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 18, type: 'mc', difficulty: 'Hard',
     question: 'Which of the following is NOT one of the four forecasting parameters in SAP PP?',
     slideRef: 'Section 4.1',
+    choices: [], correctAnswer: 'Delta factor', why: [],
     origChoices: ['Alpha factor (smoothing)', 'Beta factor (trend)', 'Delta factor', 'Gamma factor (seasonality)'],
-    correctAnswer: 'Delta factor',
     origWhy: [
       'Alpha factor is a real parameter controlling smoothing of the base level.',
       'Beta factor is a real parameter controlling trend smoothing.',
       'Correct. There is no Delta factor in SAP PP forecasting. The four parameters are Alpha, Beta, Gamma, and Periods per Season.',
       'Gamma factor is a real parameter controlling seasonality smoothing.'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 19, type: 'mc', difficulty: 'Medium',
     question: 'What is the PRIMARY purpose of the Availability Check when a Production Order is released?',
     slideRef: 'Section 5.4',
-    origChoices: [
-      'To confirm production quantities and record scrap',
-      'To verify that components, PRTs, and capacities are available on the required date',
-      'To print shop floor documents for line workers',
-      'To settle production costs to the material cost object'
-    ],
-    correctAnswer: 'To verify that components, PRTs, and capacities are available on the required date',
+    choices: [], correctAnswer: 'To verify that components, PRTs, and capacities are available on the required date', why: [],
+    origChoices: ['To confirm production quantities and record scrap', 'To verify that components, PRTs, and capacities are available on the required date', 'To print shop floor documents for line workers', 'To settle production costs to the material cost object'],
     origWhy: [
       'Confirming production quantities is the Completion Confirmation step, not the Availability Check.',
       'Correct. The Availability Check automatically verifies whether components, Production Resource Tools (PRTs), and capacities are available on the required date.',
       'Printing documents is the Shop Floor Documents step, triggered on release but separate from availability.',
       'Cost settlement is Order Settlement (last step in the cycle).'
-    ]
+    ],
+    altAnswers: []
   },
   {
     id: 20, type: 'mc', difficulty: 'Hard',
     question: 'Which of the following roles is involved in STRATEGIC PLANNING (SOP level) according to the PP process chain?',
     slideRef: 'Section 4',
+    choices: [], correctAnswer: 'CEO, COO, CFO, and Marketing Director', why: [],
     origChoices: ['Line Workers', 'MRP Controllers', 'CEO, COO, CFO, and Marketing Director', 'Shop Floor Supervisors'],
-    correctAnswer: 'CEO, COO, CFO, and Marketing Director',
     origWhy: [
       'Line Workers are involved in Manufacturing Execution, not strategic planning.',
       'MRP Controllers are involved in Detailed Planning (MPS/MRP), not strategic SOP.',
       'Correct. Strategic Planning (Forecasting → SOP) involves executive roles: CEO, COO, CIO, CFO, Controllers, and Marketing Director.',
       'Shop Floor Supervisors are part of Manufacturing Execution, not SOP.'
-    ]
+    ],
+    altAnswers: []
   },
 
-  // =================== TRUE OR FALSE (10) ===================
-  {
-    id: 21, type: 'tf', difficulty: 'Easy',
-    question: 'Forecasts in SAP PP are always accurate, and the goal of the forecasting module is to achieve a perfect forecast.',
-    slideRef: 'Section 4.1',
-    origChoices: ['True', 'False'],
-    correctAnswer: 'False',
-    origWhy: [
-      'This is incorrect. The reviewer explicitly states: "Forecasts are ALWAYS WRONG."',
-      'Correct. The key principle of forecasting in SAP PP is that forecasts are ALWAYS WRONG — the goal is to MINIMIZE deviation, not achieve perfection.'
-    ]
-  },
-  {
-    id: 22, type: 'tf', difficulty: 'Easy',
-    question: 'In SAP PP, the BOM represents the steps/operations required to produce a material, while the Routing lists the ingredients/components.',
-    slideRef: 'Section 3',
-    origChoices: ['True', 'False'],
-    correctAnswer: 'False',
-    origWhy: [
-      'This is incorrect. The analogy is reversed.',
-      'Correct. This is FALSE. BOM = ingredients (components list); Routing = steps (operations sequence). The statement has them backwards.'
-    ]
-  },
-  {
-    id: 23, type: 'tf', difficulty: 'Easy',
-    question: 'The lowest level of a Product Group structure must always consist of materials.',
-    slideRef: 'Section 3.5',
-    origChoices: ['True', 'False'],
-    correctAnswer: 'True',
-    origWhy: [
-      'Correct. TRUE. Product Groups can be multi-level or single-level, but the lowest level must always consist of materials.',
-      'This is incorrect. The reviewer states the lowest level MUST always be materials.'
-    ]
-  },
-  {
-    id: 24, type: 'tf', difficulty: 'Easy',
-    question: 'Work Centers in SAP PP can represent individual people, machines, machine groups, or assembly lines.',
-    slideRef: 'Section 3.4',
-    origChoices: ['True', 'False'],
-    correctAnswer: 'True',
-    origWhy: [
-      'Correct. TRUE. Work Centers can represent individual people or groups, machines or machine groups, and assembly lines.',
-      'This is incorrect. The reviewer confirms all these representations are valid.'
-    ]
-  },
-  {
-    id: 25, type: 'tf', difficulty: 'Medium',
-    question: 'Planned Independent Requirements (PIR) are used in Make-to-Order (MTO) environments.',
-    slideRef: 'Section 4.3',
-    origChoices: ['True', 'False'],
-    correctAnswer: 'False',
-    origWhy: [
-      'This is incorrect. PIR is associated with Make-to-Stock, not Make-to-Order.',
-      'Correct. FALSE. PIR (Planned Independent Requirements) comes from forecast/SOP and is used in MAKE-TO-STOCK environments. CIR (Customer Independent Requirements) is used in Make-to-Order.'
-    ]
-  },
-  {
-    id: 26, type: 'tf', difficulty: 'Medium',
-    question: 'In the PP planning sequence, Master Production Scheduling (MPS) materials are planned BEFORE the full MRP explosion.',
-    slideRef: 'Section 4.5',
-    origChoices: ['True', 'False'],
-    correctAnswer: 'True',
-    origWhy: [
-      'Correct. TRUE. MPS distinguishes materials with strong profit influence or critical resources, and they are planned FIRST before the full MRP explosion.',
-      'This is incorrect. MPS runs before full MRP, not after.'
-    ]
-  },
-  {
-    id: 27, type: 'tf', difficulty: 'Medium',
-    question: 'The Goods Issue step in manufacturing execution withdraws components from inventory and assigns actual costs to the production order.',
-    slideRef: 'Section 5.6',
-    origChoices: ['True', 'False'],
-    correctAnswer: 'True',
-    origWhy: [
-      'Correct. TRUE. Goods Issue withdraws components from inventory (reducing inventory quantity) and assigns actual costs to the production order.',
-      'This is incorrect. Both actions (withdrawal + cost assignment) occur during Goods Issue.'
-    ]
-  },
-  {
-    id: 28, type: 'tf', difficulty: 'Hard',
-    question: 'The Availability Check in SAP PP can ONLY be triggered automatically when a Production Order is released.',
-    slideRef: 'Section 5.4',
-    origChoices: ['True', 'False'],
-    correctAnswer: 'False',
-    origWhy: [
-      'This is incorrect. The availability check is not limited to automatic triggering.',
-      'Correct. FALSE. The Availability Check can be triggered automatically (e.g., on release) OR manually executed at any time by the planner.'
-    ]
-  },
-  {
-    id: 29, type: 'tf', difficulty: 'Easy',
-    question: 'Global Bike\'s SAP structure includes plants in Dallas (US) and Heidelberg (DE).',
-    slideRef: 'Section 2.1',
-    origChoices: ['True', 'False'],
-    correctAnswer: 'True',
-    origWhy: [
-      'Correct. TRUE. Dallas (DL00) is the US plant and Heidelberg (HD00) is the German plant in the Global Bike structure.',
-      'This is incorrect. Both plants are explicitly listed in the reviewer.'
-    ]
-  },
-  {
-    id: 30, type: 'tf', difficulty: 'Hard',
-    question: 'When a Production Order is released at the OPERATION level, the order status immediately becomes REL (Released).',
-    slideRef: 'Section 5.3',
-    origChoices: ['True', 'False'],
-    correctAnswer: 'False',
-    origWhy: [
-      'This is incorrect. Operation-level release sets PREL, not REL.',
-      'Correct. FALSE. Operation Level Release sets the order to PREL (Partially Released). The status becomes REL only when the LAST operation is released.'
-    ]
-  },
+  { id: 21, type: 'tf', difficulty: 'Easy', question: 'Forecasts in SAP PP are always accurate, and the goal of the forecasting module is to achieve a perfect forecast.', slideRef: 'Section 4.1', choices: [], correctAnswer: 'False', why: [], origChoices: ['True', 'False'], origWhy: ['This is incorrect. The reviewer explicitly states: "Forecasts are ALWAYS WRONG."', 'Correct. The key principle of forecasting in SAP PP is that forecasts are ALWAYS WRONG — the goal is to MINIMIZE deviation, not achieve perfection.'], altAnswers: [] },
+  { id: 22, type: 'tf', difficulty: 'Easy', question: 'In SAP PP, the BOM represents the steps/operations required to produce a material, while the Routing lists the ingredients/components.', slideRef: 'Section 3', choices: [], correctAnswer: 'False', why: [], origChoices: ['True', 'False'], origWhy: ['This is incorrect. The analogy is reversed.', 'Correct. This is FALSE. BOM = ingredients (components list); Routing = steps (operations sequence). The statement has them backwards.'], altAnswers: [] },
+  { id: 23, type: 'tf', difficulty: 'Easy', question: 'The lowest level of a Product Group structure must always consist of materials.', slideRef: 'Section 3.5', choices: [], correctAnswer: 'True', why: [], origChoices: ['True', 'False'], origWhy: ['Correct. TRUE. Product Groups can be multi-level or single-level, but the lowest level must always consist of materials.', 'This is incorrect. The reviewer states the lowest level MUST always be materials.'], altAnswers: [] },
+  { id: 24, type: 'tf', difficulty: 'Easy', question: 'Work Centers in SAP PP can represent individual people, machines, machine groups, or assembly lines.', slideRef: 'Section 3.4', choices: [], correctAnswer: 'True', why: [], origChoices: ['True', 'False'], origWhy: ['Correct. TRUE. Work Centers can represent individual people or groups, machines or machine groups, and assembly lines.', 'This is incorrect. The reviewer confirms all these representations are valid.'], altAnswers: [] },
+  { id: 25, type: 'tf', difficulty: 'Medium', question: 'Planned Independent Requirements (PIR) are used in Make-to-Order (MTO) environments.', slideRef: 'Section 4.3', choices: [], correctAnswer: 'False', why: [], origChoices: ['True', 'False'], origWhy: ['This is incorrect. PIR is associated with Make-to-Stock, not Make-to-Order.', 'Correct. FALSE. PIR (Planned Independent Requirements) comes from forecast/SOP and is used in MAKE-TO-STOCK environments. CIR (Customer Independent Requirements) is used in Make-to-Order.'], altAnswers: [] },
+  { id: 26, type: 'tf', difficulty: 'Medium', question: 'In the PP planning sequence, Master Production Scheduling (MPS) materials are planned BEFORE the full MRP explosion.', slideRef: 'Section 4.5', choices: [], correctAnswer: 'True', why: [], origChoices: ['True', 'False'], origWhy: ['Correct. TRUE. MPS distinguishes materials with strong profit influence or critical resources, and they are planned FIRST before the full MRP explosion.', 'This is incorrect. MPS runs before full MRP, not after.'], altAnswers: [] },
+  { id: 27, type: 'tf', difficulty: 'Medium', question: 'The Goods Issue step in manufacturing execution withdraws components from inventory and assigns actual costs to the production order.', slideRef: 'Section 5.6', choices: [], correctAnswer: 'True', why: [], origChoices: ['True', 'False'], origWhy: ['Correct. TRUE. Goods Issue withdraws components from inventory (reducing inventory quantity) and assigns actual costs to the production order.', 'This is incorrect. Both actions (withdrawal + cost assignment) occur during Goods Issue.'], altAnswers: [] },
+  { id: 28, type: 'tf', difficulty: 'Hard', question: 'The Availability Check in SAP PP can ONLY be triggered automatically when a Production Order is released.', slideRef: 'Section 5.4', choices: [], correctAnswer: 'False', why: [], origChoices: ['True', 'False'], origWhy: ['This is incorrect. The availability check is not limited to automatic triggering.', 'Correct. FALSE. The Availability Check can be triggered automatically (e.g., on release) OR manually executed at any time by the planner.'], altAnswers: [] },
+  { id: 29, type: 'tf', difficulty: 'Easy', question: "Global Bike's SAP structure includes plants in Dallas (US) and Heidelberg (DE).", slideRef: 'Section 2.1', choices: [], correctAnswer: 'True', why: [], origChoices: ['True', 'False'], origWhy: ['Correct. TRUE. Dallas (DL00) is the US plant and Heidelberg (HD00) is the German plant in the Global Bike structure.', 'This is incorrect. Both plants are explicitly listed in the reviewer.'], altAnswers: [] },
+  { id: 30, type: 'tf', difficulty: 'Hard', question: 'When a Production Order is released at the OPERATION level, the order status immediately becomes REL (Released).', slideRef: 'Section 5.3', choices: [], correctAnswer: 'False', why: [], origChoices: ['True', 'False'], origWhy: ['This is incorrect. Operation-level release sets PREL, not REL.', 'Correct. FALSE. Operation Level Release sets the order to PREL (Partially Released). The status becomes REL only when the LAST operation is released.'], altAnswers: [] },
 
-  // =================== ENUMERATION (3) ===================
-  {
-    id: 31, type: 'enum', difficulty: 'Medium',
-    question: 'Enumerate the FIVE (5) core PP master data objects in SAP S/4HANA.',
-    slideRef: 'Section 3',
-    correctAnswer: ['Material', 'Bill of Materials', 'Routing', 'Work Center', 'Product Group'],
-    altAnswers: [['material master', 'bom', 'bill of material', 'routing', 'work center', 'workcenter', 'product group']],
-    origWhy: ['The five core PP master data objects are: Material, Bill of Materials (BOM), Routing, Work Center, and Product Group. Each serves a distinct role — from defining what is made (Material) to how it is made (Routing) and where (Work Center).']
-  },
-  {
-    id: 32, type: 'enum', difficulty: 'Hard',
-    question: 'Enumerate the FIVE (5) logical steps of Material Requirements Planning (MRP) in SAP.',
-    slideRef: 'Section 4.6',
-    correctAnswer: ['Net Requirements Calculation', 'Lot Size Calculation', 'Procurement Type Determination', 'Scheduling', 'BOM Explosion'],
-    altAnswers: [['net requirements', 'lot sizing', 'lot size', 'procurement type', 'scheduling', 'bom explosion', 'bill of materials explosion']],
-    origWhy: ['The 5 logical steps of MRP are: 1) Net Requirements Calculation, 2) Lot Size Calculation, 3) Procurement Type Determination, 4) Scheduling, 5) BOM Explosion. These steps together produce a detailed production/purchasing plan.']
-  },
-  {
-    id: 33, type: 'enum', difficulty: 'Medium',
-    question: 'Enumerate the THREE (3) planning layers of Sales and Operations Planning (SOP).',
-    slideRef: 'Section 4.2',
-    correctAnswer: ['Sales Plan', 'Production Plan', 'Rough Cut Capacity Plan'],
-    altAnswers: [['sales plan', 'production plan', 'rough cut capacity plan', 'rough-cut capacity plan', 'rccp']],
-    origWhy: ['SOP has three planning layers: 1) Sales Plan (demand side), 2) Production Plan (supply side), 3) Rough Cut Capacity Plan (high-level resource check). These are planned in time buckets (monthly/quarterly) and represent cross-functional consensus.']
-  },
+  { id: 31, type: 'enum', difficulty: 'Medium', question: 'Enumerate the FIVE (5) core PP master data objects in SAP S/4HANA.', slideRef: 'Section 3', choices: [], correctAnswer: ['Material', 'Bill of Materials', 'Routing', 'Work Center', 'Product Group'], why: [], origChoices: [], origWhy: ['The five core PP master data objects are: Material, Bill of Materials (BOM), Routing, Work Center, and Product Group.'], altAnswers: ['material master', 'bom', 'bill of material', 'workcenter'] },
+  { id: 32, type: 'enum', difficulty: 'Hard', question: 'Enumerate the FIVE (5) logical steps of Material Requirements Planning (MRP) in SAP.', slideRef: 'Section 4.6', choices: [], correctAnswer: ['Net Requirements Calculation', 'Lot Size Calculation', 'Procurement Type Determination', 'Scheduling', 'BOM Explosion'], why: [], origChoices: [], origWhy: ['The 5 logical steps of MRP are Net Requirements Calculation, Lot Size Calculation, Procurement Type Determination, Scheduling, and BOM Explosion.'], altAnswers: ['net requirements', 'lot sizing', 'lot size', 'procurement type', 'bill of materials explosion'] },
+  { id: 33, type: 'enum', difficulty: 'Medium', question: 'Enumerate the THREE (3) planning layers of Sales and Operations Planning (SOP).', slideRef: 'Section 4.2', choices: [], correctAnswer: ['Sales Plan', 'Production Plan', 'Rough Cut Capacity Plan'], why: [], origChoices: [], origWhy: ['SOP has three planning layers: Sales Plan, Production Plan, and Rough Cut Capacity Plan.'], altAnswers: ['rough-cut capacity plan', 'rccp'] },
 
-  // =================== IDENTIFICATION (10) ===================
-  {
-    id: 34, type: 'ident', difficulty: 'Easy',
-    question: 'This organizational unit within a plant differentiates between various material stocks (e.g., Raw Materials, Finished Goods).',
-    slideRef: 'Section 2',
-    origChoices: ['Storage Location', 'Work Center', 'Plant', 'Company Code'],
-    correctAnswer: 'Storage Location',
-    altAnswers: ['storage loc', 'sloc'],
-    origWhy: [
-      'Correct. Storage Location is the organizational unit within a plant that differentiates between various material stocks.',
-      'Work Center is where operations are performed, not where stocks are differentiated.',
-      'Plant is the broader operating area — Storage Locations exist within a Plant.',
-      'Company Code is a financial/legal entity, not a stock differentiation unit.'
-    ]
-  },
-  {
-    id: 35, type: 'ident', difficulty: 'Medium',
-    question: 'This PP process bridges SOP and detailed planning (MPS/MRP) by translating aggregate plans into specific material requirements.',
-    slideRef: 'Section 4.3',
-    origChoices: ['Demand Management', 'Forecasting', 'Order Settlement', 'Capacity Planning'],
-    correctAnswer: 'Demand Management',
-    altAnswers: ['demand mgmt'],
-    origWhy: [
-      'Correct. Demand Management bridges SOP and detailed MPS/MRP planning, converting aggregate plans into PIR or CIR documents.',
-      'Forecasting feeds into SOP, which precedes Demand Management.',
-      'Order Settlement is the last step in manufacturing execution, not a planning bridge.',
-      'Capacity Planning checks resource availability, not plan translation.'
-    ]
-  },
-  {
-    id: 36, type: 'ident', difficulty: 'Medium',
-    question: 'This document type is used in batch-oriented manufacturing such as chemical, pharmaceutical, and food & beverage industries.',
-    slideRef: 'Section 6',
-    origChoices: ['Process Order', 'Production Order', 'Planned Order', 'Purchase Order'],
-    correctAnswer: 'Process Order',
-    altAnswers: ['process orders'],
-    origWhy: [
-      'Correct. Process Orders are used in Production – Process Industries for batch-oriented manufacturing (chemical, pharma, food & beverage, electronics).',
-      'Production Orders are used for discrete/repetitive manufacturing, not batch-process industries.',
-      'Planned Orders are planning documents that convert to production/purchase orders.',
-      'Purchase Orders are for external procurement, not internal production.'
-    ]
-  },
-  {
-    id: 37, type: 'ident', difficulty: 'Easy',
-    question: 'This forecasting parameter in SAP PP controls the smoothing of the base level of a time series.',
-    slideRef: 'Section 4.1',
-    origChoices: ['Alpha factor', 'Beta factor', 'Gamma factor', 'Delta factor'],
-    correctAnswer: 'Alpha factor',
-    altAnswers: ['alpha', 'smoothing factor'],
-    origWhy: [
-      'Correct. The Alpha factor controls smoothing of the base level in SAP PP forecasting.',
-      'Beta factor controls trend smoothing, not base level smoothing.',
-      'Gamma factor controls seasonality smoothing.',
-      'Delta factor does not exist in SAP PP forecasting parameters.'
-    ]
-  },
-  {
-    id: 38, type: 'ident', difficulty: 'Medium',
-    question: 'This is the production order status set when ALL operations are released via HEADER-level release.',
-    slideRef: 'Section 5.3',
-    origChoices: ['REL', 'PREL', 'CRTD', 'TECO'],
-    correctAnswer: 'REL',
-    altAnswers: ['released', 'rel status'],
-    origWhy: [
-      'Correct. REL (Released) is the status when the entire order and all operations are released at once via header-level release.',
-      'PREL (Partially Released) is the status for operation-level release when not all operations are released.',
-      'CRTD is the initial Created status before any release.',
-      'TECO means Technically Completed — set after production is finished.'
-    ]
-  },
-  {
-    id: 39, type: 'ident', difficulty: 'Easy',
-    question: 'This is the Work Center used for all operations in the Finished Bike routing at plant DL00 (Dallas).',
-    slideRef: 'Section 3.3',
-    origChoices: ['ASSY1000', 'PACK1000', 'INSP1000', 'DL00_WC'],
-    correctAnswer: 'ASSY1000',
-    altAnswers: ['assy 1000', 'assembly 1000'],
-    origWhy: [
-      'Correct. ASSY1000 is the Work Center used for all operations (0010–0110) in the Finished Bike routing at plant DL00.',
-      'PACK1000 is not used in the Finished Bike routing example from the reviewer.',
-      'INSP1000 is not referenced in the routing example.',
-      'DL00_WC is not a real Work Center code from the material.'
-    ]
-  },
-  {
-    id: 40, type: 'ident', difficulty: 'Hard',
-    question: 'In MRP lot sizing, this type groups requirements ACROSS multiple periods to calculate a consolidated order quantity.',
-    slideRef: 'Section 4.6',
-    origChoices: ['Periodic lot sizing', 'Static lot sizing', 'Optimized lot sizing', 'Fixed lot sizing'],
-    correctAnswer: 'Periodic lot sizing',
-    altAnswers: ['periodic', 'periodic lot size'],
-    origWhy: [
-      'Correct. Periodic lot sizing groups requirements across periods — e.g., all demand for the week or month is combined into one order.',
-      'Static lot sizing uses fixed values from the Material Master (e.g., fixed order quantity).',
-      'Optimized lot sizing calculates the optimal lot size considering costs across several periods.',
-      'Fixed lot sizing is a type of static lot sizing, not the periodic group type.'
-    ]
-  },
-  {
-    id: 41, type: 'ident', difficulty: 'Medium',
-    question: 'This shop floor document type, printed on production order release, lists the components to be withdrawn from stock.',
-    slideRef: 'Section 5.5',
-    origChoices: ['Material Withdrawal Slip', 'Time Ticket', 'Operation Control Ticket', 'PRT List'],
-    correctAnswer: 'Material Withdrawal Slip',
-    altAnswers: ['withdrawal slip', 'material withdrawal', 'pull list'],
-    origWhy: [
-      'Correct. The Material Withdrawal Slip (also called Pull List) is a component-based shop floor document listing materials to be withdrawn from inventory.',
-      'Time Tickets are operation-based documents for recording time, not component withdrawal.',
-      'Operation Control Ticket is a multi-purpose document, not specifically for component withdrawal.',
-      'PRT Lists show Production Resource Tools per operation, not material components.'
-    ]
-  },
-  {
-    id: 42, type: 'ident', difficulty: 'Hard',
-    question: 'In Order Settlement accounting logic, the difference between the debit and credit posting goes to this account.',
-    slideRef: 'Section 5.9',
-    origChoices: ['Price Difference account', 'Cost of Goods Sold account', 'WIP account', 'Overhead account'],
-    correctAnswer: 'Price Difference account',
-    altAnswers: ['price difference', 'price diff account'],
-    origWhy: [
-      'Correct. The difference between the debit posting (qty × Standard Price) and the credit posting goes to a Price Difference account in Order Settlement.',
-      'Cost of Goods Sold account is a different accounting concept from production variance.',
-      'WIP account tracks Work In Progress, which is cleared at settlement but is not where the price difference goes.',
-      'Overhead account is for overhead cost allocations, not price differences.'
-    ]
-  },
-  {
-    id: 43, type: 'ident', difficulty: 'Medium',
-    question: 'This step in manufacturing execution formally records the confirmed output quantity from the production order into stock.',
-    slideRef: 'Section 5.8',
-    origChoices: ['Goods Receipt', 'Goods Issue', 'Completion Confirmation', 'Order Settlement'],
-    correctAnswer: 'Goods Receipt',
-    altAnswers: ['goods receipt from production', 'gr'],
-    origWhy: [
-      'Correct. Goods Receipt (Step 7) formally records acceptance of confirmed output quantity from the production order into stock.',
-      'Goods Issue is Step 5 — it withdraws components FROM stock, not posting finished goods INTO stock.',
-      'Completion Confirmation (Step 6) tracks progress and quantities but does not post to stock.',
-      'Order Settlement (Step 8) settles costs, not physical stock movements.'
-    ]
-  },
+  { id: 34, type: 'ident', difficulty: 'Easy', question: 'This organizational unit within a plant differentiates between various material stocks (e.g., Raw Materials, Finished Goods).', slideRef: 'Section 2', choices: [], correctAnswer: 'Storage Location', why: [], origChoices: ['Storage Location', 'Work Center', 'Plant', 'Company Code'], origWhy: ['Correct. Storage Location is the organizational unit within a plant that differentiates between various material stocks.', 'Work Center is where operations are performed, not where stocks are differentiated.', 'Plant is the broader operating area — Storage Locations exist within a Plant.', 'Company Code is a financial/legal entity, not a stock differentiation unit.'], altAnswers: ['storage loc', 'sloc'] },
+  { id: 35, type: 'ident', difficulty: 'Medium', question: 'This PP process bridges SOP and detailed planning (MPS/MRP) by translating aggregate plans into specific material requirements.', slideRef: 'Section 4.3', choices: [], correctAnswer: 'Demand Management', why: [], origChoices: ['Demand Management', 'Forecasting', 'Order Settlement', 'Capacity Planning'], origWhy: ['Correct. Demand Management bridges SOP and detailed MPS/MRP planning, converting aggregate plans into PIR or CIR documents.', 'Forecasting feeds into SOP, which precedes Demand Management.', 'Order Settlement is the last step in manufacturing execution, not a planning bridge.', 'Capacity Planning checks resource availability, not plan translation.'], altAnswers: ['demand mgmt'] },
+  { id: 36, type: 'ident', difficulty: 'Medium', question: 'This document type is used in batch-oriented manufacturing such as chemical, pharmaceutical, and food & beverage industries.', slideRef: 'Section 6', choices: [], correctAnswer: 'Process Order', why: [], origChoices: ['Process Order', 'Production Order', 'Planned Order', 'Purchase Order'], origWhy: ['Correct. Process Orders are used in Production – Process Industries for batch-oriented manufacturing.', 'Production Orders are used for discrete/repetitive manufacturing, not batch-process industries.', 'Planned Orders are planning documents that convert to production/purchase orders.', 'Purchase Orders are for external procurement, not internal production.'], altAnswers: ['process orders'] },
+  { id: 37, type: 'ident', difficulty: 'Easy', question: 'This forecasting parameter in SAP PP controls the smoothing of the base level of a time series.', slideRef: 'Section 4.1', choices: [], correctAnswer: 'Alpha factor', why: [], origChoices: ['Alpha factor', 'Beta factor', 'Gamma factor', 'Delta factor'], origWhy: ['Correct. The Alpha factor controls smoothing of the base level in SAP PP forecasting.', 'Beta factor controls trend smoothing, not base level smoothing.', 'Gamma factor controls seasonality smoothing.', 'Delta factor does not exist in SAP PP forecasting parameters.'], altAnswers: ['alpha', 'smoothing factor'] },
+  { id: 38, type: 'ident', difficulty: 'Medium', question: 'This is the production order status set when ALL operations are released via HEADER-level release.', slideRef: 'Section 5.3', choices: [], correctAnswer: 'REL', why: [], origChoices: ['REL', 'PREL', 'CRTD', 'TECO'], origWhy: ['Correct. REL (Released) is the status when the entire order and all operations are released at once via header-level release.', 'PREL (Partially Released) is the status for operation-level release when not all operations are released.', 'CRTD is the initial Created status before any release.', 'TECO means Technically Completed — set after production is finished.'], altAnswers: ['released', 'rel status'] },
+  { id: 39, type: 'ident', difficulty: 'Easy', question: 'This is the Work Center used for all operations in the Finished Bike routing at plant DL00 (Dallas).', slideRef: 'Section 3.3', choices: [], correctAnswer: 'ASSY1000', why: [], origChoices: ['ASSY1000', 'PACK1000', 'INSP1000', 'DL00_WC'], origWhy: ['Correct. ASSY1000 is the Work Center used for all operations in the Finished Bike routing at plant DL00.', 'PACK1000 is not used in the Finished Bike routing example.', 'INSP1000 is not referenced in the routing example.', 'DL00_WC is not a real Work Center code from the material.'], altAnswers: ['assy 1000', 'assembly 1000'] },
+  { id: 40, type: 'ident', difficulty: 'Hard', question: 'In MRP lot sizing, this type groups requirements ACROSS multiple periods to calculate a consolidated order quantity.', slideRef: 'Section 4.6', choices: [], correctAnswer: 'Periodic lot sizing', why: [], origChoices: ['Periodic lot sizing', 'Static lot sizing', 'Optimized lot sizing', 'Fixed lot sizing'], origWhy: ['Correct. Periodic lot sizing groups requirements across periods.', 'Static lot sizing uses fixed values from the Material Master.', 'Optimized lot sizing calculates the optimal lot size considering costs.', 'Fixed lot sizing is a type of static lot sizing, not the periodic group type.'], altAnswers: ['periodic', 'periodic lot size'] },
+  { id: 41, type: 'ident', difficulty: 'Medium', question: 'This shop floor document type, printed on production order release, lists the components to be withdrawn from stock.', slideRef: 'Section 5.5', choices: [], correctAnswer: 'Material Withdrawal Slip', why: [], origChoices: ['Material Withdrawal Slip', 'Time Ticket', 'Operation Control Ticket', 'PRT List'], origWhy: ['Correct. The Material Withdrawal Slip is a component-based shop floor document listing materials to be withdrawn from inventory.', 'Time Tickets are operation-based documents for recording time, not component withdrawal.', 'Operation Control Ticket is a multi-purpose document, not specifically for component withdrawal.', 'PRT Lists show Production Resource Tools per operation, not material components.'], altAnswers: ['withdrawal slip', 'material withdrawal', 'pull list'] },
+  { id: 42, type: 'ident', difficulty: 'Hard', question: 'In Order Settlement accounting logic, the difference between the debit and credit posting goes to this account.', slideRef: 'Section 5.9', choices: [], correctAnswer: 'Price Difference account', why: [], origChoices: ['Price Difference account', 'Cost of Goods Sold account', 'WIP account', 'Overhead account'], origWhy: ['Correct. The difference goes to a Price Difference account in Order Settlement.', 'Cost of Goods Sold account is a different accounting concept from production variance.', 'WIP account tracks Work In Progress, not price differences.', 'Overhead account is for overhead allocations, not price differences.'], altAnswers: ['price difference', 'price diff account'] },
+  { id: 43, type: 'ident', difficulty: 'Medium', question: 'This step in manufacturing execution formally records the confirmed output quantity from the production order into stock.', slideRef: 'Section 5.8', choices: [], correctAnswer: 'Goods Receipt', why: [], origChoices: ['Goods Receipt', 'Goods Issue', 'Completion Confirmation', 'Order Settlement'], origWhy: ['Correct. Goods Receipt formally records acceptance of confirmed output quantity from the production order into stock.', 'Goods Issue withdraws components FROM stock, not finished goods INTO stock.', 'Completion Confirmation tracks progress and quantities but does not post to stock.', 'Order Settlement settles costs, not physical stock movements.'], altAnswers: ['goods receipt from production', 'gr'] },
 
-  // =================== ACRONYM (5) ===================
-  {
-    id: 44, type: 'acronym', difficulty: 'Easy',
-    question: 'What does the acronym PP stand for in SAP S/4HANA?',
-    slideRef: 'Section 1',
-    correctAnswer: 'Production Planning',
-    altAnswers: ['production planning & execution', 'production planning and execution'],
-    origWhy: ['PP stands for Production Planning. It is the SAP S/4HANA module that manages the complete manufacturing lifecycle from material planning to production execution.']
-  },
-  {
-    id: 45, type: 'acronym', difficulty: 'Easy',
-    question: 'What does the acronym BOM stand for in the context of SAP PP?',
-    slideRef: 'Section 3.2',
-    correctAnswer: 'Bill of Materials',
-    altAnswers: ['bill of material'],
-    origWhy: ['BOM stands for Bill of Materials — a structured list of all components, sub-assemblies, and documents needed to produce a finished product.']
-  },
-  {
-    id: 46, type: 'acronym', difficulty: 'Easy',
-    question: 'What does the acronym MRP stand for in SAP production planning?',
-    slideRef: 'Section 4.6',
-    correctAnswer: 'Material Requirements Planning',
-    altAnswers: ['materials requirements planning'],
-    origWhy: ['MRP stands for Material Requirements Planning — the process that calculates net requirements across all BOM levels and outputs a detailed production/purchasing plan.']
-  },
-  {
-    id: 47, type: 'acronym', difficulty: 'Easy',
-    question: 'What does the acronym SOP stand for in SAP PP strategic planning?',
-    slideRef: 'Section 4.2',
-    correctAnswer: 'Sales and Operations Planning',
-    altAnswers: ['sales & operations planning'],
-    origWhy: ['SOP stands for Sales and Operations Planning — a cross-functional planning tool that aligns supply with demand at an aggregate level using consensus from Sales, Manufacturing, Accounting, HR, and Purchasing.']
-  },
-  {
-    id: 48, type: 'acronym', difficulty: 'Medium',
-    question: 'What does the acronym PIR stand for in the context of SAP Demand Management?',
-    slideRef: 'Section 4.3',
-    correctAnswer: 'Planned Independent Requirements',
-    altAnswers: ['planned independent requirement'],
-    origWhy: ['PIR stands for Planned Independent Requirements — demand that comes from forecasts or SOP outputs, used in Make-to-Stock planning environments.']
-  }
+  { id: 44, type: 'acronym', difficulty: 'Easy', question: 'What does the acronym PP stand for in SAP S/4HANA?', slideRef: 'Section 1', choices: [], correctAnswer: 'Production Planning', why: [], origChoices: [], origWhy: ['PP stands for Production Planning.'], altAnswers: ['production planning & execution', 'production planning and execution'] },
+  { id: 45, type: 'acronym', difficulty: 'Easy', question: 'What does the acronym BOM stand for in the context of SAP PP?', slideRef: 'Section 3.2', choices: [], correctAnswer: 'Bill of Materials', why: [], origChoices: [], origWhy: ['BOM stands for Bill of Materials.'], altAnswers: ['bill of material'] },
+  { id: 46, type: 'acronym', difficulty: 'Easy', question: 'What does the acronym MRP stand for in SAP production planning?', slideRef: 'Section 4.6', choices: [], correctAnswer: 'Material Requirements Planning', why: [], origChoices: [], origWhy: ['MRP stands for Material Requirements Planning.'], altAnswers: ['materials requirements planning'] },
+  { id: 47, type: 'acronym', difficulty: 'Easy', question: 'What does the acronym SOP stand for in SAP PP strategic planning?', slideRef: 'Section 4.2', choices: [], correctAnswer: 'Sales and Operations Planning', why: [], origChoices: [], origWhy: ['SOP stands for Sales and Operations Planning.'], altAnswers: ['sales & operations planning'] },
+  { id: 48, type: 'acronym', difficulty: 'Medium', question: 'What does the acronym PIR stand for in the context of SAP Demand Management?', slideRef: 'Section 4.3', choices: [], correctAnswer: 'Planned Independent Requirements', why: [], origChoices: [], origWhy: ['PIR stands for Planned Independent Requirements.'], altAnswers: ['planned independent requirement'] }
 ];
 
-/* ===================================================
-   FISHER-YATES SHUFFLE (never mutates original)
-=================================================== */
+const sections = [
+  { type: 'mc', label: 'Multiple Choice', count: 20 },
+  { type: 'tf', label: 'True or False', count: 10 },
+  { type: 'enum', label: 'Enumeration', count: 3 },
+  { type: 'ident', label: 'Identification', count: 10 },
+  { type: 'acronym', label: 'Acronym Meaning', count: 5 }
+];
+
 function shuffle(arr) {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -639,30 +1140,23 @@ function shuffle(arr) {
   return a;
 }
 
-/* ===================================================
-   SECTION CONFIG + STABLE ATTEMPT ORDER
-=================================================== */
-const sections = [
-  { type: 'mc', label: 'Multiple Choice', count: 20 },
-  { type: 'tf', label: 'True or False', count: 10 },
-  { type: 'enum', label: 'Enumeration', count: 3 },
-  { type: 'ident', label: 'Identification', count: 10 },
-  { type: 'acronym', label: 'Acronym Meaning', count: 5 }
-];
-
-let attemptQuestions = [];
-let choiceMap = {}; // qId -> { shuffled: [], map: [] }
-
-function buildAttemptQuestions() {
-  const ordered = [];
-  sections.forEach(sec => {
-    const pool = questionBank.filter(q => q.type === sec.type);
-    ordered.push(...shuffle(pool));
-  });
-  return ordered;
+function cloneQuestion(q) {
+  return {
+    ...q,
+    choices: [],
+    why: Array.isArray(q.why) ? [...q.why] : [],
+    origChoices: Array.isArray(q.origChoices) ? [...q.origChoices] : [],
+    origWhy: Array.isArray(q.origWhy) ? [...q.origWhy] : [],
+    altAnswers: Array.isArray(q.altAnswers) ? [...q.altAnswers] : [],
+    correctAnswer: Array.isArray(q.correctAnswer) ? [...q.correctAnswer] : q.correctAnswer,
+    shuffledChoices: [],
+    correctShuffledIndex: -1
+  };
 }
 
 function initExam() {
+  if (examState.timerInterval) clearInterval(examState.timerInterval);
+
   examState.answers = {};
   examState.flagged = {};
   examState.currentStreak = 0;
@@ -670,18 +1164,18 @@ function initExam() {
   examState.submitted = false;
   examState.remainingTime = 20 * 60;
   examState.startTime = Date.now();
+  examState.questions = [];
 
-  // Shuffle once per attempt and keep this exact order until retake
-  attemptQuestions = buildAttemptQuestions();
-
-  // Shuffle choices once per attempt and keep them fixed
-  choiceMap = {};
-  attemptQuestions.forEach(q => {
-    if (q.origChoices && q.origChoices.length) {
-      const shuffled = shuffle(q.origChoices);
-      const mapIdx = shuffled.map(c => q.origChoices.indexOf(c));
-      choiceMap[q.id] = { shuffled, mapIdx };
-    }
+  sections.forEach(sec => {
+    const pool = shuffle(questionBank.filter(q => q.type === sec.type).map(cloneQuestion));
+    pool.forEach(q => {
+      if (q.origChoices.length) {
+        q.shuffledChoices = shuffle(q.origChoices);
+        q.choices = [...q.shuffledChoices];
+        q.correctShuffledIndex = q.shuffledChoices.findIndex(choice => choice === q.correctAnswer);
+      }
+      examState.questions.push(q);
+    });
   });
 
   renderQuestions();
@@ -690,16 +1184,13 @@ function initExam() {
   updateProgress();
 }
 
-/* ===================================================
-   RENDER QUESTIONS
-=================================================== */
 function renderQuestions() {
   const container = document.getElementById('questions-container');
   container.innerHTML = '';
-
   let globalIdx = 0;
+
   sections.forEach(sec => {
-    const qs = attemptQuestions.filter(q => q.type === sec.type);
+    const qs = examState.questions.filter(q => q.type === sec.type);
     const secDiv = document.createElement('div');
 
     const lbl = document.createElement('div');
@@ -709,14 +1200,13 @@ function renderQuestions() {
 
     qs.forEach(q => {
       globalIdx++;
-      const card = buildQuestionCard(q, globalIdx);
-      secDiv.appendChild(card);
+      secDiv.appendChild(buildQuestionCard(q, globalIdx));
     });
 
     container.appendChild(secDiv);
   });
 
-  document.getElementById('total-count').textContent = attemptQuestions.length;
+  document.getElementById('total-count').textContent = examState.questions.length;
 }
 
 function buildQuestionCard(q, num) {
@@ -742,11 +1232,11 @@ function buildQuestionCard(q, num) {
   card.appendChild(qtext);
 
   if (q.type === 'mc' || q.type === 'tf' || q.type === 'ident') {
-    const cm = choiceMap[q.id];
     const choicesDiv = document.createElement('div');
     choicesDiv.className = 'choices';
     const labels = ['A', 'B', 'C', 'D'];
-    cm.shuffled.forEach((choice, i) => {
+
+    q.choices.forEach((choice, i) => {
       const btn = document.createElement('button');
       btn.className = 'choice-btn';
       btn.id = `choice-${q.id}-${i}`;
@@ -759,12 +1249,12 @@ function buildQuestionCard(q, num) {
       btn.onclick = () => handleAnswer(q.id, choice, i);
       choicesDiv.appendChild(btn);
     });
+
     card.appendChild(choicesDiv);
   } else if (q.type === 'enum') {
     const enumDiv = document.createElement('div');
     enumDiv.className = 'enum-inputs';
-    const count = q.correctAnswer.length;
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < q.correctAnswer.length; i++) {
       const row = document.createElement('div');
       row.className = 'enum-row';
       row.innerHTML = `<span class="enum-num">${i + 1}.</span>`;
@@ -785,7 +1275,7 @@ function buildQuestionCard(q, num) {
     inp.className = 'q-input';
     inp.id = `acronym-${q.id}`;
     inp.placeholder = 'Type the full meaning…';
-    inp.setAttribute('aria-label', `Acronym answer for question`);
+    inp.setAttribute('aria-label', 'Acronym answer');
     inp.oninput = () => handleInputChange(q.id, 'acronym');
     card.appendChild(inp);
   }
@@ -798,14 +1288,11 @@ function buildQuestionCard(q, num) {
   return card;
 }
 
-/* ===================================================
-   HANDLE ANSWER
-=================================================== */
 function handleAnswer(qId, choice, idx) {
   if (examState.submitted) return;
   examState.answers[qId] = choice;
-  const cm = choiceMap[qId];
-  cm.shuffled.forEach((c, i) => {
+  const q = examState.questions.find(item => item.id === qId);
+  q.choices.forEach((_, i) => {
     const btn = document.getElementById(`choice-${qId}-${i}`);
     if (btn) btn.classList.toggle('selected', i === idx);
   });
@@ -815,11 +1302,11 @@ function handleAnswer(qId, choice, idx) {
 
 function handleEnumChange(qId) {
   if (examState.submitted) return;
-  const q = questionBank.find(x => x.id === qId);
+  const q = examState.questions.find(x => x.id === qId);
   const vals = [];
   for (let i = 0; i < q.correctAnswer.length; i++) {
     const inp = document.getElementById(`enum-${qId}-${i}`);
-    if (inp) vals.push(inp.value.trim());
+    vals.push(inp ? inp.value.trim() : '');
   }
   examState.answers[qId] = vals;
   updateProgress();
@@ -829,11 +1316,9 @@ function handleEnumChange(qId) {
 function handleInputChange(qId, type) {
   if (examState.submitted) return;
   const inp = document.getElementById(`${type}-${qId}`);
-  if (inp) {
-    examState.answers[qId] = inp.value.trim();
-    updateProgress();
-    updateNav();
-  }
+  if (inp) examState.answers[qId] = inp.value.trim();
+  updateProgress();
+  updateNav();
 }
 
 function toggleFlag(qId) {
@@ -845,11 +1330,9 @@ function toggleFlag(qId) {
   updateNav();
 }
 
-/* ===================================================
-   TIMER
-=================================================== */
 function startTimer() {
   if (examState.timerInterval) clearInterval(examState.timerInterval);
+  updateTimerDisplay();
   examState.timerInterval = setInterval(() => {
     examState.remainingTime--;
     updateTimerDisplay();
@@ -861,42 +1344,33 @@ function startTimer() {
 }
 
 function updateTimerDisplay() {
-  const t = examState.remainingTime;
+  const t = Math.max(examState.remainingTime, 0);
   const m = Math.floor(t / 60);
   const s = t % 60;
-  const display = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   const el = document.getElementById('timer-display');
-  el.textContent = display;
-  const total = 20 * 60;
-
+  el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   el.classList.remove('warning', 'danger');
   if (t <= 300) el.classList.add('danger');
-  else if (t <= total * 0.25) el.classList.add('warning');
+  else if (t <= (20 * 60 * 0.25)) el.classList.add('warning');
 }
 
-/* ===================================================
-   PROGRESS
-=================================================== */
 function getAnsweredCount() {
-  return attemptQuestions.filter(q => {
+  return examState.questions.filter(q => {
     const ans = examState.answers[q.id];
     if (!ans) return false;
-    if (Array.isArray(ans)) return ans.some(a => a.length > 0);
-    return ans.length > 0;
+    if (Array.isArray(ans)) return ans.some(a => String(a).trim().length > 0);
+    return String(ans).trim().length > 0;
   }).length;
 }
 
 function updateProgress() {
   const answered = getAnsweredCount();
-  const total = attemptQuestions.length;
+  const total = examState.questions.length;
   document.getElementById('answered-count').textContent = answered;
   document.getElementById('total-count').textContent = total;
   document.getElementById('progress-bar-fill').style.width = `${(answered / total) * 100}%`;
 }
 
-/* ===================================================
-   NAVIGATOR
-=================================================== */
 function openNav() {
   document.getElementById('nav-overlay').classList.add('open');
   document.getElementById('nav-panel').classList.add('open');
@@ -910,18 +1384,14 @@ function updateNav() {
   const grid = document.getElementById('nav-grid');
   grid.innerHTML = '';
 
-  attemptQuestions.forEach((q, i) => {
+  examState.questions.forEach((q, i) => {
     const btn = document.createElement('button');
     btn.className = 'nav-item';
     btn.textContent = i + 1;
     btn.setAttribute('aria-label', `Jump to question ${i + 1}`);
 
-    const answered = (() => {
-      const ans = examState.answers[q.id];
-      if (!ans) return false;
-      if (Array.isArray(ans)) return ans.some(a => a.length > 0);
-      return ans.length > 0;
-    })();
+    const ans = examState.answers[q.id];
+    const answered = Array.isArray(ans) ? ans.some(a => String(a).trim()) : !!(ans && String(ans).trim());
 
     if (examState.submitted) {
       const correct = isCorrect(q);
@@ -938,16 +1408,12 @@ function updateNav() {
       if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
       closeNav();
     };
-
     grid.appendChild(btn);
   });
 }
 
-/* ===================================================
-   MODAL
-=================================================== */
 function openModal() {
-  const unanswered = attemptQuestions.length - getAnsweredCount();
+  const unanswered = examState.questions.length - getAnsweredCount();
   const titleEl = document.getElementById('modal-title');
   const bodyEl = document.getElementById('modal-body');
   if (unanswered > 0) {
@@ -967,30 +1433,15 @@ function confirmSubmit() {
   submitExam();
 }
 
-/* ===================================================
-   CHECK ANSWER
-=================================================== */
 function normalizeStr(s) {
   return String(s).toLowerCase().trim().replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function isCorrect(q) {
   const ans = examState.answers[q.id];
-  if (!ans || (Array.isArray(ans) && !ans.some(a => a.length > 0)) || ans === '') return null;
+  if (!ans || (Array.isArray(ans) && !ans.some(a => String(a).trim().length > 0)) || ans === '') return null;
 
-  if (q.type === 'mc' || q.type === 'tf' || q.type === 'ident') {
-    const a = normalizeStr(ans);
-    const c = normalizeStr(q.correctAnswer);
-    if (a === c) return true;
-    if (q.altAnswers) {
-      for (const alt of q.altAnswers) {
-        if (normalizeStr(alt) === a) return true;
-      }
-    }
-    return false;
-  }
-
-  if (q.type === 'acronym') {
+  if (q.type === 'mc' || q.type === 'tf' || q.type === 'ident' || q.type === 'acronym') {
     const a = normalizeStr(ans);
     const c = normalizeStr(q.correctAnswer);
     if (a === c) return true;
@@ -1003,36 +1454,42 @@ function isCorrect(q) {
   }
 
   if (q.type === 'enum') {
-    const answers = (ans || []).map(a => normalizeStr(a));
-    const correct = q.correctAnswer.map(c => normalizeStr(c));
-    const altFlat = q.altAnswers ? q.altAnswers.flat().map(a => normalizeStr(a)) : [];
-    const allValid = [...correct, ...altFlat];
+    const answers = (ans || []).map(a => normalizeStr(a)).filter(Boolean);
+    const valid = [...q.correctAnswer.map(c => normalizeStr(c)), ...q.altAnswers.map(a => normalizeStr(a))];
+    const used = new Set();
     let matched = 0;
+
     answers.forEach(a => {
-      if (a && allValid.some(v => v.includes(a) || a.includes(v) || v === a)) matched++;
+      const idx = valid.findIndex((v, i) => !used.has(i) && (v === a || v.includes(a) || a.includes(v)));
+      if (idx !== -1) {
+        used.add(idx);
+        matched++;
+      }
     });
-    return matched >= correct.length ? true : (matched > 0 ? 'partial' : false);
+
+    return matched >= q.correctAnswer.length ? true : (matched > 0 ? 'partial' : false);
   }
 
   return false;
 }
 
 function getEnumScore(q) {
-  const ans = examState.answers[q.id] || [];
-  const answers = ans.map(a => normalizeStr(a));
-  const correct = q.correctAnswer.map(c => normalizeStr(c));
-  const altFlat = q.altAnswers ? q.altAnswers.flat().map(a => normalizeStr(a)) : [];
-  const allValid = [...correct, ...altFlat];
+  const ans = (examState.answers[q.id] || []).map(a => normalizeStr(a)).filter(Boolean);
+  const valid = [...q.correctAnswer.map(c => normalizeStr(c)), ...q.altAnswers.map(a => normalizeStr(a))];
+  const used = new Set();
   let matched = 0;
-  answers.forEach(a => {
-    if (a && allValid.some(v => v.includes(a) || a.includes(v) || v === a)) matched++;
+
+  ans.forEach(a => {
+    const idx = valid.findIndex((v, i) => !used.has(i) && (v === a || v.includes(a) || a.includes(v)));
+    if (idx !== -1) {
+      used.add(idx);
+      matched++;
+    }
   });
-  return Math.min(matched, correct.length);
+
+  return Math.min(matched, q.correctAnswer.length);
 }
 
-/* ===================================================
-   SUBMIT EXAM
-=================================================== */
 function submitExam() {
   if (examState.submitted) return;
   examState.submitted = true;
@@ -1040,9 +1497,9 @@ function submitExam() {
 
   let totalScore = 0;
   let totalPoints = 0;
-  const sectionScores = { mc: { s: 0, t: 0 }, tf: { s: 0, t: 0 }, enum: { s: 0, t: 0 }, ident: { s: 0, t: 0 }, acronym: { s: 0, t: 0 } };
+  const sectionScores = { mc:{s:0,t:0}, tf:{s:0,t:0}, enum:{s:0,t:0}, ident:{s:0,t:0}, acronym:{s:0,t:0} };
 
-  attemptQuestions.forEach(q => {
+  examState.questions.forEach(q => {
     const pts = q.type === 'enum' ? q.correctAnswer.length : 1;
     totalPoints += pts;
     sectionScores[q.type].t += pts;
@@ -1065,14 +1522,10 @@ function submitExam() {
 
   document.getElementById('streak-count').textContent = examState.longestStreak;
   document.getElementById('exam-form').style.display = 'none';
-
   renderResults(totalScore, totalPoints, sectionScores);
   updateNav();
 }
 
-/* ===================================================
-   RENDER RESULTS
-=================================================== */
 function renderResults(totalScore, totalPoints, sectionScores) {
   const pct = Math.round((totalScore / totalPoints) * 100);
   const passed = pct >= 75;
@@ -1083,43 +1536,36 @@ function renderResults(totalScore, totalPoints, sectionScores) {
   pb.textContent = passed ? 'PASSED ✓' : 'FAILED ✗';
   pb.className = `pass-badge ${passed ? 'pass' : 'fail'}`;
 
+  const skipped = examState.questions.length - getAnsweredCount();
   document.getElementById('score-meta').innerHTML = `
     <div class="score-meta-item"><span class="val">${pct}%</span><span class="lbl">Score</span></div>
     <div class="score-meta-item"><span class="val">${examState.longestStreak}</span><span class="lbl">Longest Streak</span></div>
     <div class="score-meta-item"><span class="val">${getAnsweredCount()}</span><span class="lbl">Answered</span></div>
-    <div class="score-meta-item"><span class="val">${passed ? '75%' : pct + '%'}</span><span class="lbl">${passed ? 'Passed ✓' : 'Required: 75%'}</span></div>
+    <div class="score-meta-item"><span class="val">${skipped}</span><span class="lbl">Skipped</span></div>
   `;
 
-  const sectionNames = { mc: 'Multiple Choice', tf: 'True/False', enum: 'Enumeration', ident: 'Identification', acronym: 'Acronym' };
+  const sectionNames = { mc:'Multiple Choice', tf:'True/False', enum:'Enumeration', ident:'Identification', acronym:'Acronym' };
   let pillsHTML = '';
   Object.entries(sectionScores).forEach(([key, val]) => {
-    const p = val.t > 0 ? Math.round((val.s / val.t) * 100) : 0;
-    pillsHTML += `<div class="pill">
-      <div class="pill-name">${sectionNames[key]}</div>
-      <div class="pill-score">${val.s}/${val.t}</div>
-      <div class="pill-pct">${p}%</div>
-    </div>`;
+    const p = val.t ? Math.round((val.s / val.t) * 100) : 0;
+    pillsHTML += `<div class="pill"><div class="pill-name">${sectionNames[key]}</div><div class="pill-score">${val.s}/${val.t}</div><div class="pill-pct">${p}%</div></div>`;
   });
   document.getElementById('breakdown-pills').innerHTML = pillsHTML;
 
-  const barColors = { mc: 'bar-mc', tf: 'bar-tf', enum: 'bar-enum', ident: 'bar-ident', acronym: 'bar-acro' };
-  const barLabels = { mc: 'MC', tf: 'T/F', enum: 'Enum', ident: 'Ident', acronym: 'Acronym' };
+  const barColors = { mc:'bar-mc', tf:'bar-tf', enum:'bar-enum', ident:'bar-ident', acronym:'bar-acro' };
+  const barLabels = { mc:'MC', tf:'T/F', enum:'Enum', ident:'Ident', acronym:'Acronym' };
   let chartHTML = '';
   Object.entries(sectionScores).forEach(([key, val]) => {
-    const p = val.t > 0 ? Math.round((val.s / val.t) * 100) : 0;
-    chartHTML += `<div class="bar-row">
-      <div class="bar-row-label">${barLabels[key]}</div>
-      <div class="bar-wrap"><div class="bar-fill ${barColors[key]}" id="bar-${key}" style="width:0%">${p}%</div></div>
-      <div style="font-size:12px;font-weight:600;color:var(--text-sub);min-width:40px">${val.s}/${val.t}</div>
-    </div>`;
+    const p = val.t ? Math.round((val.s / val.t) * 100) : 0;
+    chartHTML += `<div class="bar-row"><div class="bar-row-label">${barLabels[key]}</div><div class="bar-wrap"><div class="bar-fill ${barColors[key]}" id="bar-${key}" style="width:0%">${p}%</div></div><div style="font-size:12px;font-weight:600;color:var(--text-sub);min-width:40px">${val.s}/${val.t}</div></div>`;
   });
   document.getElementById('bar-chart').innerHTML = chartHTML;
 
   setTimeout(() => {
     Object.entries(sectionScores).forEach(([key, val]) => {
-      const p = val.t > 0 ? Math.round((val.s / val.t) * 100) : 0;
+      const p = val.t ? Math.round((val.s / val.t) * 100) : 0;
       const bar = document.getElementById(`bar-${key}`);
-      if (bar) bar.style.width = p + '%';
+      if (bar) bar.style.width = `${p}%`;
     });
   }, 200);
 
@@ -1131,37 +1577,33 @@ function renderResults(totalScore, totalPoints, sectionScores) {
   renderReview();
 }
 
-/* ===================================================
-   RENDER REVIEW
-=================================================== */
 function renderReview() {
   const container = document.getElementById('review-section');
   container.innerHTML = '<div class="section-label"><div class="label-badge">Review Answers</div><div class="label-line"></div></div>';
 
-  attemptQuestions.forEach((q, idx) => {
+  examState.questions.forEach((q, idx) => {
     const card = document.createElement('div');
     const result = isCorrect(q);
     card.className = `q-card ${result === true ? 'correct-card' : (result === null ? '' : 'wrong-card')}`;
     card.id = `review-q-${q.id}`;
 
     const ans = examState.answers[q.id];
-    const hasAnswer = ans && (Array.isArray(ans) ? ans.some(a => a.length > 0) : ans.length > 0);
+    const hasAnswer = ans && (Array.isArray(ans) ? ans.some(a => String(a).trim().length > 0) : String(ans).trim().length > 0);
 
     let statusHTML = '';
     if (result === true) statusHTML = '<div class="result-status status-correct">✓ Correct</div>';
-    else if (result === 'partial') statusHTML = '<div class="result-status" style="background:var(--warning-bg, #fef9c3);color:#92400e;">~ Partial Credit</div>';
+    else if (result === 'partial') statusHTML = '<div class="result-status" style="background:#fef9c3;color:#92400e;">~ Partial Credit</div>';
     else if (!hasAnswer) statusHTML = '<div class="result-status status-skipped">— Skipped</div>';
     else statusHTML = '<div class="result-status status-wrong">✗ Incorrect</div>';
 
     let answerArea = '';
     if (q.type === 'mc' || q.type === 'tf' || q.type === 'ident') {
-      const cm = choiceMap[q.id];
-      const labels = ['A', 'B', 'C', 'D'];
+      const labels = ['A','B','C','D'];
       answerArea = '<div class="choices">';
-      cm.shuffled.forEach((choice, i) => {
+      q.choices.forEach((choice, i) => {
         let cls = 'choice-btn';
         const isSelected = ans === choice;
-        const isCorrectChoice = choice === q.correctAnswer;
+        const isCorrectChoice = i === q.correctShuffledIndex;
         if (isSelected && isCorrectChoice) cls += ' correct-choice';
         else if (isSelected && !isCorrectChoice) cls += ' wrong-choice';
         else if (!isSelected && isCorrectChoice) cls += ' missed-choice';
@@ -1172,15 +1614,15 @@ function renderReview() {
         </button>`;
       });
       answerArea += '</div>';
+      answerArea += `<div style="font-size:12px;color:var(--text-sub);margin-top:8px;">Correct answer in your attempt order: <strong>${['A','B','C','D'][q.correctShuffledIndex]}</strong></div>`;
     } else if (q.type === 'enum') {
       const answers = ans || [];
       answerArea = '<div class="enum-inputs">';
       q.correctAnswer.forEach((ca, i) => {
         const userAns = answers[i] || '';
         const norm = normalizeStr(userAns);
-        const normCA = normalizeStr(ca);
-        const altFlat = q.altAnswers ? q.altAnswers.flat().map(a => normalizeStr(a)) : [];
-        const isOk = norm && (normCA.includes(norm) || norm.includes(normCA) || norm === normCA || altFlat.some(v => v.includes(norm) || norm.includes(v)));
+        const valid = [...q.correctAnswer.map(v => normalizeStr(v)), ...q.altAnswers.map(v => normalizeStr(v))];
+        const isOk = norm && valid.some(v => v === norm || v.includes(norm) || norm.includes(v));
         answerArea += `<div class="enum-row">
           <span class="enum-num">${i + 1}.</span>
           <input class="q-input ${userAns ? (isOk ? 'correct-input' : 'wrong-input') : ''}" value="${userAns || ''}" disabled placeholder="(Skipped)" style="flex:1"/>
@@ -1191,24 +1633,19 @@ function renderReview() {
     } else if (q.type === 'acronym') {
       const isOk = result === true;
       answerArea = `<input class="q-input ${ans ? (isOk ? 'correct-input' : 'wrong-input') : ''}" value="${ans || ''}" disabled placeholder="(No answer)" style="width:100%"/>`;
-      if (!isOk) {
-        answerArea += `<div style="font-size:13px;color:var(--correct);margin-top:6px">✓ Correct answer: <strong>${q.correctAnswer}</strong></div>`;
-      }
+      if (!isOk) answerArea += `<div style="font-size:13px;color:var(--correct);margin-top:6px">✓ Correct answer: <strong>${q.correctAnswer}</strong></div>`;
     }
 
     let explHTML = '';
-    if (q.type === 'mc' || q.type === 'tf' || q.type === 'ident') {
-      const labels = ['A', 'B', 'C', 'D'];
-      explHTML = '<div style="margin-bottom:8px;font-size:12px;color:var(--text-sub);font-style:italic">Explanations shown in original logical order:</div>';
+    if (q.origChoices.length) {
+      const labels = ['A','B','C','D'];
+      explHTML += '<div style="margin-bottom:8px;font-size:12px;color:var(--text-sub);font-style:italic">Original explanation order (A/B/C/D below refers to the original source order, not the shuffled review buttons above).</div>';
       q.origChoices.forEach((choice, i) => {
         const isCorrectOrig = choice === q.correctAnswer;
-        explHTML += `<div class="why-item">
-          <span class="why-label ${isCorrectOrig ? 'correct-label' : ''}">${labels[i]}. ${choice}:</span>
-          <span style="color:var(--text-sub)"> ${q.origWhy[i]}</span>
-        </div>`;
+        explHTML += `<div class="why-item"><span class="why-label ${isCorrectOrig ? 'correct-label' : ''}">${labels[i]}. ${choice}:</span><span> ${q.origWhy[i] || ''}</span></div>`;
       });
     } else {
-      explHTML = `<div style="color:var(--text)">${q.origWhy[0]}</div>`;
+      explHTML += `<div style="color:var(--text)">${q.origWhy[0] || ''}</div>`;
       explHTML += `<div style="margin-top:8px;color:var(--correct);font-weight:600">✓ Correct answer: ${Array.isArray(q.correctAnswer) ? q.correctAnswer.join(' / ') : q.correctAnswer}</div>`;
     }
 
@@ -1228,9 +1665,6 @@ function renderReview() {
   });
 }
 
-/* ===================================================
-   RETAKE
-=================================================== */
 function retakeExam() {
   if (examState.timerInterval) clearInterval(examState.timerInterval);
   document.getElementById('results-section').style.display = 'none';
@@ -1243,19 +1677,12 @@ function retakeExam() {
   initExam();
 }
 
-/* ===================================================
-   DARK MODE
-=================================================== */
 function toggleDark() {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  const btn = document.getElementById('dark-btn');
-  btn.textContent = isDark ? '🌙 Dark' : '☀ Light';
+  document.getElementById('dark-btn').textContent = isDark ? '🌙 Dark' : '☀ Light';
 }
 
-/* ===================================================
-   DATES
-=================================================== */
 function setDates() {
   const d = new Date();
   const opts = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -1263,14 +1690,13 @@ function setDates() {
   const topDate = document.getElementById('top-date');
   const footerDate = document.getElementById('footer-date');
   if (topDate) topDate.textContent = dateStr;
-  if (footerDate) footerDate.textContent = `Generated: ${dateStr}`;
+  if (footerDate) footerDate.textContent = `Date: ${dateStr}`;
 }
 
-/* ===================================================
-   INIT
-=================================================== */
 document.addEventListener('DOMContentLoaded', () => {
   setDates();
   initExam();
 });
 </script>
+</body>
+</html>
